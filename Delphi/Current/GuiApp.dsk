@@ -12,18 +12,18 @@ File_9=SourceModule,'D:\project\My_Progi\COM+\PlayerApp\Unit2.pas',0,1,1,1,1,0,0
 
 [Modules]
 Module0=E:\Project\bladeRF\Delphi\Current\MainFrm.pas
-Module1=c:\program files (x86)\borland\delphi6\source\vcl\Graphics.pas
-Module2=E:\Project\bladeRF\Delphi\Current\BladeRFIntf.pas
-Module3=E:\Project\bladeRF\Delphi\Current\NSP\NSPFirh.imp
-Module4=E:\Project\bladeRF\Delphi\Current\FIRFilter.pas
-Module5=E:\Project\bladeRF\Delphi\Current\NSP\NSPFft.imp
-Module6=E:\Project\bladeRF\Delphi\Current\NSP\NSPCvrt.imp
-Module7=E:\Project\bladeRF\Delphi\Current\NSP\nsp.pas
-Module8=E:\Project\bladeRF\Delphi\Current\NSP\nsperror.int
-Module9=E:\Project\bladeRF\Delphi\Current\NSP\NSPWin.imp
-Module10=E:\Project\bladeRF\Delphi\Current\FFT.pas
-Module11=E:\Project\bladeRF\Delphi\Current\BladeRFThread.pas
-Module12=E:\Project\bladeRF\Delphi\Current\GuiApp.dpr
+Module1=E:\Project\bladeRF\Delphi\Current\NSP\nsp.pas
+Module2=E:\Project\bladeRF\Delphi\Current\BladeRFThread.pas
+Module3=E:\Project\bladeRF\Delphi\Current\FFT.pas
+Module4=E:\Project\bladeRF\Delphi\Current\BladeRFIntf.pas
+Module5=E:\Project\bladeRF\Delphi\Current\NSP\NSPFirh.imp
+Module6=E:\Project\bladeRF\Delphi\Current\FIRFilter.pas
+Module7=E:\Project\bladeRF\Delphi\Current\NSP\NSPFft.imp
+Module8=E:\Project\bladeRF\Delphi\Current\NSP\NSPCvrt.imp
+Module9=E:\Project\bladeRF\Delphi\Current\NSP\nsperror.int
+Module10=E:\Project\bladeRF\Delphi\Current\NSP\NSPWin.imp
+Module11=E:\Project\bladeRF\Delphi\Current\GuiApp.dpr
+Module12=c:\program files (x86)\borland\delphi6\source\vcl\Graphics.pas
 Count=13
 EditWindowCount=1
 
@@ -32,7 +32,17 @@ ModuleType=SourceModule
 FormState=1
 FormOnTop=0
 
-[c:\program files (x86)\borland\delphi6\source\vcl\Graphics.pas]
+[E:\Project\bladeRF\Delphi\Current\NSP\nsp.pas]
+ModuleType=SourceModule
+FormState=0
+FormOnTop=0
+
+[E:\Project\bladeRF\Delphi\Current\BladeRFThread.pas]
+ModuleType=SourceModule
+FormState=0
+FormOnTop=0
+
+[E:\Project\bladeRF\Delphi\Current\FFT.pas]
 ModuleType=SourceModule
 FormState=0
 FormOnTop=0
@@ -62,11 +72,6 @@ ModuleType=SourceModule
 FormState=0
 FormOnTop=0
 
-[E:\Project\bladeRF\Delphi\Current\NSP\nsp.pas]
-ModuleType=SourceModule
-FormState=0
-FormOnTop=0
-
 [E:\Project\bladeRF\Delphi\Current\NSP\nsperror.int]
 ModuleType=SourceModule
 FormState=0
@@ -77,17 +82,12 @@ ModuleType=SourceModule
 FormState=0
 FormOnTop=0
 
-[E:\Project\bladeRF\Delphi\Current\FFT.pas]
-ModuleType=SourceModule
-FormState=0
-FormOnTop=0
-
-[E:\Project\bladeRF\Delphi\Current\BladeRFThread.pas]
-ModuleType=SourceModule
-FormState=0
-FormOnTop=0
-
 [E:\Project\bladeRF\Delphi\Current\GuiApp.dpr]
+ModuleType=SourceModule
+FormState=0
+FormOnTop=0
+
+[c:\program files (x86)\borland\delphi6\source\vcl\Graphics.pas]
 ModuleType=SourceModule
 FormState=0
 FormOnTop=0
@@ -135,9 +135,9 @@ BottomPanelData=00000400000000009105000000000000028A0000000000000001000000000000
 
 [View0]
 Module=E:\Project\bladeRF\Delphi\Current\MainFrm.pas
-CursorX=53
-CursorY=1672
-TopLine=1934
+CursorX=23
+CursorY=1574
+TopLine=1559
 LeftCol=1
 
 [View1]
@@ -156,16 +156,16 @@ LeftCol=1
 
 [View3]
 Module=E:\Project\bladeRF\Delphi\Current\BladeRFThread.pas
-CursorX=21
-CursorY=635
-TopLine=619
+CursorX=92
+CursorY=539
+TopLine=513
 LeftCol=1
 
 [View4]
 Module=E:\Project\bladeRF\Delphi\Current\FFT.pas
-CursorX=3
-CursorY=520
-TopLine=501
+CursorX=54
+CursorY=561
+TopLine=541
 LeftCol=1
 
 [View5]
@@ -185,7 +185,7 @@ LeftCol=1
 [View7]
 Module=E:\Project\bladeRF\Delphi\Current\NSP\nsp.pas
 CursorX=1
-CursorY=41
+CursorY=43
 TopLine=18
 LeftCol=1
 
@@ -219,9 +219,9 @@ LeftCol=1
 
 [View12]
 Module=E:\Project\bladeRF\Delphi\Current\BladeRFIntf.pas
-CursorX=87
-CursorY=199
-TopLine=97
+CursorX=44
+CursorY=161
+TopLine=141
 LeftCol=1
 
 [Watches]
@@ -322,7 +322,7 @@ LRDockWidth=190
 Dockable=1
 SplitPos=85
 ArrangeBy=Name
-SelectedItem=Font.Size
+SelectedItem=Left
 ExpandedItems=Font
 HiddenCategories=
 

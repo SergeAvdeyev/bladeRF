@@ -11,6 +11,8 @@ uses
 Const
    Buffer_Size = 8192;
 
+   FFT_WINDOW_SIZE = 8192;
+
 
 type
   TFreqLabelDescr = record
@@ -184,6 +186,9 @@ type
     //SpectrWCplx1 : PWCplx;
     //SpectrWCplx2 : PWCplx;
 
+    BufferDRe : PDCplx;
+    BufferDIm : PDCplx;
+
     SpectrDCplxRe : PDCplx;
     SpectrDCplxIm : PDCplx;
 
@@ -196,6 +201,8 @@ type
     HotList : TList;
 
     ZoomFactor : Integer;
+
+    FFT_Delay : Integer;
 
     //FTxSamplesLen : Integer;
     //FTxBufferSize : Integer;
@@ -319,23 +326,27 @@ begin
   FIR_Low1 := TFIRFilter.Create(4800000);
   FIR_Low1.FIRInitLowPass(2300000, 120);
 
-  //GetMem(SpectrWCplx1, (2048 + 1)*SizeOf(TWCplx));
-  //ZeroMemory(SpectrWCplx1, (2048 + 1)*SizeOf(TWCplx));
-  //GetMem(SpectrWCplx2, (2048 + 1)*SizeOf(TWCplx));
-  //ZeroMemory(SpectrWCplx2, (2048 + 1)*SizeOf(TWCplx));
+  //GetMem(SpectrWCplx1, (FFT_WINDOW_SIZE + 1)*SizeOf(TWCplx));
+  //ZeroMemory(SpectrWCplx1, (FFT_WINDOW_SIZE + 1)*SizeOf(TWCplx));
+  //GetMem(SpectrWCplx2, (FFT_WINDOW_SIZE + 1)*SizeOf(TWCplx));
+  //ZeroMemory(SpectrWCplx2, (FFT_WINDOW_SIZE + 1)*SizeOf(TWCplx));
 
-  GetMem(SpectrDCplxRe, (2048)*SizeOf(TDCplx));
-  ZeroMemory(SpectrDCplxRe, (2048)*SizeOf(TDCplx));
-  GetMem(SpectrDCplxIm, (2048)*SizeOf(TDCplx));
-  ZeroMemory(SpectrDCplxIm, (2048)*SizeOf(TDCplx));
+  GetMem(SpectrDCplxRe, (FFT_WINDOW_SIZE)*SizeOf(TDCplx));
+  ZeroMemory(SpectrDCplxRe, (FFT_WINDOW_SIZE)*SizeOf(TDCplx));
+  GetMem(SpectrDCplxIm, (FFT_WINDOW_SIZE)*SizeOf(TDCplx));
+  ZeroMemory(SpectrDCplxIm, (FFT_WINDOW_SIZE)*SizeOf(TDCplx));
+
+  GetMem(BufferDRe, FFT_WINDOW_SIZE*SizeOf(TDCplx));
+  GetMem(BufferDIm, FFT_WINDOW_SIZE*SizeOf(TDCplx));
 
   Fft := TFFT.Create;
-  Fft.FFTSize := 11;
+  Fft.FFTSize := FFT_WINDOW_SIZE;
 
   HotList := TList.Create;
   HotBuffer := nil;
   HotBufferWritten := 0;
   ZoomFactor := 1;
+  FFT_Delay := 0;
 end;
 
 procedure TForm1.FormActivate(Sender: TObject);
@@ -399,6 +410,10 @@ begin
 
   FreeMem(SpectrDCplxRe);
   FreeMem(SpectrDCplxIm);
+
+  FreeMem(BufferDRe);
+  FreeMem(BufferDIm);
+
   IniFile.Free;
 end;
 
@@ -972,8 +987,14 @@ begin
   if AllBox.Checked then
     Memo.Lines.Add('Setting RX LNA to ' + IntToStr(RxLnaSlider.Value));
   I := FDeviceThread.RxSetLnaSync(RxLnaSlider.Value);
-  if I = 0 then
-    RxLnaLabel.Value := RxLnaSlider.Value
+  if I = 0 then begin
+    if RxLnaSlider.Value = 1 then
+      RxLnaLabel.Value := 0
+    else if RxLnaSlider.Value = 2 then
+      RxLnaLabel.Value := 3
+    else
+      RxLnaLabel.Value := 6;
+  end
   else if DebugBox.Checked then begin
     S := StrPas(bladerf_strerror(I));
     Memo.Lines.Add('Failed to set RX LNA: ' + S);
@@ -1136,7 +1157,8 @@ begin
     PostMsg(ToDevMsg_RxStart, 0, 0);
     Exit;
 
-    Status := FDeviceThread.RxStartSync;
+    Status := 0;
+    //Status := FDeviceThread.RxStartSync;
 
     if Status = 0 then begin
       StartRxBtn.Tag := 1;
@@ -1157,8 +1179,9 @@ begin
       Memo.Lines.Add('Stopping RX ... ');
     PostMsg(ToDevMsg_RxStop, 0, 0);
     Exit;
-    
-    Status := FDeviceThread.RxStopSync;
+
+    Status := 0;
+    //Status := FDeviceThread.RxStopSync;
 
     if Status = 0 then begin
       StartRxBtn.Tag := 0;
@@ -1186,7 +1209,8 @@ begin
     PostMsg(ToDevMsg_TxStart, 0, 0);
     Exit;
 
-    Status := FDeviceThread.TxStartSync;
+    Status := 0;
+    //Status := FDeviceThread.TxStartSync;
 
     if Status = 0 then begin
       StartTxBtn.Tag := 1;
@@ -1503,35 +1527,41 @@ var i : Integer;
     BufferIm : PSmallInt;
     BufferImPtr : PSmallInt;
 
-    BufferDRe : PDCplx;
-    BufferDIm : PDCplx;
+    //BufferDRe : PDCplx;
+    //BufferDIm : PDCplx;
     BufferDRePtr : PDCplx;
     BufferDImPtr : PDCplx;
 
     HotBufferPtr : PSmallInt;
     //CValue : TWCplx;
+
+    ReCorrect, ImCorrect : Double;
 begin
   Buffer := PSmallInt(Msg.WParam);
   //BufferPtr := Buffer;
   //BufferTmpPtr := Buffer;
+
+  //FreeMem(Buffer);
+  //Exit;
 
 
   samples_len_in := Msg.LParam div 4;
   //samples_len_out := samples_len_in div 2;
 
   WBufferPtr := PWCplx(Buffer);
-  GetMem(BufferDRe, 2048*SizeOf(TDCplx));
-  GetMem(BufferDIm, 2048*SizeOf(TDCplx));
+
   BufferDRePtr := BufferDRe;
   BufferDImPtr := BufferDIm;
 
   i := 0;
-  while i < 2048 do
+  ReCorrect := Int(ReCorrectionEdit.Value);
+  ImCorrect := Int(ImCorrectionEdit.Value);
+  while i < FFT_WINDOW_SIZE do
   begin
-    BufferDRePtr^.Re := WBufferPtr^.Re + Int(ReCorrectionEdit.Value);
-    BufferDRePtr^.Im := WBufferPtr^.Im + Int(ImCorrectionEdit.Value);
-    BufferDImPtr^.Re := WBufferPtr^.Im + Int(ImCorrectionEdit.Value);
-    BufferDImPtr^.Im := WBufferPtr^.Re + Int(ReCorrectionEdit.Value);
+    BufferDRePtr^.Re := WBufferPtr^.Re + ReCorrect;
+    BufferDRePtr^.Im := WBufferPtr^.Im + ImCorrect;
+    BufferDImPtr^.Re := WBufferPtr^.Im + ImCorrect;
+    BufferDImPtr^.Im := WBufferPtr^.Re + ReCorrect;
 
     inc(BufferDRePtr);
     inc(BufferDImPtr);
@@ -1540,15 +1570,17 @@ begin
   end;
 
   if SpectrumRB.Checked then begin
-    Fft.ProcessDCplx(BufferDRe, SpectrDCplxRe, 2048);
-    Fft.ProcessDCplx(BufferDIm, SpectrDCplxIm, 2048);
-    ReDraw(nil);
+    inc(FFT_Delay);
+    if FFT_Delay >= 10 then begin
+      Fft.ProcessDCplx(BufferDRe, SpectrDCplxRe, FFT_WINDOW_SIZE);
+      //Fft.ProcessDCplx(BufferDIm, SpectrDCplxIm, FFT_WINDOW_SIZE);
+      ReDraw(nil);
+      FFT_Delay := 0;
+    end;
   end
   else
     ReDraw(BufferDRe);
 
-  FreeMem(BufferDRe);
-  FreeMem(BufferDIm);
 
   //if CB3.Checked then
   //begin
@@ -1564,6 +1596,7 @@ begin
     inc(HotBufferPtr, HotBufferWritten div 2);
   end;
 
+  {
   GetMem(BufferRe, samples_len_in*SizeOf(SmallInt));
   GetMem(BufferIm, samples_len_in*SizeOf(SmallInt));
   BufferRePtr := BufferRe;
@@ -1598,12 +1631,12 @@ begin
 
     inc(n, 100);
   end;
-
+  FreeMem(BufferRe);
+  FreeMem(BufferIm);
+  }
 
   FreeMemory(Buffer);
 
-  FreeMem(BufferRe);
-  FreeMem(BufferIm);
 end;
 
 
@@ -1641,6 +1674,8 @@ var r : TRect;
     FCenter : Integer;
 
     SignalBufferPtr : PDCplx;
+    Mult : Integer;
+    j : Integer;
 begin
   r.Left    := 0;
   r.Top     := 0;
@@ -1685,51 +1720,72 @@ begin
   FZeroLine := 0;
   FCenter := FBitMap.Width div 2;
 
-  GetMem(BufferOut, 2048*SizeOf(Short));
+  GetMem(BufferOut, 1024*SizeOf(Short));
 
   BufferOutPtr := BufferOut;
   BufferInPtr := SpectrDCplxRe;
   //inc(BufferInPtr, 2);
-  for i := 0 to 512 - 1 do
+  Mult := FFT_WINDOW_SIZE div 2 div 1024;
+  j := 0;
+  for i := 0 to 1024 - 1 do
   begin
-    if BufferInPtr^.Re < 0 then
-      BufferInPtr^.Re := BufferInPtr^.Re*-1;
-    if BufferInPtr^.Im < 0 then
-      BufferInPtr^.Im := BufferInPtr^.Im*-1;
-    F1 := BufferInPtr^.Re + BufferInPtr^.Im;
-    Inc(BufferInPtr);
-    if BufferInPtr^.Re < 0 then
-      BufferInPtr^.Re := BufferInPtr^.Re*-1;
-    if BufferInPtr^.Im < 0 then
-      BufferInPtr^.Im := BufferInPtr^.Im*-1;
-    F2 := F1 + BufferInPtr^.Re + BufferInPtr^.Im;
-    Inc(BufferInPtr);
+    F1 := 0;
+    while j < Mult do begin
+      if BufferInPtr^.Re < 0 then
+        BufferInPtr^.Re := BufferInPtr^.Re*-1;
+      if BufferInPtr^.Im < 0 then
+        BufferInPtr^.Im := BufferInPtr^.Im*-1;
+      F1 := F1 + BufferInPtr^.Re + BufferInPtr^.Im;
+      Inc(BufferInPtr);
+      inc(j);
+    end;
+    F1 := F1 / j;
+    j := 0;
+    //if BufferInPtr^.Re < 0 then
+    //  BufferInPtr^.Re := BufferInPtr^.Re*-1;
+    //if BufferInPtr^.Im < 0 then
+    //  BufferInPtr^.Im := BufferInPtr^.Im*-1;
+    //F2 := F1 + BufferInPtr^.Re + BufferInPtr^.Im;
+    //Inc(BufferInPtr);
 
-    if F2 = 0 then
+    if F1 = 0 then
     begin
       BufferOutPtr^ := -70;
       if FZeroLine = 0 then
         FZeroLine := 290;
     end
     else begin
-      BufferOutPtr^ := Round(20*Log10(F2/5000000)); //Round(F1 + F2) div 500;
+      BufferOutPtr^ := Round(20*Log10(F1/5000000)); //Round(F1 + F2) div 500;
+      //BufferOutPtr^ := Round(F1 + F2) div 500;
       if FZeroLine = 0 then
         FZeroLine := 10 - BufferOutPtr^*4;
     end;
     Inc(BufferOutPtr);
-    if F2 > FMax then
-      FMax := F2;
+    if F1 > FMax then
+      FMax := F1;
   end;
   BufferOutPtr := BufferOut;
   //inc(BufferOutPtr, 10);
 
+  {
   FBitMap.Canvas.MoveTo(FCenter, FZeroLine);
   for i := FCenter to FBitMap.Width - 2 do
   begin
     FBitMap.Canvas.LineTo(i, 10 - BufferOutPtr^*4);
     inc(BufferOutPtr);
   end;
+  }
+  //FBitMap.Canvas.MoveTo(0, FZeroLine);
+  FBitMap.Canvas.MoveTo(0, 10 - BufferOutPtr^*4);
+  inc(BufferOutPtr);
+  for i := 1 to FBitMap.Width - 1 do
+  begin
+    FBitMap.Canvas.LineTo(i, 10 - BufferOutPtr^*4);
+    inc(BufferOutPtr);
+  end;
 
+
+  {
   BufferOutPtr := BufferOut;
   BufferInPtr := SpectrDCplxIm;
   for i := 0 to 515 - 1 do
@@ -1768,6 +1824,7 @@ begin
     FBitMap.Canvas.LineTo(i, 10 - BufferOutPtr^*4);
     inc(BufferOutPtr);
   end;
+  }
 
   FFTBox.Canvas.Draw(0, 0, FBitMap);
   FreeMem(BufferOut);

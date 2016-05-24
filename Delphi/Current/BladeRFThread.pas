@@ -73,7 +73,7 @@ type
     FRxConfigured : Boolean;
 
     FTxActive     : Boolean;
-    //FTxBuffer     : PSmallInt;
+    FTxBuffer     : PSmallInt;
     FTxSamplesLen : UINT;
     FTxBufferSize : UINT;
     FTxConfigured : Boolean;
@@ -97,6 +97,8 @@ type
 
     function TxInitSync: Integer;
     procedure TxProcess;
+
+    function IsFpgaConfigured: Integer;
 
   protected
     procedure Execute; override;
@@ -123,8 +125,8 @@ type
     function RxSetVga2Sync(AVga2: Integer; var AVga2Actual: Integer): Integer;
     function RxGetVga2Sync(var AVga2Actual: Integer): Integer;
 
-    function RxStartSync: Integer;
-    function RxStopSync: Integer;
+    //function RxStartSync: Integer;
+    //function RxStopSync: Integer;
 
 
 
@@ -144,8 +146,8 @@ type
     function TxSetVga2Sync(AVga2: Integer; var AVga2Actual: Integer): Integer;
     function TxGetVga2Sync(var AVga2Actual: Integer): Integer;
 
-    function TxStartSync: Integer;
-    function TxStopSync: Integer;
+    //function TxStartSync: Integer;
+    //function TxStopSync: Integer;
 
     function TxAddData(AData: Pointer; ADataSize: Integer): Boolean;
 
@@ -209,8 +211,24 @@ begin
   if FDevice <> nil then Exit;
 
   Status := bladerf_open(FDevice, nil);
+  if Status <> 0 then begin
+    SendMessage(hMainWnd, FromDev_Connect, Status, 0);
+    Exit;
+  end;
+  Status := IsFpgaConfigured ;
   FConnected := Status = 0;
   SendMessage(hMainWnd, FromDev_Connect, Status, 0);
+end;
+
+function TBladeThread.IsFpgaConfigured: Integer;
+var Status : Integer;
+begin
+  if FDevice = nil then Exit;
+  Status := bladerf_is_fpga_configured(FDevice);
+  if Status = 0 then
+    Status := bladerf_load_fpga(FDevice, 'hostedx115.rbf')
+  else if Status = 1 then
+    Status := 0;
 end;
 
 procedure TBladeThread.Disconnect;
@@ -298,7 +316,8 @@ begin
   Result := 0;
   if (not FConnected) OR (FDevice = nil) then Exit;
 
-  Result := bladerf_set_lna_gain(FDevice, bladerf_lna_gain(ALna));
+  //Result := bladerf_set_lna_gain(FDevice, bladerf_lna_gain(ALna));
+  Result := bladerf_set_lna_gain(FDevice, Integer(ALna));
 end;
 
 function TBladeThread.RxGetLnaSync(var ALnaActual: Cardinal): Integer;
@@ -513,7 +532,8 @@ begin
     Exit;
   end;
 
-  FRxSamplesLen := 512*1000; //* May be any (reasonable) size */
+  //FRxSamplesLen := 512*1000; //* May be any (reasonable) size */
+  FRxSamplesLen := 48*1000; //* May be any (reasonable) size */
   FRxBufferSize := FRxSamplesLen*SizeOf(SmallInt)*2; //* May be any (reasonable) size */
   GetMem(FRxBuffer, FRxBufferSize);
 
@@ -522,6 +542,7 @@ begin
   SendMessage(hMainWnd, FromDev_RxStart, Status, 0);
 end;
 
+{
 function TBladeThread.RxStartSync: Integer;
 begin
   Result := -1;
@@ -544,9 +565,10 @@ begin
     //FRxBuffer := nil;
     Exit;
   end;
-  
+
   FRxActive := True;
 end;
+}
 
 procedure TBladeThread.RxStop;
 var Status : Integer;
@@ -566,6 +588,7 @@ begin
   SendMessage(hMainWnd, FromDev_RxStop, 0, 0);
 end;
 
+{
 function TBladeThread.RxStopSync: Integer;
 begin
   Lock;
@@ -578,7 +601,7 @@ begin
   //FreeMemory(FRxBuffer);
   //FRxBuffer := nil;
 end;
-
+}
 
 
 
@@ -672,13 +695,14 @@ begin
 
   FTxSamplesLen := 512*1000; //* May be any (reasonable) size */
   FTxBufferSize := FTxSamplesLen*SizeOf(SmallInt)*2; //* May be any (reasonable) size */
-  //GetMem(FTxBuffer, FTxBufferSize);
+  GetMem(FTxBuffer, FTxBufferSize);
 
   FTxActive := True;
 
   SendMessage(hMainWnd, FromDev_TxStart, Status, 0);
 end;
 
+{
 function TBladeThread.TxStartSync: Integer;
 begin
   Result := -1;
@@ -701,11 +725,13 @@ begin
 
   FTxActive := True;
 end;
+}
 
 procedure TBladeThread.TxStop;
 var Status : Integer;
 begin
   if not FTxActive then Exit;
+  FTxActive := False;
   Status := bladerf_enable_module(FDevice, BLADERF_MODULE_TX, False);
   if Status <> 0 then
   begin
@@ -713,11 +739,11 @@ begin
     Exit;
   end;
 
-  FTxActive := False;
 
   SendMessage(hMainWnd, FromDev_TxStop, 0, 0);
 end;
 
+{
 function TBladeThread.TxStopSync: Integer;
 begin
   Result := -1;
@@ -729,7 +755,7 @@ begin
   Result := bladerf_enable_module(FDevice, BLADERF_MODULE_TX, False);
   Unlock;
 end;
-
+}
 
 
 function TBladeThread.CanSend: Boolean;
@@ -750,11 +776,11 @@ function TBladeThread.TxAddData(AData: Pointer; ADataSize: Integer): Boolean;
 var FDataItem : PTxDataItem;
 begin
   Result := False;
+  GetMem(FDataItem, SizeOf(TTxDataItem));
+  FDataItem^.Data := AData;
+  FDataItem^.DataSize := ADataSize;
   try
     Lock;
-    GetMem(FDataItem, SizeOf(TTxDataItem));
-    FDataItem^.Data := AData;
-    FDataItem^.DataSize := ADataSize;
     FTxDataList.Add(FDataItem);
     Result := True;
   finally
@@ -771,6 +797,8 @@ begin
   if not FTxActive then Exit;
 
   FDataItem := nil;
+  Exit;
+
   //FDataSended := 0;
   //while True do begin
     try
@@ -788,7 +816,8 @@ begin
 
     if FDataItem = nil then Exit;
 
-    Status := bladerf_sync_tx(FDevice, FDataItem^.Data, FDataItem^.DataSize div 4, nil, 5000);
+    //Status := bladerf_sync_tx(FDevice, FDataItem^.Data, FDataItem^.DataSize div 4, nil, 5000);
+    Status := bladerf_sync_tx(FDevice, FTxBuffer, FTxSamplesLen, nil, 5000);
     if Status <> 0 then
     begin
       Disconnect;
@@ -796,8 +825,9 @@ begin
       //Break;
       Exit;
     end;
-    FreeMem(FDataItem^.Data);
-    FreeMem(FDataItem);
+    //FreeMem(FDataItem^.Data);
+    //FreeMem(FDataItem);
+
     //inc(FDataSended, FDataItem^.DataSize);
     //if FDataSended >= FTxBufferSize then Break;
   //end;
@@ -847,7 +877,10 @@ begin
      RxProcess;
      //Unlock;
 
-     TxProcess;
+     try
+       TxProcess;
+     except
+     end;
      //Sleep(2);
   end;
   if FConnected then

@@ -125,6 +125,8 @@ type
 
 function bladerf_open(var device : Pointer;
                       device_identifier: PChar): Integer; cdecl; external 'bladeRF.dll';
+function bladerf_is_fpga_configured(device : Pointer): Integer; cdecl; external 'bladeRF.dll';
+function bladerf_load_fpga(device : Pointer; fpga: PChar): Integer; cdecl; external 'bladeRF.dll';
 function bladerf_strerror(error: Integer): PChar; cdecl; external 'bladeRF.dll';
 procedure bladerf_close(device: Pointer); cdecl; external 'bladeRF.dll';
 function bladerf_set_frequency(device: Pointer;
@@ -153,8 +155,10 @@ function bladerf_enable_module(device: Pointer;
                                module: bladerf_module;
                                enable: Boolean): Integer; cdecl; external 'bladeRF.dll';
 
+//function bladerf_set_lna_gain(device: Pointer;
+//                              gain: bladerf_lna_gain): Integer; cdecl; external 'bladeRF.dll';
 function bladerf_set_lna_gain(device: Pointer;
-                              gain: bladerf_lna_gain): Integer; cdecl; external 'bladeRF.dll';
+                              gain: Integer): Integer; cdecl; external 'bladeRF.dll';
 
 function bladerf_set_rxvga1(device: Pointer;
                             gain: Integer): Integer; cdecl; external 'bladeRF.dll';

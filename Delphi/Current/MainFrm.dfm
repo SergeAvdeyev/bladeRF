@@ -435,8 +435,10 @@ object Form1: TForm1
       Width = 191
       Height = 26
       Increment = 1
+      MinValue = 1
       MaxValue = 3
       TabOrder = 3
+      Value = 1
       OnChange = RxLnaSliderChange
     end
     object RxLnaLabel: TCurrencyEdit

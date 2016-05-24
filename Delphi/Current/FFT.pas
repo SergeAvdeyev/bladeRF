@@ -443,7 +443,8 @@ end;
 constructor TFFT.Create;
 begin
 
-  FFTSize := 11;
+  FFFTSize := 11;
+  FWindowSize := 2048;
   InitFFT;
 end;
 
@@ -511,14 +512,14 @@ begin
 
   //nspvWinHann(BufferIn, FWindowSize);
   S := 2;
-  nspvFftNip(BufferIn, BufferOut, FFT_ORDER, NSP_Forw, NSP_FIXED_SCALE, S);
+  nspvFftNip(BufferIn, BufferOut, FFFTSize, NSP_Forw, NSP_FIXED_SCALE, S);
 end;
 
 procedure TFFT.ProcessDCplx(BufferIn: PDCplx; BufferOut: PDCplx; BufferSize: Integer);
 begin
 
   nspzWinHann(BufferIn, FWindowSize);
-  nspzFftNip(BufferIn, BufferOut, FFT_ORDER, NSP_Forw);
+  nspzFftNip(BufferIn, BufferOut, FFFTSize, NSP_Forw);
 end;
 
 {
@@ -547,10 +548,27 @@ end;
 
 
 procedure TFFT.SetFFTSize(Value: Integer);
+var i : Integer;
+    tmp : Integer;
 begin
-  if Value <= 0 then Exit;
-  FFFTSize := Value;
-  FWindowSize := Round(Power(2, FFFTSize));
+  i := 1;
+  FFFTSize := 0;
+  while i < 16 do begin
+    tmp := Round(Power(2, i));
+    if tmp = Value then begin
+      FFFTSize := i;
+      FWindowSize := Value;
+      Break;
+    end;
+    inc(i);
+  end;
+  if FFFTSize = 0 then begin
+    FFFTSize := 11;
+    FWindowSize := 2048;
+  end;
+  //if Value <= 0 then Exit;
+  //FFFTSize := Value;
+  //FWindowSize := Round(Power(2, FFFTSize));
 end;
 
 
