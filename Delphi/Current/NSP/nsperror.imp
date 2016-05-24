@@ -1,0 +1,20 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+*)
+
+function  nspGetLibVersion; external nspDLL;
+function  nspGetErrStatus;  external nspDLL;
+procedure nspSetErrStatus;  external nspDLL;
+function  nspGetErrMode;    external nspDLL;
+procedure nspSetErrMode;    external nspDLL;
+function  nspError;         external nspDLL;
+function  nspErrorStr;      external nspDLL;
+function  nspNulDevReport;  external nspDLL;
+function  nspStdErrReport;  external nspDLL;
+function  nspGuiBoxReport;  external nspDLL;
+function  nspRedirectError; external nspDLL;
+{EOF}

@@ -1,0 +1,92 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+*)
+
+procedure nspsbFloatToInt;      external nspDLL;
+procedure nspdbFloatToInt;      external nspDLL;
+
+procedure nspsbIntToFloat;      external nspDLL;
+procedure nspdbIntToFloat;      external nspDLL;
+
+procedure nspsbFloatToFix;      external nspDLL;
+procedure nspdbFloatToFix;      external nspDLL;
+
+procedure nspsbFixToFloat;      external nspDLL;
+procedure nspdbFixToFloat;      external nspDLL;
+
+procedure nspsbFloatToS31Fix;   external nspDLL;
+procedure nspsbFloatToS15Fix;   external nspDLL;
+procedure nspsbFloatToS7Fix;    external nspDLL;
+procedure nspsbFloatToS1516Fix; external nspDLL;
+procedure nspdbFloatToS31Fix;   external nspDLL;
+procedure nspdbFloatToS15Fix;   external nspDLL;
+procedure nspdbFloatToS7Fix;    external nspDLL;
+procedure nspdbFloatToS1516Fix; external nspDLL;
+
+
+procedure nspsbS31FixToFloat;   external nspDLL;
+procedure nspsbS15FixToFloat;   external nspDLL;
+procedure nspsbS7FixToFloat;    external nspDLL;
+procedure nspsbS1516FixToFloat; external nspDLL;
+procedure nspdbS31FixToFloat;   external nspDLL;
+procedure nspdbS15FixToFloat;   external nspDLL;
+procedure nspdbS7FixToFloat;    external nspDLL;
+procedure nspdbS1516FixToFloat; external nspDLL;
+
+procedure nspcbReal;            external nspDLL;
+procedure nspzbReal;            external nspDLL;
+procedure nspvbReal;            external nspDLL;
+
+procedure nspcbImag;            external nspDLL;
+procedure nspzbImag;            external nspDLL;
+procedure nspvbImag;            external nspDLL;
+
+procedure nspcbCplxTo2Real;     external nspDLL;
+procedure nspzbCplxTo2Real;     external nspDLL;
+procedure nspvbCplxTo2Real;     external nspDLL;
+
+procedure nspcb2RealToCplx;     external nspDLL;
+procedure nspzb2RealToCplx;     external nspDLL;
+procedure nspvb2RealToCplx;     external nspDLL;
+
+procedure nspcbCartToPolar;     external nspDLL;
+procedure nspzbCartToPolar;     external nspDLL;
+
+procedure nspsbrCartToPolar;    external nspDLL;
+procedure nspdbrCartToPolar;    external nspDLL;
+
+procedure nspcbPolarToCart;     external nspDLL;
+procedure nspzbPolarToCart;     external nspDLL;
+
+procedure nspsbrPolarToCart;    external nspDLL;
+procedure nspdbrPolarToCart;    external nspDLL;
+
+procedure nspcbMag;             external nspDLL;
+procedure nspzbMag;             external nspDLL;
+procedure nspvbMag;             external nspDLL;
+
+procedure nspsbrMag;            external nspDLL;
+procedure nspdbrMag;            external nspDLL;
+procedure nspwbrMag;            external nspDLL;
+
+procedure nspcbPhase;           external nspDLL;
+procedure nspzbPhase;           external nspDLL;
+procedure nspvbPhase;           external nspDLL;
+
+procedure nspsbrPhase;          external nspDLL;
+procedure nspdbrPhase;          external nspDLL;
+procedure nspwbrPhase;          external nspDLL;
+
+procedure nspcbPowerSpectr;     external nspDLL;
+procedure nspzbPowerSpectr;     external nspDLL;
+procedure nspvbPowerSpectr;     external nspDLL;
+
+procedure nspsbrPowerSpectr;    external nspDLL;
+procedure nspdbrPowerSpectr;    external nspDLL;
+procedure nspwbrPowerSpectr;    external nspDLL;
+
+{EOF}

@@ -1,0 +1,318 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+
+From:    nsplmsl.h
+Purpose: NSP Adaptive FIR filter that uses the LMS algorithm.
+*)
+
+{--- LMS filter (method) type -------------------------------------------}
+
+type
+  TNSPLmsType = (NSP_LmsNull, NSP_LmsDefault);
+
+{--- LMS low-level filter state structure -------------------------------}
+
+  TNSPLmsTapState = record
+    // FirLmsTapState;                    // Base filter state, see FIRL.H
+    Taps         : Pointer;
+    Len          : Integer;
+    UpFactor     : Integer;
+    UpPhase      : Integer;
+    DownFactor   : Integer;
+    DownPhase    : Integer;
+    IsMultiRate  : Integer;
+    IsFilterMode : Integer;
+    // end FirLmsTapState;
+    Leak         : Float;                 // Leak value to range taps magn
+    Step         : Float;                 // Step-size to change taps magn
+    ErrDly       : Integer;               // Delay of error signal
+    LmsType      : TNSPLmsType;
+  end;
+
+{--- LMS low-level filter delay line ------------------------------------}
+
+  TNSPLmsDlyState = record
+    // FirLmsDlyState;
+    Dlyl         : Pointer;
+    Len          : Integer;
+    IsFilterMode : Integer;
+    // end FirLmsDlyState;
+    AdaptB       : Integer;               // Is used in delay length definition
+  end;
+
+{------------------------------------------------------------------------}
+{   LMSL of "integer" type uses Fixed Point representation of taps       }
+{------------------------------------------------------------------------}
+
+  FixedPoint = Integer;
+
+  TNSPWLmsTapState = record
+    // FirLmsTapState;                    // Base filter state, see FIRL.H
+    Taps         : Pointer;
+    Len          : Integer;
+    UpFactor     : Integer;
+    UpPhase      : Integer;
+    DownFactor   : Integer;
+    DownPhase    : Integer;
+    IsMultiRate  : Integer;
+    IsFilterMode : Integer;
+    // end FirLmsTapState;
+    Leak         : Float;                 // Leak value to arrange taps magn
+    Step         : record                 // Step size to change taps values
+      case Integer of
+        0: (F : Float);
+        1: (I : FixedPoint);
+    end;
+    ErrDly       : Integer;               // Delay of an error signal
+    LmsType      : TNSPLmsType;
+  end;
+
+  TNSPWLmsDlyState = TNSPLmsDlyState;
+
+{------------------------------------------------------------------------}
+{ LmslInit, LmslInitMr, LmslInitDlyl                                     }
+{                                                                        }
+{ Initialize  an adaptive  FIR filter  that uses  the least  mean-square }
+{ (LMS) algorithm.                                                       }
+
+{--- Single-rate init ---------------------------------------------------}
+
+procedure nspsLmslInit(LmsType : TNSPLmsType; Taps   : PFloat;
+                       TapsLen : Integer;     Step   : Float;
+                       Leak    : Float;       ErrDly : Integer;
+                   var TapSt   : TNSPLmsTapState);     stdcall;
+procedure nspdLmslInit(LmsType : TNSPLmsType; Taps   : PDouble;
+                       TapsLen : Integer;     Step   : Float;
+                       Leak    : Float;       ErrDly : Integer;
+                   var TapSt   : TNSPLmsTapState);     stdcall;
+procedure nspcLmslInit(LmsType : TNSPLmsType; Taps   : PSCplx;
+                       TapsLen : Integer;     Step   : Float;
+                       Leak    : Float;       ErrDly : Integer;
+                   var TapSt   : TNSPLmsTapState);     stdcall;
+procedure nspzLmslInit(LmsType : TNSPLmsType; Taps   : PDCplx;
+                       TapsLen : Integer;     Step   : Float;
+                       Leak    : Float;       ErrDly : Integer;
+                   var TapSt   : TNSPLmsTapState);     stdcall;
+
+{--- Multi-rate init ----------------------------------------------------}
+
+procedure nspsLmslInitMr(LmsType    : TNSPLmsType; Taps      : PFloat;
+                         TapsLen    : Integer;     Step      : Float;
+                         Leak       : Float;       ErrDly    : Integer;
+                         DownFactor : Integer;     DownPhase : Integer;
+                     var TapSt      : TNSPLmsTapState);        stdcall;
+procedure nspdLmslInitMr(LmsType    : TNSPLmsType; Taps      : PDouble;
+                         TapsLen    : Integer;     Step      : Float;
+                         Leak       : Float;       ErrDly    : Integer;
+                         DownFactor : Integer;     DownPhase : Integer;
+                     var TapSt      : TNSPLmsTapState);        stdcall;
+procedure nspcLmslInitMr(LmsType    : TNSPLmsType; Taps      : PSCplx;
+                         TapsLen    : Integer;     Step      : Float;
+                         Leak       : Float;       ErrDly    : Integer;
+                         DownFactor : Integer;     DownPhase : Integer;
+                     var TapSt      : TNSPLmsTapState);        stdcall;
+procedure nspzLmslInitMr(LmsType    : TNSPLmsType; Taps      : PDCplx;
+                         TapsLen    : Integer;     Step      : Float;
+                         Leak       : Float;       ErrDly    : Integer;
+                         DownFactor : Integer;     DownPhase : Integer;
+                     var TapSt      : TNSPLmsTapState);        stdcall;
+
+{--- Delay line init ----------------------------------------------------}
+
+procedure nspsLmslInitDlyl(var TapSt : TNSPLmsTapState;
+                               Dlyl  : PFloat; AdaptB :  Integer;
+                           var DlySt : TNSPLmsDlyState); stdcall;
+procedure nspdLmslInitDlyl(var TapSt : TNSPLmsTapState;
+                               Dlyl  : PDouble; AdaptB :  Integer;
+                           var DlySt : TNSPLmsDlyState); stdcall;
+procedure nspcLmslInitDlyl(var TapSt : TNSPLmsTapState;
+                               Dlyl  : PSCplx; AdaptB :  Integer;
+                           var DlySt : TNSPLmsDlyState); stdcall;
+procedure nspzLmslInitDlyl(var TapSt : TNSPLmsTapState;
+                               Dlyl  : PDCplx; AdaptB :  Integer;
+                           var DlySt : TNSPLmsDlyState); stdcall;
+
+{------------------------------------------------------------------------}
+{ LmslGetStep, LmslSetStep, LmslGetLeak, LmslSetLeak                     }
+{                                                                        }
+{ Utility  functions  to  get  and  set  the  leak  and step values of a }
+{ low-level LMS filter.                                                  }
+
+function nspsLmslGetStep(const TapSt : TNSPLmsTapState) : Float; stdcall;
+function nspsLmslGetLeak(const TapSt : TNSPLmsTapState) : Float; stdcall;
+
+procedure nspsLmslSetStep(Step : Float; var TapSt : TNSPLmsTapState); stdcall;
+procedure nspsLmslSetLeak(Leak : Float; var TapSt : TNSPLmsTapState); stdcall;
+
+{------------------------------------------------------------------------}
+{ Lmsl, bLmsl                                                            }
+{                                                                        }
+{ Filter samples through a low-level LMS filter.                         }
+
+function nspsLmsl( var TapSt   : TNSPLmsTapState;
+                   var DlySt   : TNSPLmsDlyState;
+                       Samp    : Float;  Err : Float)  : Float;  stdcall;
+function nspcLmsl( var TapSt   : TNSPLmsTapState;
+                   var DlySt   : TNSPLmsDlyState;
+                       Samp    : TSCplx; Err : TSCplx) : TSCplx; stdcall;
+function nspdLmsl( var TapSt   : TNSPLmsTapState;
+                   var DlySt   : TNSPLmsDlyState;
+                       Samp    : Double; Err : Double) : Double; stdcall;
+function nspzLmsl( var TapSt   : TNSPLmsTapState;
+                   var DlySt   : TNSPLmsDlyState;
+                       Samp    : TDCplx; Err : TDCplx) : TDCplx; stdcall;
+procedure nspcLmslOut(var TapSt : TNSPLmsTapState;
+                      var DlySt : TNSPLmsDlyState;
+                          Samp  : TSCplx; Err : TSCplx;
+                      var Val   : TSCplx); stdcall;
+
+function nspsbLmsl(var TapSt   : TNSPLmsTapState;
+                   var DlySt   : TNSPLmsDlyState;
+                       InSamps : PFloat;  Err : Float)  : Float;  stdcall;
+function nspcbLmsl(var TapSt   : TNSPLmsTapState;
+                   var DlySt   : TNSPLmsDlyState;
+                       InSamps : PSCplx;  Err : TSCplx) : TSCplx; stdcall;
+function nspdbLmsl(var TapSt   : TNSPLmsTapState;
+                   var DlySt   : TNSPLmsDlyState;
+                       InSamps : PDouble; Err : Double) : Double; stdcall;
+function nspzbLmsl(var TapSt   : TNSPLmsTapState;
+                   var DlySt   : TNSPLmsDlyState;
+                       InSamps : PDCplx;  Err : TDCplx) : TDCplx; stdcall;
+procedure nspcbLmslOut(var TapSt   : TNSPLmsTapState;
+                       var DlySt   : TNSPLmsDlyState;
+                           InSamps : PSCplx; Err : TSCplx;
+                       var Val     : TSCplx); stdcall;
+
+{------------------------------------------------------------------------}
+{ LmslNa, bLmslNa                                                        }
+{                                                                        }
+{ Filter a signal using a LMS filter, but without adapting the filter.   }
+
+function nspsLmslNa(      const TapSt    : TNSPLmsTapState;
+                          var   DlySt    : TNSPLmsDlyState;
+                                Samp     : Float)  : Float;   stdcall;
+function nspcLmslNa(      const TapSt    : TNSPLmsTapState;
+                          var   DlySt    : TNSPLmsDlyState;
+                                Samp     : TSCplx) : TSCplx;  stdcall;
+function nspdLmslNa(      const TapSt    : TNSPLmsTapState;
+                          var   DlySt    : TNSPLmsDlyState;
+                                Samp     : Double) : Double;  stdcall;
+function nspzLmslNa(      const TapSt    : TNSPLmsTapState;
+                          var   DlySt    : TNSPLmsDlyState;
+                                Samp     : TDCplx) : TDCplx;  stdcall;
+procedure nspcLmslNaOut(const TapSt      : TNSPLmsTapState;
+                        var   DlySt      : TNSPLmsDlyState;
+                              Samp       : TSCplx;
+                        var   Val        : TSCplx);  stdcall;
+
+procedure nspsbLmslNa(    const TapSt    : TNSPLmsTapState;
+                          var   DlySt    : TNSPLmsDlyState;
+                                InSamps  : PFloat;  OutSamps : PFloat;
+                                NumIters : Integer);          stdcall;
+procedure nspcbLmslNa(    const TapSt    : TNSPLmsTapState;
+                          var   DlySt    : TNSPLmsDlyState;
+                                InSamps  : PSCplx;  OutSamps : PSCplx;
+                                NumIters : Integer);          stdcall;
+procedure nspdbLmslNa(    const TapSt    : TNSPLmsTapState;
+                          var   DlySt    : TNSPLmsDlyState;
+                                InSamps  : PDouble; OutSamps : PDouble;
+                                NumIters : Integer);          stdcall;
+procedure nspzbLmslNa(    const TapSt    : TNSPLmsTapState;
+                          var   DlySt    : TNSPLmsDlyState;
+                                InSamps  : PDCplx;  OutSamps : PDCplx;
+                                NumIters : Integer);          stdcall;
+
+procedure nspsLmslGetTaps(const TapSt    : TNSPLmsTapState;
+                                OutTaps  : PFloat);           stdcall;
+procedure nspcLmslGetTaps(const TapSt    : TNSPLmsTapState;
+                                OutTaps  : PSCplx);           stdcall;
+procedure nspdLmslGetTaps(const TapSt    : TNSPLmsTapState;
+                                OutTaps  : PDouble);          stdcall;
+procedure nspzLmslGetTaps(const TapSt    : TNSPLmsTapState;
+                                OutTaps  : PDCplx);           stdcall;
+
+procedure nspsLmslSetTaps(      InTaps   : PFloat;
+                          var   TapSt    : TNSPLmsTapState);  stdcall;
+procedure nspcLmslSetTaps(      InTaps   : PSCplx;
+                          var   TapSt    : TNSPLmsTapState);  stdcall;
+procedure nspdLmslSetTaps(      InTaps   : PDouble;
+                          var   TapSt    : TNSPLmsTapState);  stdcall;
+procedure nspzLmslSetTaps(      InTaps   : PDCplx;
+                          var   TapSt    : TNSPLmsTapState);  stdcall;
+
+procedure nspsLmslGetDlyl(const TapSt    : TNSPLmsTapState;
+                          const DlySt    : TNSPLmsDlyState;
+                                OutDlyl  : PFloat);           stdcall;
+procedure nspcLmslGetDlyl(const TapSt    : TNSPLmsTapState;
+                          const DlySt    : TNSPLmsDlyState;
+                                OutDlyl  : PSCplx);           stdcall;
+procedure nspdLmslGetDlyl(const TapSt    : TNSPLmsTapState;
+                          const DlySt    : TNSPLmsDlyState;
+                                OutDlyl  : PDouble);          stdcall;
+procedure nspzLmslGetDlyl(const TapSt    : TNSPLmsTapState;
+                          const DlySt    : TNSPLmsDlyState;
+                                OutDlyl  : PDCplx);           stdcall;
+
+procedure nspsLmslSetDlyl(const TapSt   : TNSPLmsTapState;
+                                InDlyl  : PFloat;
+                          var   DlySt   : TNSPLmsDlyState); stdcall;
+procedure nspcLmslSetDlyl(const TapSt   : TNSPLmsTapState;
+                                InDlyl  : PSCplx;
+                          var   DlySt   : TNSPLmsDlyState); stdcall;
+procedure nspdLmslSetDlyl(const TapSt   : TNSPLmsTapState;
+                                InDlyl  : PDouble;
+                          var   DlySt   : TNSPLmsDlyState); stdcall;
+procedure nspzLmslSetDlyl(const TapSt   : TNSPLmsTapState;
+                                InDlyl  : PDCplx;
+                          var   DlySt   : TNSPLmsDlyState); stdcall;
+
+{------------------------------------------------------------------------}
+{   The wLmsl functions for data of short type.                          }
+{   31-mar-97. New interface and new functions                           }
+{      o leak is not used,                                               }
+{      o adaptB is not used,                                             }
+{      o filter taps are float in the function call,                     }
+{      o step is float in the function call,                             }
+{      o calculation are done with fixed point data.                     }
+{------------------------------------------------------------------------}
+
+{ Note that adaptB is not used }
+procedure nspwLmslInitDlyl(var   TapSt   : TNSPWLmsTapState;
+                                 Dlyl    : PShort;
+                           var   DlySt   : TNSPWLmsDlyState); stdcall;
+
+procedure nspwLmslSetDlyl( const TapSt   : TNSPWLmsTapState;
+                                 InDlyl  : PShort;
+                           var   DlySt   : TNSPWLmsDlyState); stdcall;
+
+procedure nspwLmslGetDlyl( const TapSt   : TNSPWLmsTapState;
+                           const DlySt   : TNSPWLmsDlyState;
+                                 OutDlyl : PShort);           stdcall;
+
+{ Note that leak is not used and taps are float }
+procedure nspwLmslInit(LmsType : TNSPLmsType; Taps : PFloat;
+                       TapsLen : Integer;     Step : Float;
+                       ErrDly  : Integer;
+                   var TapSt   : TNSPWLmsTapState);  stdcall;
+
+procedure nspwLmslSetTaps(      InTaps  : PFloat;
+                          var   TapSt   : TNSPWLmsTapState); stdcall;
+
+procedure nspwLmslGetTaps(const TapSt   : TNSPWLmsTapState;
+                                OutTaps : PFloat);           stdcall;
+
+function nspwLmsl(        var   TapSt   : TNSPWLmsTapState;
+                          var   DlySt   : TNSPWLmsDlyState;
+                                Samp    : Short;
+                                Err     : Short) : Short;    stdcall;
+
+{ Note that step is float }
+function  nspwLmslGetStep(const TapSt : TNSPWLmsTapState) : Float; stdcall;
+procedure nspwLmslSetStep(      Step  : Float;
+                          var   TapSt : TNSPWLmsTapState);         stdcall;
+
+{EOF}

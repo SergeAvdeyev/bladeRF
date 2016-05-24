@@ -1,0 +1,75 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+*)
+
+procedure nspsGoertzInit;  external nspDLL;
+procedure nspcGoertzInit;  external nspDLL;
+procedure nspdGoertzInit;  external nspDLL;
+procedure nspzGoertzInit;  external nspDLL;
+procedure nspwGoertzInit;  external nspDLL;
+procedure nspvGoertzInit;  external nspDLL;
+
+procedure nspsGoertzReset; external nspDLL;
+procedure nspcGoertzReset; external nspDLL;
+procedure nspdGoertzReset; external nspDLL;
+procedure nspzGoertzReset; external nspDLL;
+procedure nspwGoertzReset; external nspDLL;
+procedure nspvGoertzReset; external nspDLL;
+
+function nspsGoertz(var State  : TNSPSGoertzState;
+                        Sample : Float) : TSCplx;
+var
+  Val : TSCplx;
+begin
+  nspsGoertzOut(State,Sample,Val);
+  Result := Val;
+end;
+
+function nspcGoertz(var State  : TNSPCGoertzState;
+                        Sample : TSCplx) : TSCplx;
+var
+  Val : TSCplx;
+begin
+  nspcGoertzOut(State,Sample,Val);
+  Result := Val;
+end;
+
+function nspdGoertz; external nspDLL;
+function nspzGoertz; external nspDLL;
+function nspwGoertz; external nspDLL;
+function nspvGoertz; external nspDLL;
+
+function nspsbGoertz(var State   : TNSPSGoertzState;
+                         InSamps : PFloat;
+                         Len     : Integer) : TSCplx;
+var
+  Val : TSCplx;
+begin
+  nspsbGoertzOut(State,InSamps,Len,Val);
+  Result := Val;
+end;
+
+function nspcbGoertz(var State   : TNSPCGoertzState;
+                         InSamps : PSCplx;
+                         Len     : Integer) : TSCplx;
+var
+  Val : TSCplx;
+begin
+  nspcbGoertzOut(State,InSamps,Len,Val);
+  Result := Val;
+end;
+
+function nspdbGoertz; external nspDLL;
+function nspzbGoertz; external nspDLL;
+function nspwbGoertz; external nspDLL;
+function nspvbGoertz; external nspDLL;
+
+procedure nspsGoertzOut;  external nspDLL;
+procedure nspcGoertzOut;  external nspDLL;
+procedure nspsbGoertzOut; external nspDLL;
+procedure nspcbGoertzOut; external nspDLL;
+{EOF}

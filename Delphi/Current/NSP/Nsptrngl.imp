@@ -1,0 +1,37 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+*)
+
+procedure nspwTrnglInit; external nspDLL;
+procedure nspvTrnglInit; external nspDLL;
+procedure nspsTrnglInit; external nspDLL;
+procedure nspcTrnglInit; external nspDLL;
+procedure nspdTrnglInit; external nspDLL;
+procedure nspzTrnglInit; external nspDLL;
+
+function nspwTrngl;      external nspDLL;
+function nspvTrngl;      external nspDLL;
+function nspsTrngl;      external nspDLL;
+function nspcTrngl(var State : TNSPCTrnglState) : TSCplx;
+var
+  Val : TSCplx;
+begin
+  nspcTrnglOut(State,Val);
+  Result := Val;
+end;
+function nspdTrngl;      external nspDLL;
+function nspzTrngl;      external nspDLL;
+procedure nspcTrnglOut;  external nspDLL;
+
+procedure nspwbTrngl; external nspDll;
+procedure nspvbTrngl; external nspDll;
+procedure nspsbTrngl; external nspDll;
+procedure nspcbTrngl; external nspDll;
+procedure nspdbTrngl; external nspDll;
+procedure nspzbTrngl; external nspDll;
+
+{EOF}

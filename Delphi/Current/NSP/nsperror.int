@@ -1,0 +1,116 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+
+From:    nsperror.h
+Purpose: NSP Error Handling Module
+*)
+
+type
+  PNSPLibVersion = ^TNSPLibVersion;
+  TNSPLibVersion = record
+    Major           : Integer;    // e.g. 4
+    Minor           : Integer;    // e.g. 00
+    Build           : Integer;    // e.g. 32
+    Name            : PChar;      // e.g. "nspp6l.lib","nspm5.dll"
+    Version         : PChar;      // e.g. "v4.00"
+    InternalVersion : PChar;      // e.g. "[4.00.32, 17/03/98]"
+    BuildDate       : PChar;      // e.g. "Mar 17 98"
+    CallConv        : PChar;      // e.g. "DLL",..
+  end;
+
+{--- NSPErrStatus,NSPErrMode Values Definition ---}
+
+//* common status code definitions */
+const
+  NSP_StsOk           =  0;         // everithing is ok
+  NSP_StsBackTrace    = -1;         // pseudo error for back trace
+  NSP_StsError        = -2;         // unknown /unspecified error
+  NSP_StsInternal     = -3;         // internal error (bad state)
+  NSP_StsNoMem        = -4;         // out of memory
+  NSP_StsBadArg       = -5;         // function arg/param is bad
+  NSP_StsBadFunc      = -6;         // unsupported function
+  NSP_StsNoConv       = -7;         // iter. didn't converge
+  NSP_StsAutoTrace    = -8;         // Tracing through nsptrace.h
+  NSP_StsDivideByZero = -9;
+  NSP_StsNullPtr      = -10;
+  NSP_StsBadSizeValue = -11;
+  NSP_StsBadPtr       = -12;
+  NSP_StsBadStruct    = -13;
+  NSP_StsBadLen       = -14;        // bad vector length
+
+  NSP_ErrModeLeaf     = 0;          // Print error and exit program
+  NSP_ErrModeParent   = 1;          // Print error and continue
+  NSP_ErrModeSilent   = 2;          // Don't print and continue
+
+//* custom status code definitions */
+  //* nspsmpl */
+  NSP_StsBadFact       = -50;        // Negative FactorRange
+  //* nspfirg */
+  NSP_StsBadFreq       = -51;        // bad frequency value
+  NSP_StsBadRel        = -52;        // bad relation between frequency
+
+type
+  TNSPErrorCallBack = function(
+    Status   : NSPStatus;
+    FuncName : PChar;
+    Context  : PChar;
+    FileName : PChar;
+    Line     : Integer) : Integer; stdcall;
+
+{ Flags for scaleMode parameter of nsp?Func(...,scaleMode,scaleFactor)    }
+const
+  NSP_NO_SCALE    = $0000;        // ignore factor
+  NSP_FIXED_SCALE = $0002;        // fixed factor value
+  NSP_AUTO_SCALE  = $0004;        // detect factor value
+
+  NSP_OVERFLOW    = $0000;        // wrapround
+  NSP_SATURATE    = $0001;        // saturate
+
+{--- Get Library Version -------------------------}
+{ Returns pointer to NSP lib info structure       }
+function nspGetLibVersion : PNSPLibVersion; stdcall;
+
+{--- Get/Set ErrStatus ---------------------------}
+function nspGetErrStatus : NSPStatus; stdcall;
+procedure nspSetErrStatus(Status : NSPStatus); stdcall;
+
+{--- NspStdErrMode Declaration -------------------}
+function nspGetErrMode : Integer; stdcall;
+procedure nspSetErrMode(Mode : Integer); stdcall;
+
+{--- nspError,nspErrorStr Declaration ------------}
+function nspError(
+  Status   : NSPStatus;
+  Func     : PChar;
+  Context  : PChar;
+  FileName : PChar;
+  Line     : integer) : NSPStatus; stdcall;
+function nspErrorStr(Status : NSPStatus) : PChar; stdcall;
+
+{--- nspRedirectError Declaration ----------------}
+function nspNulDevReport(
+  Status   : NSPStatus;
+  FuncName : PChar;
+  Context  : PChar;
+  FileName : PChar;
+  Line     : integer) : NSPStatus; stdcall;
+function nspStdErrReport(
+  Status   : NSPStatus;
+  FuncName : PChar;
+  Context  : PChar;
+  FileName : PChar;
+  Line     : integer) : NSPStatus; stdcall;
+function nspGuiBoxReport(
+  Status   : NSPStatus;
+  FuncName : PChar;
+  Context  : PChar;
+  FileName : PChar;
+  Line     : integer) : NSPStatus; stdcall;
+function nspRedirectError(
+  nspErrorFunc : TNSPErrorCallBack) : TNSPErrorCallBack; stdcall;
+
+{EOF}

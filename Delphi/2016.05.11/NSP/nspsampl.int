@@ -1,0 +1,62 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+
+From:    nspsampl.h
+Purpose: Purpose: NSP sample
+*)
+
+{-------------------------------------------------------------------------}
+{        UpSample                                                         }
+{                                                                         }
+{ Up-sample  a  signal, conceptually increasing  its  sampling rate by an }
+{ integer factor and forming output parameters for next sampling;         }
+
+procedure nspsUpSample(Src    : PFloat;      SrcLen : Integer;
+                       Dst    : PFloat;  var DstLen : Integer;
+                       Factor : Integer; var Phase  : Integer); stdcall;
+procedure nspcUpSample(Src    : PSCplx;      SrcLen : Integer;
+                       Dst    : PSCplx;  var DstLen : Integer;
+                       Factor : Integer; var Phase  : Integer); stdcall;
+procedure nspdUpSample(Src    : PDouble;     SrcLen : Integer;
+                       Dst    : PDouble; var DstLen : Integer;
+                       Factor : Integer; var Phase  : Integer); stdcall;
+procedure nspzUpSample(Src    : PDCplx;      SrcLen : Integer;
+                       Dst    : PDCplx;  var DstLen : Integer;
+                       Factor : Integer; var Phase  : Integer); stdcall;
+procedure nspwUpSample(Src    : PShort;      SrcLen : Integer;
+                       Dst    : PShort;  var DstLen : Integer;
+                       Factor : Integer; var Phase  : Integer); stdcall;
+procedure nspvUpSample(Src    : PWCplx;      SrcLen : Integer;
+                       Dst    : PWCplx;  var DstLen : Integer;
+                       Factor : Integer; var Phase  : Integer); stdcall;
+
+{-------------------------------------------------------------------------}
+{        DownSample                                                       }
+{                                                                         }
+{ Down-sample a  signal, conceptually decreasing  its sample rate  by an  }
+{ integer factor and forming output parameters for next sampling;         }
+
+procedure nspsDownSample(Src    : PFloat;      SrcLen : Integer;
+                         Dst    : PFloat;  var DstLen : Integer;
+                         Factor : Integer; var Phase  : Integer); stdcall;
+procedure nspcDownSample(Src    : PSCplx;      SrcLen : Integer;
+                         Dst    : PSCplx;  var DstLen : Integer;
+                         Factor : Integer; var Phase  : Integer); stdcall;
+procedure nspdDownSample(Src    : PDouble;     SrcLen : Integer;
+                         Dst    : PDouble; var DstLen : Integer;
+                         Factor : Integer; var Phase  : Integer); stdcall;
+procedure nspzDownSample(Src    : PDCplx;      SrcLen : Integer;
+                         Dst    : PDCplx;  var DstLen : Integer;
+                         Factor : Integer; var Phase  : Integer); stdcall;
+procedure nspwDownSample(Src    : PShort;      SrcLen : Integer;
+                         Dst    : PShort;  var DstLen : Integer;
+                         Factor : Integer; var Phase  : Integer); stdcall;
+procedure nspvDownSample(Src    : PWCplx;      SrcLen : Integer;
+                         Dst    : PWCplx;  var DstLen : Integer;
+                         Factor : Integer; var Phase  : Integer); stdcall;
+
+{EOF}

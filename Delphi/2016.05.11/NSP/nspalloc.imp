@@ -1,0 +1,19 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+*)
+
+function nspMalloc;  external nspDLL;
+function nspsMalloc; external nspDLL;
+function nspdMalloc; external nspDLL;
+function nspcMalloc; external nspDLL;
+function nspzMalloc; external nspDLL;
+function nspwMalloc; external nspDLL;
+function nspvMalloc; external nspDLL;
+
+procedure nspFree; external nspDLL;
+
+{EOF}

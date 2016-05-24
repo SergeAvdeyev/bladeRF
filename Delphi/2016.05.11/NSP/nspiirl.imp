@@ -1,0 +1,50 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+*)
+
+procedure nspwIirlInit;     external nspDLL;
+procedure nspsIirlInit;     external nspDLL;
+procedure nspcIirlInit;     external nspDLL;
+procedure nspdIirlInit;     external nspDLL;
+procedure nspzIirlInit;     external nspDLL;
+procedure nspwIirlInitGain; external nspDLL;
+
+procedure nspwIirlInitBq;   external nspDLL;
+procedure nspsIirlInitBq;   external nspDLL;
+procedure nspcIirlInitBq;   external nspDLL;
+procedure nspdIirlInitBq;   external nspDLL;
+procedure nspzIirlInitBq;   external nspDLL;
+
+procedure nspwIirlInitDlyl; external nspDLL;
+procedure nspsIirlInitDlyl; external nspDLL;
+procedure nspcIirlInitDlyl; external nspDLL;
+procedure nspdIirlInitDlyl; external nspDLL;
+procedure nspzIirlInitDlyl; external nspDLL;
+
+function nspwIirl;          external nspDLL;
+function nspsIirl;          external nspDLL;
+function nspcIirl(const TapState    : TNSPIirTapState;
+                  var   DlyState    : TNSPIirDlyState;
+                        Samp        : TSCplx)  : TSCplx;
+var
+  Val : TSCplx;
+begin
+  nspcIirlOut(TapState,DlyState,Samp,Val);
+  Result := Val;
+end;
+
+function nspdIirl;          external nspDLL;
+function nspzIirl;          external nspDLL;
+procedure nspcIirlOut;      external nspDLL;
+
+procedure nspwbIirl;         external nspDLL;
+procedure nspsbIirl;         external nspDLL;
+procedure nspcbIirl;         external nspDLL;
+procedure nspdbIirl;         external nspDLL;
+procedure nspzbIirl;         external nspDLL;
+
+{EOF}

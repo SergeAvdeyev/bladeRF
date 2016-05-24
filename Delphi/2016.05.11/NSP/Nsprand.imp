@@ -1,0 +1,65 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+*)
+
+procedure nspsRandUniInit; external nspDLL;
+procedure nspcRandUniInit; external nspDLL;
+procedure nspdRandUniInit; external nspDLL;
+procedure nspzRandUniInit; external nspDLL;
+procedure nspwRandUniInit; external nspDLL;
+procedure nspvRandUniInit; external nspDLL;
+
+function  nspsRandUni;            external nspDLL;
+function  nspcRandUni(var State : TNSPCRandUniState) : TSCplx;
+var
+  Val : TSCplx;
+begin
+  nspcRandUniOut(State,Val);
+  Result := Val;
+end;
+function  nspdRandUni;    external nspDLL;
+function  nspzRandUni;    external nspDLL;
+function  nspwRandUni;    external nspDLL;
+function  nspvRandUni;    external nspDLL;
+procedure nspcRandUniOut; external nspDLL;
+
+procedure nspsbRandUni; external nspDLL;
+procedure nspcbRandUni; external nspDLL;
+procedure nspdbRandUni; external nspDLL;
+procedure nspzbRandUni; external nspDLL;
+procedure nspwbRandUni; external nspDLL;
+procedure nspvbRandUni; external nspDLL;
+
+procedure nspsRandGausInit; external nspDLL;
+procedure nspcRandGausInit; external nspDLL;
+procedure nspdRandGausInit; external nspDLL;
+procedure nspzRandGausInit; external nspDLL;
+procedure nspwRandGausInit; external nspDLL;
+procedure nspvRandGausInit; external nspDLL;
+
+function nspsRandGaus;            external nspDLL;
+function nspcRandGaus(var State : TNSPCRandGausState) : TSCplx;
+var
+  Val : TSCplx;
+begin
+  nspcRandGausOut(State,Val);
+  Result := Val;
+end;
+function nspdRandGaus;     external nspDLL;
+function nspzRandGaus;     external nspDLL;
+function nspwRandGaus;     external nspDLL;
+function nspvRandGaus;     external nspDLL;
+procedure nspcRandGausOut; external nspDLL;
+
+procedure nspsbRandGaus; external nspDLL;
+procedure nspcbRandGaus; external nspDLL;
+procedure nspdbRandGaus; external nspDLL;
+procedure nspzbRandGaus; external nspDLL;
+procedure nspwbRandGaus; external nspDLL;
+procedure nspvbRandGaus; external nspDLL;
+
+{EOF}

@@ -1,0 +1,100 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+
+From:    nspcorr.h
+Purpose: NSP Correlation
+*)
+
+type
+  TNSPAutoCorrType = (NSP_Normal, NSP_Biased, NSP_UnBiased);
+
+{------------------------------------------------------------------------}
+{        AutoCorrelation                                                 }
+{                                                                        }
+{
+  Normal:
+  ~~~~~~~
+  dst[n] = S ~src[k] * src[k+n],  0 <= n < nLags
+                                  0 <= k < len
+
+  Biased:
+  ~~~~~~~
+  dst[n] = K* S ~src[k] * src[k+n],  0 <= n < nLags
+                                     0 <= k < len
+                                     K = 1/len
+  UnBiased:
+  ~~~~~~~~~
+  dst[n] = K* S ~src[k] * src[k+n],  0 <= n < nLags
+                                     0 <= k < len
+                                     K = 1/(len-n)
+
+                                             | src[k], 0<=k<len
+                                   src(k) = <
+                                             | 0, otherwise
+}
+
+procedure nspsAutoCorr(Src         : PFloat;  Len   : Integer;
+                       Dst         : PFloat;  NLags : Integer;
+                       CorrType    : TNSPAutoCorrType); stdcall;
+procedure nspcAutoCorr(Src         : PSCplx;  Len   : Integer;
+                       Dst         : PSCplx;  NLags : Integer;
+                       CorrType    : TNSPAutoCorrType); stdcall;
+procedure nspdAutoCorr(Src         : PDouble; Len   : Integer;
+                       Dst         : PDouble; NLags : Integer;
+                       CorrType    : TNSPAutoCorrType); stdcall;
+procedure nspzAutoCorr(Src         : PDCplx;  Len   : Integer;
+                       Dst         : PDCplx;  NLags : Integer;
+                       CorrType    : TNSPAutoCorrType); stdcall;
+procedure nspwAutoCorr(Src         : PShort;  Len   : Integer;
+                       Dst         : PShort;  NLags : Integer;
+                       CorrType    : TNSPAutoCorrType;
+                       ScaleMode   : Integer;
+                   var ScaleFactor : Integer); stdcall;
+procedure nspvAutoCorr(Src         : PWCplx;  Len   : Integer;
+                       Dst         : PWCplx;  NLags : Integer;
+                       CorrType    : TNSPAutoCorrType;
+                       ScaleMode   : Integer;
+                   var ScaleFactor : Integer); stdcall;
+
+{------------------------------------------------------------------------}
+{        CrossCorralation                                                }
+{
+  dst[n] = S ~srcA[k] * srcB[k+n+loLag],  0 <= n <= hiLag-loLag
+                                          0 <= k < lenA
+
+                                                 | srcB[k], 0<=k<lenB
+                                       srcB(k) = <
+                                                 | 0, otherwise
+  Number of result elements is hiLag-loLag+1.
+  Estimate at lag of loLag in dst[0].
+  Estimate at lag of hiLag in dst[hiLag-loLag].
+}
+
+procedure nspsCrossCorr(SrcA        : PFloat;  LenA         : Integer;
+                        SrcB        : PFloat;  LenB         : Integer;
+                        Dst         : PFloat;  LoLag, HiLag : Integer); stdcall;
+procedure nspcCrossCorr(SrcA        : PSCplx;  LenA         : Integer;
+                        SrcB        : PSCplx;  LenB         : Integer;
+                        Dst         : PSCplx;  LoLag, HiLag : Integer); stdcall;
+procedure nspdCrossCorr(SrcA        : PDouble; LenA         : Integer;
+                        SrcB        : PDouble; LenB         : Integer;
+                        Dst         : PDouble; LoLag, HiLag : Integer); stdcall;
+procedure nspzCrossCorr(SrcA        : PDCplx;  LenA         : Integer;
+                        SrcB        : PDCplx;  LenB         : Integer;
+                        Dst         : PDCplx;  LoLag, HiLag : Integer); stdcall;
+procedure nspwCrossCorr(SrcA        : PShort;  LenA         : Integer;
+                        SrcB        : PShort;  LenB         : Integer;
+                        Dst         : PShort;  LoLag, HiLag : Integer;
+                        ScaleMode   : Integer;
+                    var ScaleFactor : Integer); stdcall;
+procedure nspvCrossCorr(SrcA        : PWCplx;  LenA         : Integer;
+                        SrcB        : PWCplx;  LenB         : Integer;
+                        Dst         : PWCplx;  LoLag,HiLag  : Integer;
+                        ScaleMode   : Integer;
+                    var ScaleFactor : Integer); stdcall;
+
+{EOF}

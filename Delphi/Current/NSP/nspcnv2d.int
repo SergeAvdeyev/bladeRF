@@ -1,0 +1,29 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+
+From:    nspcnv2d.h
+Purpose: NSP 2D Filtering Functions
+*)
+
+{-------------------------------------------------------------------------}
+{         Conv2D                                                          }
+{                                                                         }
+{ Perform finite, linear convolution of two two-dimensional signals.      }
+
+procedure nspsConv2D(X           : PFloat;  XCols : Integer; XRows : Integer;
+                     H           : PFloat;  HCols : Integer; HRows : Integer;
+                     Y           : PFloat);  stdcall;
+procedure nspdConv2D(X           : PDouble; XCols : Integer; XRows : Integer;
+                     H           : PDouble; HCols : Integer; HRows : Integer;
+                     Y           : PDouble); stdcall;
+procedure nspwConv2D(X           : PShort;  XCols : Integer; XRows : Integer;
+                     H           : PShort;  HCols : Integer; HRows : Integer;
+                     Y           : PShort;
+                     ScaleMode   : Integer;
+                 var ScaleFactor : Integer); stdcall;
+
+{EOF}

@@ -1,0 +1,172 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+
+From:    nspnorm.h
+Purpose:
+*)
+
+const
+  NSP_C         = $01;
+  NSP_L1        = $02;
+  NSP_L2        = $04;
+  NSP_RELATIVE  = $08;
+  NSP_SQR_L2    = $10;
+
+
+// Functions: nsp?Norm
+//  Compute the C, L1 or L2 norm of the input vectors’ difference ||a-b||
+//  or of one vector ||a||.
+//  Vector x[n]' norm definitions:
+//  C  norm: ||x[n]|| = MAX(|x[i]|)
+//  L1 norm: ||x[n]|| = SUMM(|x[i]|)
+//  L2 norm: ||x[n]|| = SQRT( SUMM(x[i]*x[i]) )
+//  SQR_L2 norm: ||x[n]|| = SUMM(x[i]*x[i])
+//
+// Parameters:
+//  srcA    - pointer to the first input vector a[n], must not be NULL.
+//  srcB    - pointer to the second input vector b[n].
+//  len     - the number of elements in the input vectors.
+//  flag    - specifies the norm type and the relative mode.
+//          Possible values:
+//          NSP_C  - C  norm,
+//          NSP_L1 - L1 norm,
+//          NSP_L2 - L2 norm,
+//          NSP_SQR_L2 - SQR_L2 norm,
+//          NSP_C |NSP_RELATIVE - C  norm and relative mode,
+//          NSP_L1|NSP_RELATIVE - L1 norm and relative mode,
+//          NSP_L2|NSP_RELATIVE - L2 norm and relative mode.
+//          NSP_SQR_L2|NSP_RELATIVE - SQR_L2 norm and relative mode.
+//
+//  Returned value:
+//          ||a-b||       if srcB != NULL && !(flag & NSP_RELATIVE)
+//          ||a||         if srcB == NULL && !(flag & NSP_RELATIVE)
+//          ||a-b||/||a|| if srcB != NULL && flag & NSP_RELATIVE
+//          1             if srcB == NULL && flag & NSP_RELATIVE
+//          FLT_MAX       if ||a|| < FLT_MIN && flag & NSP_RELATIVE
+
+function nspsNorm(SrcA : PFloat;  SrcB : PFloat;
+                  Len  : Integer; Flag : Integer) : Float;  stdcall;
+function nspcNorm(SrcA : PSCplx;  SrcB : PSCplx;
+                  Len  : Integer; Flag : Integer) : Float;  stdcall;
+function nspdNorm(SrcA : PDouble; SrcB : PDouble;
+                  Len  : Integer; Flag : Integer) : Double; stdcall;
+function nspzNorm(SrcA : PDCplx;  SrcB : PDCplx;
+                  Len  : Integer; Flag : Integer) : Double; stdcall;
+function nspwNorm(SrcA : PShort;  SrcB : PShort;
+                  Len  : Integer; Flag : Integer) : Float;  stdcall;
+function nspvNorm(SrcA : PWCplx;  SrcB : PWCplx;
+                  Len  : Integer; Flag : Integer) : Float;  stdcall;
+
+// Functions: nspwNormExt, nspvNormExt
+//  Compute the C, L1 or L2 norm of the input vectors’ difference ||a-b||
+//  or of one vector ||a|| as nsp?Norm functions
+//  and scales the float result to int result according to scale mode and
+//  scale factor.
+//
+// Parameters:
+//  srcA    pointer to the first input vector a[n], must not be NULL.
+//  srcB    pointer to the second input vector b[n].
+//  len     the number of elements in the input vectors.
+//  flag    specifies the norm type and the relative mode.
+//          Possible values:
+//          NSP_C  - C  norm,
+//          NSP_L1 - L1 norm,
+//          NSP_L2 - L2 norm,
+//          NSP_SQR_L2 - SQR_L2 norm,
+//          NSP_C |NSP_RELATIVE - C  norm and relative mode,
+//          NSP_L1|NSP_RELATIVE - L1 norm and relative mode,
+//          NSP_L2|NSP_RELATIVE - L2 norm and relative mode.
+//          NSP_SQR_L2|NSP_RELATIVE - SQR_L2 norm and relative mode.
+//  scaleMode    scale mode for returned value.
+//               Below VALUE is float, non-negative result of nsp?Norm.
+//               scale(VALUE) will be compute according to scaleMode:
+//          NSP_NO_SCALE              - scale(VALUE) = (int)(VALUE+0.5)
+//          NSP_NO_SCALE|NSP_SATURATE - scale(VALUE) = VALUE+0.5 >= INT_MAX ?
+//                                                     INT_MAX :
+//                                                     (int)(VALUE+0.5)
+//          NSP_FIXED_SCALE              - scale(VALUE) =
+//                                         (int)(VALUE/(1<<*scaleFactor))
+//          NSP_FIXED_SCALE|NSP_SATURATE - scale(VALUE) =
+//                                         (VALUE/(1<<*scaleFactor) >= INT_MAX ?
+//                                         INT_MAX :
+//                                         (int)(VALUE/(1<<*scaleFactor))
+//          NSP_AUTO_SCALE - scale(VALUE) = (int)(VALUE/(1<<*scaleFactor)) where
+//                           VALUE/(1<<*scaleFactor) < INT_MAX
+//  scaleFactor  pointer to scale factor for returned value (see above)
+//
+//  Returned value:
+//          scale(||a-b||)       if srcB != NULL && !(flag & NSP_RELATIVE)
+//          scale(||a||)         if srcB == NULL && !(flag & NSP_RELATIVE)
+//          scale(||a-b||/||a||) if srcB != NULL && flag & NSP_RELATIVE
+//          1                    if srcB == NULL && flag & NSP_RELATIVE
+//          scale(FLT_MAX)       if ||a|| < FLT_MIN && flag & NSP_RELATIVE
+
+function nspwNormExt(SrcA        : PShort;  SrcB : PShort;
+                     Len         : Integer; Flag : Integer;
+                     ScaleMode   : Integer;
+                 var ScaleFactor : Integer) : Integer; stdcall;
+function nspvNormExt(SrcA        : PWCplx;  SrcB : PWCplx;
+                     Len         : Integer; Flag : Integer;
+                     ScaleMode   : Integer;
+                 var ScaleFactor : Integer) : Integer; stdcall;
+
+// Function: nsp?bNormalize().
+//  Subtract the offset constant from the elements of the input vector a[n]
+//  and divides the result by factor.
+//  Output vector b[n] has the elements:
+//      b[i] = ( a[i] - offset) / factor.
+//
+// Parameters:
+//  src     pointer to the input vector a[n].
+//  dst     pointer to the output vector b[n].
+//  len     the number of elements in the input and output vectors.
+//  offset  offset for each element a[i]
+//  factor  factor for each element a[i]
+
+procedure nspsbNormalize(Src    : PFloat;  Dst    : PFloat;  Len : Integer;
+                         Offset : Float;   Factor : Float);  stdcall;
+procedure nspcbNormalize(Src    : PSCplx;  Dst    : PSCplx;  Len : Integer;
+                         Offset : TSCplx;  Factor : Float);  stdcall;
+procedure nspdbNormalize(Src    : PDouble; Dst    : PDouble; Len : Integer;
+                         Offset : Double;  Factor : Double); stdcall;
+procedure nspzbNormalize(Src    : PDCplx;  Dst    : PDCplx;  Len : Integer;
+                         Offset : TDCplx;  Factor : Double); stdcall;
+procedure nspwbNormalize(Src    : PShort;  Dst    : PShort;  Len : Integer;
+                         Offset : Short;   Factor : Float);  stdcall;
+procedure nspvbNormalize(Src    : PWCplx;  Dst    : PWCplx;  Len : Integer;
+                         Offset : TWCplx;  Factor : Float);  stdcall;
+
+// Functions: nspsSum, nspdSum, nspcSum, nspzSum
+//  Compute the sum of the input vectors’ elements.
+//
+// Parameters:
+//  src   pointer to the input vector.
+//  n     the number of elements in the input vector.
+//
+//  Returned value:  SUM (src[i])
+
+function nspsSum(Src : PFloat;  N : Integer) : Float;  stdcall;
+function nspdSum(Src : PDouble; N : Integer) : Double; stdcall;
+function nspcSum(Src : PSCplx;  N : Integer; var Sum : TSCplx) : NSPStatus; stdcall;
+function nspzSum(Src : PDCplx;  N : Integer; var Sum : TDCplx) : NSPStatus; stdcall;
+
+// Function: nspwSum
+//  Computes the sum of the input vectors’ elements with scaling.
+//
+// Parameters:
+//  src          pointer to the input vector.
+//  n            the number of elements in the input vector.
+//  scaleMode    scale mode for returned value.
+//  scaleFactor  pointer to scale factor for returned value.
+//
+//  Returned value:  SCALE (SUM (src[i]))
+
+function nspwSum(Src         : PShort; N : Integer;
+                 ScaleMode   : Integer;
+             var ScaleFactor : Integer)  : Integer; stdcall;
+
+{EOF}

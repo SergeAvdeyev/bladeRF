@@ -1,0 +1,330 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-200 Intel Corporation. All Rights Reserved.
+
+From:    nsparith.h
+Purpose: NSP Scalar and Vector Arithmetics
+*)
+
+{-------------------------------------------------------------------------}
+{   Miscellaneous Scalar Functions and Vector Functions                   }
+{        Complex Add, Sub, Mpy, Div, Conj                                 }
+{                                                                         }
+{   These functions perform addition, subtraction, multiplication,        }
+{   division, and conjugation on complex numbers a and b.                 }
+function nspcAdd( A, B : TSCplx) : TSCplx; stdcall;
+function nspcSub( A, B : TSCplx) : TSCplx; stdcall;
+function nspcMpy( A, B : TSCplx) : TSCplx; stdcall;
+function nspcDiv( A, B : TSCplx) : TSCplx; stdcall;
+function nspcConj(A    : TSCplx) : TSCplx; stdcall;
+
+procedure nspcAddOut( A, B : TSCplx; var Val : TSCplx); stdcall;
+procedure nspcSubOut( A, B : TSCplx; var Val : TSCplx); stdcall;
+procedure nspcMpyOut( A, B : TSCplx; var Val : TSCplx); stdcall;
+procedure nspcDivOut( A, B : TSCplx; var Val : TSCplx); stdcall;
+procedure nspcConjOut(A    : TSCplx; var Val : TSCplx); stdcall;
+
+{---- Additional Functions -----------------------------------------------}
+function  nspcSet(Re, Im : Float) : TSCplx; stdcall;
+procedure nspcSetOut(Re, Im : Float; var Val : TSCplx); stdcall;
+
+{-------------------------------------------------------------------------}
+{        Vector Initialization                                            }
+{   These functions initialize vectors of length n.                       }
+procedure nspsbZero(Dst : PFloat; N : integer); stdcall;
+procedure nspcbZero(Dst : PSCplx; N : integer); stdcall;
+
+procedure nspsbSet(Val    : Float; Dst : PFloat; N : integer); stdcall;
+procedure nspcbSet(Re, Im : Float; Dst : PSCplx; N : integer); stdcall;
+
+procedure nspsbCopy(Src : PFloat; Dst : PFloat; N : integer); stdcall;
+procedure nspcbCopy(Src : PSCplx; Dst : PSCplx; N : integer); stdcall;
+
+{-------------------------------------------------------------------------}
+{        Vector Addition and multiplication                               }
+{  These functions perform element-wise arithmetic on vectors of length n }
+
+{ dst[i]=dst[i]+val;                                                      }
+procedure nspsbAdd1(Val : Float;  Dst : PFloat; N : integer); stdcall;
+procedure nspcbAdd1(Val : TSCplx; Dst : PSCplx; N : integer); stdcall;
+
+{ dst[i]=dst[i]+src[i];                                                   }
+procedure nspsbAdd2(Src : PFloat; Dst : PFloat; N : integer); stdcall;
+procedure nspcbAdd2(Src : PSCplx; Dst : PSCplx; N : integer); stdcall;
+
+{ dst[i]=srcA[i]+srcB[i];                                                 }
+procedure nspsbAdd3(SrcA : PFloat; SrcB : PFloat; Dst : PFloat; N : integer); stdcall;
+procedure nspcbAdd3(SrcA : PSCplx; SrcB : PSCplx; Dst : PSCplx; N : integer); stdcall;
+
+{ dst[i]=dst[i]-val;                                                      }
+procedure nspsbSub1(Val : Float;  Dst : PFloat; N : integer); stdcall;
+procedure nspcbSub1(Val : TSCplx; Dst : PSCplx; N : integer); stdcall;
+
+{ dst[i]=dst[i]-val[i];                                                   }
+procedure nspsbSub2(Val : PFloat; Dst : PFloat; N : integer); stdcall;
+procedure nspcbSub2(Val : PSCplx; Dst : PSCplx; N : integer); stdcall;
+
+{ dst[i]=src[i]-val[i];                                                   }
+procedure nspsbSub3(Src : PFloat; Val : PFloat; Dst : PFloat; N : integer); stdcall;
+procedure nspcbSub3(Src : PSCplx; Val : PSCplx; Dst : PSCplx; N : integer); stdcall;
+
+{ dst[i]=dst[i]*val;                                                      }
+procedure nspsbMpy1(Val : Float;  Dst : PFloat; N : integer); stdcall;
+procedure nspcbMpy1(Val : TSCplx; Dst : PSCplx; N : integer); stdcall;
+
+{ dst[i]=dst[i]*src[i];                                                   }
+procedure nspsbMpy2(Src : PFloat; Dst : PFloat; N : integer); stdcall;
+procedure nspcbMpy2(Src : PSCplx; Dst : PSCplx; N : integer); stdcall;
+
+{ dst[i]=srcA[i]*srcB[i];                                                 }
+procedure nspsbMpy3(SrcA : PFloat; SrcB : PFloat; Dst : PFloat; N : integer); stdcall;
+procedure nspcbMpy3(SrcA : PSCplx; SrcB : PSCplx; Dst : PSCplx; N : integer); stdcall;
+
+{-------------------------------------------------------------------------}
+{        Complex conjugates of scalars and vectors                        }
+
+procedure nspcbConj1      (Vec : PSCplx;               N : integer); stdcall;
+procedure nspcbConj2      (Src : PSCplx; Dst : PSCplx; N : integer); stdcall;
+procedure nspcbConjFlip2  (Src : PSCplx; Dst : PSCplx; N : integer); stdcall;
+procedure nspcbConjExtend1(Vec : PSCplx;               N : integer); stdcall;
+procedure nspcbConjExtend2(Src : PSCplx; Dst : PSCplx; N : integer); stdcall;
+
+{-------------------------------------------------------------------------}
+{   Miscellaneous Scalar Functions and Vector Functions                   }
+{        Complex Add, Sub, Mpy, Div, Conj                                 }
+{   These functions perform addition, subtraction, multiplication,        }
+{   division, and conjugation on complex numbers a and b.                 }
+{                                                                         }
+
+function nspzAdd( A, B : TDCplx) : TDCplx; stdcall;
+function nspzSub( A, B : TDCplx) : TDCplx; stdcall;
+function nspzMpy( A, B : TDCplx) : TDCplx; stdcall;
+function nspzDiv( A, B : TDCplx) : TDCplx; stdcall;
+function nspzConj(A    : TDCplx) : TDCplx; stdcall;
+
+{---- Additional Functions -----------------------------------------------}
+
+function nspzSet(Re, Im : Double) : TDCplx; stdcall;
+
+{-------------------------------------------------------------------------}
+{        Vector Initialization                                            }
+{   These functions initialize vectors of length n.                       }
+
+procedure nspdbZero(Dst : PDouble; N : Integer); stdcall;
+procedure nspzbZero(Dst : PDCplx;  N : Integer); stdcall;
+
+procedure nspdbSet(Val    : Double; Dst : PDouble; N : Integer); stdcall;
+procedure nspzbSet(Re, Im : Double; Dst : PDCplx;  N : Integer); stdcall;
+
+procedure nspdbCopy(Src, Dst : PDouble; N : Integer); stdcall;
+procedure nspzbCopy(Src, Dst : PDCplx;  N : Integer); stdcall;
+
+{-------------------------------------------------------------------------}
+{        Vector Addition and multiplication                               }
+{   These functions perform element-wise arithmetic on vectors of length n}
+
+{ dst[i]=dst[i]+val;                                                      }
+procedure nspdbAdd1(Val : Double; Dst : PDouble; N : Integer); stdcall;
+procedure nspzbAdd1(Val : TDCplx; Dst : PDCplx;  N : Integer); stdcall;
+
+{ dst[i]=dst[i]+src[i];                                                   }
+procedure nspdbAdd2(Src, Dst : PDouble; N : Integer); stdcall;
+procedure nspzbAdd2(Src, Dst : PDCplx;  N : Integer); stdcall;
+
+{ dst[i]=srcA[i]+srcB[i];                                                 }
+procedure nspdbAdd3(SrcA, SrcB, Dst : PDouble; N : Integer); stdcall;
+procedure nspzbAdd3(SrcA, SrcB, Dst : PDCplx;  N : Integer); stdcall;
+
+{ dst[i]=dst[i]-val;                                                      }
+procedure nspdbSub1(Val : Double; Dst : PDouble; N : Integer); stdcall;
+procedure nspzbSub1(Val : TDCplx; Dst : PDCplx;  N : Integer); stdcall;
+
+{ dst[i]=dst[i]-val[i];                                                   }
+procedure nspdbSub2(Val, Dst : PDouble; N : Integer); stdcall;
+procedure nspzbSub2(Val, Dst : PDCplx;  N : Integer); stdcall;
+
+{ dst[i]=src[i]-val[i];                                                   }
+procedure nspdbSub3(Src, Val, Dst : PDouble; N : Integer); stdcall;
+procedure nspzbSub3(Src, Val, Dst : PDCplx;  N : Integer); stdcall;
+
+{ dst[i]=dst[i]*val;                                                      }
+procedure nspdbMpy1(Val : Double; Dst : PDouble; N : Integer); stdcall;
+procedure nspzbMpy1(Val : TDCplx; Dst : PDCplx;  N : Integer); stdcall;
+
+{ dst[i]=dst[i]*src[i];                                                   }
+procedure nspdbMpy2(Src, Dst : PDouble; N : Integer); stdcall;
+procedure nspzbMpy2(Src, Dst : PDCplx;  N : Integer); stdcall;
+
+{ dst[i]=srcA[i]*srcB[i];                                                 }
+procedure nspdbMpy3(SrcA, SrcB, Dst : PDouble; N : Integer); stdcall;
+procedure nspzbMpy3(SrcA, SrcB, Dst : PDCplx;  N : Integer); stdcall;
+
+{-------------------------------------------------------------------------}
+{                                                                         }
+{        Complex conjugates of scalars and vectors                        }
+{                                                                         }
+
+procedure nspzbConj1(      Vec      : PDCplx; N : Integer); stdcall;
+procedure nspzbConj2(      Src, Dst : PDCplx; N : Integer); stdcall;
+procedure nspzbConjFlip2(  Src, Dst : PDCplx; N : Integer); stdcall;
+procedure nspzbConjExtend1(Vec      : PDCplx; N : Integer); stdcall;
+procedure nspzbConjExtend2(Src, Dst : PDCplx; N : Integer); stdcall;
+
+{-------------------------------------------------------------------------}
+{   Miscellaneous Scalar Functions and Vector Functions                   }
+{        Complex Add, Sub, Mpy, Div, Conj                                 }
+{   These functions perform addition, subtraction, multiplication,        }
+{   division, and conjugation on complex numbers a and b.                 }
+{                                                                         }
+
+function nspvAdd(A, B        : TWCplx;
+                 ScaleMode   : integer;
+             var ScaleFactor : integer) : TWCplx; stdcall;
+function nspvSub(A, B        : TWCplx;
+                 ScaleMode   : integer;
+             var ScaleFactor : integer) : TWCplx; stdcall;
+function nspvMpy(A, B        : TWCplx;
+                 ScaleMode   : integer;
+             var ScaleFactor : integer) : TWCplx; stdcall;
+function nspvDiv(A, B        : TWCplx)  : TWCplx; stdcall;
+function nspvConj(A          : TWCplx)  : TWCplx; stdcall;
+
+{---- Additional Functions -----------------------------------------------}
+
+function nspvSet(Re, Im : Short) : TWCplx; stdcall;
+
+{-------------------------------------------------------------------------}
+{        Vector Initialization                                            }
+{   These functions initialize vectors of length n.                       }
+
+procedure nspwbZero(Dst : PShort; N : integer); stdcall;
+procedure nspvbZero(Dst : PWCplx; N : integer); stdcall;
+
+procedure nspwbSet(Val    : Short; Dst : PShort; N : integer); stdcall;
+procedure nspvbSet(Re, Im : Short; Dst : PWCplx; N : integer); stdcall;
+
+procedure nspwbCopy(Src : PShort; Dst : PShort; N : integer); stdcall;
+procedure nspvbCopy(Src : PWCplx; Dst : PWCplx; N : integer); stdcall;
+
+{-------------------------------------------------------------------------}
+{        Vector Addition and multiplication                               }
+{   These functions perform element-wise arithmetic on vectors of length n}
+
+procedure nspwbAdd1(Val         : Short;
+                    Dst         : PShort;
+                    N           : integer;
+                    ScaleMode   : integer;
+                var ScaleFactor : integer); stdcall;
+procedure nspvbAdd1(Val         : TWCplx;
+                    Dst         : PWCplx;
+                    N           : integer;
+                    ScaleMode   : integer;
+                var ScaleFactor : integer); stdcall;
+
+procedure nspwbAdd2(Src         : PShort;
+                    Dst         : PShort;
+                    N           : integer;
+                    ScaleMode   : integer;
+                var ScaleFactor : integer); stdcall;
+procedure nspvbAdd2(Src         : PWCplx;
+                    Dst         : PWCplx;
+                    N           : integer;
+                    ScaleMode   : integer;
+                var ScaleFactor : integer); stdcall;
+
+procedure nspwbAdd3(SrcA        : PShort;
+                    SrcB        : PShort;
+                    Dst         : PShort;
+                    N           : integer;
+                    ScaleMode   : integer;
+                var ScaleFactor : integer); stdcall;
+procedure nspvbAdd3(SrcA        : PWCplx;
+                    SrcB        : PWCplx;
+                    Dst         : PWCplx;
+                    N           : integer;
+                    ScaleMode   : integer;
+                var ScaleFactor : integer); stdcall;
+
+procedure nspwbSub1(Val         : Short;
+                    Dst         : PShort;
+                    N           : integer;
+                    ScaleMode   : integer;
+                var ScaleFactor : integer); stdcall;
+procedure nspvbSub1(Val         : TWCplx;
+                    Dst         : PWCplx;
+                    N           : integer;
+                    ScaleMode   : integer;
+                var ScaleFactor : integer); stdcall;
+
+procedure nspwbSub2(Val         : PShort;
+                    Dst         : PShort;
+                    N           : integer;
+                    ScaleMode   : integer;
+                var ScaleFactor : integer); stdcall;
+procedure nspvbSub2(Val         : PWCplx;
+                    Dst         : PWCplx;
+                    N           : integer;
+                    ScaleMode   : integer;
+                var ScaleFactor : integer); stdcall;
+
+procedure nspwbSub3(Src         : PShort;
+                    Val         : PShort;
+                    Dst         : PShort;
+                    N           : integer;
+                    ScaleMode   : integer;
+                var ScaleFactor : integer); stdcall;
+procedure nspvbSub3(Src         : PWCplx;
+                    Val         : PWCplx;
+                    Dst         : PWCplx;
+                    N           : integer;
+                    ScaleMode   : integer;
+                var ScaleFactor : integer); stdcall;
+
+procedure nspwbMpy1(Val         : Short;
+                    Dst         : PShort;
+                    N           : integer;
+                    ScaleMode   : integer;
+                var ScaleFactor : integer); stdcall;
+procedure nspvbMpy1(Val         : TWCplx;
+                    Dst         : PWCplx;
+                    N           : integer;
+                    ScaleMode   : integer;
+                var ScaleFactor : integer); stdcall;
+
+procedure nspwbMpy2(Val         : PShort;
+                    Dst         : PShort;
+                    N           : integer;
+                    ScaleMode   : integer;
+                var ScaleFactor : integer); stdcall;
+procedure nspvbMpy2(Val         : PWCplx;
+                    Dst         : PWCplx;
+                    N           : integer;
+                    ScaleMode   : integer;
+                var ScaleFactor : integer); stdcall;
+
+procedure nspwbMpy3(SrcA        : PShort;
+                    SrcB        : PShort;
+                    Dst         : PShort;
+                    N           : integer;
+                    ScaleMode   : integer;
+                var ScaleFactor : integer); stdcall;
+procedure nspvbMpy3(SrcA        : PWCplx;
+                    SrcB        : PWCplx;
+                    Dst         : PWCplx;
+                    N           : integer;
+                    ScaleMode   : integer;
+                var ScaleFactor : integer); stdcall;
+
+{-------------------------------------------------------------------------}
+{        Complex conjugates of vectors                                    }
+
+procedure nspvbConj1(      Vec : PWCplx;               N : integer); stdcall;
+procedure nspvbConj2(      Src : PWCplx; Dst : PWCplx; N : integer); stdcall;
+procedure nspvbConjFlip2(  Src : PWCplx; Dst : PWCplx; N : integer); stdcall;
+procedure nspvbConjExtend1(Vec : PWCplx;               N : integer); stdcall;
+procedure nspvbConjExtend2(Src : PWCplx; Dst : PWCplx; N : integer); stdcall;
+
+{EOF}

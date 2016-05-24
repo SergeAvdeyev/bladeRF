@@ -1,0 +1,93 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+*)
+
+procedure nspvDft;         external nspDLL;
+procedure nspcDft;         external nspDLL;
+procedure nspzDft;         external nspDLL;
+
+procedure nspvFft;         external nspDLL;
+procedure nspcFft;         external nspDLL;
+procedure nspzFft;         external nspDLL;
+
+procedure nspvFftNip;      external nspDLL;
+procedure nspcFftNip;      external nspDLL;
+procedure nspzFftNip;      external nspDLL;
+
+procedure nspvrFft;        external nspDLL;
+procedure nspcrFft;        external nspDLL;
+procedure nspzrFft;        external nspDLL;
+
+procedure nspvrFftNip;     external nspDLL;
+procedure nspcrFftNip;     external nspDLL;
+procedure nspzrFftNip;     external nspDLL;
+
+procedure nspwRealFftl;    external nspDLL;
+procedure nspsRealFftl;    external nspDLL;
+procedure nspdRealFftl;    external nspDLL;
+
+procedure nspwRealFftlNip; external nspDLL;
+procedure nspsRealFftlNip; external nspDLL;
+procedure nspdRealFftlNip; external nspDLL;
+
+procedure nspwCcsFftl;     external nspDLL;
+procedure nspsCcsFftl;     external nspDLL;
+procedure nspdCcsFftl;     external nspDLL;
+
+procedure nspwCcsFftlNip;  external nspDLL;
+procedure nspsCcsFftlNip;  external nspDLL;
+procedure nspdCcsFftlNip;  external nspDLL;
+
+procedure nspwMpyRCPack2;  external nspDLL;
+procedure nspsMpyRCPack2;  external nspDLL;
+procedure nspdMpyRCPack2;  external nspDLL;
+
+procedure nspwMpyRCPack3;  external nspDLL;
+procedure nspsMpyRCPack3;  external nspDLL;
+procedure nspdMpyRCPack3;  external nspDLL;
+
+procedure nspwMpyRCPerm2;  external nspDLL;
+procedure nspsMpyRCPerm2;  external nspDLL;
+procedure nspdMpyRCPerm2;  external nspDLL;
+
+procedure nspwMpyRCPerm3;  external nspDLL;
+procedure nspsMpyRCPerm3;  external nspDLL;
+procedure nspdMpyRCPerm3;  external nspDLL;
+
+procedure nspwRealFft;     external nspDLL;
+procedure nspsRealFft;     external nspDLL;
+procedure nspdRealFft;     external nspDLL;
+
+procedure nspwRealFftNip;  external nspDLL;
+procedure nspsRealFftNip;  external nspDLL;
+procedure nspdRealFftNip;  external nspDLL;
+
+procedure nspwCcsFft;      external nspDLL;
+procedure nspsCcsFft;      external nspDLL;
+procedure nspdCcsFft;      external nspDLL;
+
+procedure nspwCcsFftNip;   external nspDLL;
+procedure nspsCcsFftNip;   external nspDLL;
+procedure nspdCcsFftNip;   external nspDLL;
+
+procedure nspwReal2Fft;    external nspDLL;
+procedure nspsReal2Fft;    external nspDLL;
+procedure nspdReal2Fft;    external nspDLL;
+
+procedure nspwReal2FftNip; external nspDLL;
+procedure nspsReal2FftNip; external nspDLL;
+procedure nspdReal2FftNip; external nspDLL;
+
+procedure nspwCcs2Fft;     external nspDLL;
+procedure nspsCcs2Fft;     external nspDLL;
+procedure nspdCcs2Fft;     external nspDLL;
+
+procedure nspwCcs2FftNip;  external nspDLL;
+procedure nspsCcs2FftNip;  external nspDLL;
+procedure nspdCcs2FftNip;  external nspDLL;
+
+{EOF}

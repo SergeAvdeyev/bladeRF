@@ -1,0 +1,531 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+
+From:    nspcvrt.h
+Purpose: Data Convertion Functions.
+*)
+
+{-------Flags to determine the transformation-----------------------------}
+
+const
+  NSP_Noflags   = $0000;     // Specifies an absence of all flags
+  NSP_Round     = $0080;     // Specifies that floating-point values
+                             // should be rounded to the nearest integer
+  NSP_TruncZero = $0100;     // Specifies that floating-point values
+                             // should be truncated toward zero
+  NSP_TruncNeg  = $0200;     // Specifies that floating-point values
+                             // should be truncated toward negative
+                             // infinity
+  NSP_TruncPos  = $0400;     // Specifies that floating-point values
+                             // should be truncated toward positive
+                             // infinity
+  NSP_Unsigned  = $0800;     // Specifies that integer values are
+                             // unsigned
+  NSP_Clip      = $1000;     // Specifies that floating-point values
+                             // outside the allowable integer range
+                             // are saturated to maximum(minimum)
+                             // integer value
+  NSP_OvfErr    = $2000;     // Specifies that an overflow error should
+                             // be signaled with a call to nspError()
+
+{-------------------------------------------------------------------------}
+{ Maximum possible phase value for short function, corresponds to NSP_PI  }
+
+  NSP_CVRT_MAXPHASE = 16383;
+
+{-------------------------------------------------------------------------}
+{             bFloatToInt, bIntToFloat                                    }
+{                                                                         }
+{Vector floating-point to integer and integer to floating-point conversion}
+{-------------------------------------------------------------------------}
+{ FUNCTION:                                                               }
+{   nsp<s,d>bFloatToInt                                                   }
+{ DESCRIPTION:                                                            }
+{   Converts the float point data in the input array and stores           }
+{   the results in the output array.                                      }
+{ PARAMETERS:                                                             }
+{   src       - an input array to be converted;                           }
+{   dst       - an output array to store the result;                      }
+{   len       - a length of the arrays;                                   }
+{   wordSize  - specifies the size of an integer in bits,                 }
+{                     and must be 8, 16 or 32;                            }
+{   flags     - specifies the sort of the conversion and consists of the  }
+{               bitwise-OR of flags, defined in the beginnig of this file }
+{                                                                         }
+
+procedure nspsbFloatToInt(Src      : PFloat;  Dst   : Pointer; Len : Integer;
+                          WordSize : Integer; Flags : Integer); stdcall;
+procedure nspdbFloatToInt(Src      : PDouble; Dst   : Pointer; Len : Integer;
+                          WordSize : Integer; Flags : Integer); stdcall;
+
+{ FUNCTION:                                                               }
+{   nsp<s,d>bIntToFloat                                                   }
+{ DESCRIPTION:                                                            }
+{   Converts the integer data in the input array and stores the results   }
+{   in the output array                                                   }
+{ PARAMETERS:                                                             }
+{   src       - an input array to be converted;                           }
+{   dst       - an output array to store the result;                      }
+{   len       - a length of the arrays;                                   }
+{   wordSize  - specifies the size of an integer in bits,                 }
+{                     and must be 8, 16 or 32;                            }
+{   flags     - specifies that integer values are unsigned or signed.     }
+{                                                                         }
+
+procedure nspsbIntToFloat(Src      : Pointer; Dst   : PFloat;  Len : Integer;
+                          WordSize : Integer; Flags : Integer); stdcall;
+procedure nspdbIntToFloat(Src      : Pointer; Dst   : PDouble; Len : Integer;
+                          WordSize : Integer; Flags : Integer); stdcall;
+
+{-------------------------------------------------------------------------}
+{             bFloatToFix, bFixToFloat                                    }
+{                                                                         }
+{ Vector floating-point to fixed-point and                                }
+{            fixed-point to floating-point conversion                     }
+{-------------------------------------------------------------------------}
+{ FUNCTION:                                                               }
+{   nsp<s,d>bFloatToFix                                                   }
+{ DESCRIPTION:                                                            }
+{   Converts the floating-point data in the input array and stores        }
+{   the results in the output array.                                      }
+{ PARAMETERS:                                                             }
+{   src       - an input array to be converted;                           }
+{   dst       - an output array to store the result;                      }
+{   len       - a length of the arrays;                                   }
+{   wordSize  - specifies the size of an fix-point in bits,               }
+{                     and must be 8, 16 or 32;                            }
+{   fractBits - specifies the number of fractional bits                   }
+{   flags     - specifies the sort of the conversion and consists of the  }
+{               bitwise-OR of flags, defined in the beginnig of this file }
+{                                                                         }
+
+procedure nspsbFloatToFix(Src       : PFloat;  Dst      : Pointer;
+                          Len       : Integer; WordSize : Integer;
+                          FractBits : Integer; Flags    : Integer); stdcall;
+procedure nspdbFloatToFix(Src       : PDouble; Dst      : Pointer;
+                          Len       : Integer; WordSize : Integer;
+                          FractBits : Integer; Flags    : Integer); stdcall;
+
+{ FUNCTION:                                                               }
+{   nsp<s,d>bFixToFloat                                                   }
+{ DESCRIPTION:                                                            }
+{   Converts the fixed-point data in the input array and stores the       }
+{       results in the output array                                       }
+{ PARAMETERS:                                                             }
+{   src       - an input array to be converted;                           }
+{   dst       - an output array to store the result;                      }
+{   len       - a length of the arrays;                                   }
+{   wordSize  - specifies the size of an integer in bits,                 }
+{                     and must be 8, 16 or 32;                            }
+{   fractBits - specifies the number of fractional bits                   }
+{   flags     - specifies that fixed-point values are unsigned or signed  }
+{                                                                         }
+
+procedure nspsbFixToFloat(Src       : Pointer; Dst      : PFloat;
+                          Len       : Integer; WordSize : Integer;
+                          FractBits : Integer; Flags    : Integer); stdcall;
+procedure nspdbFixToFloat(Src       : Pointer; Dst      : PDouble;
+                          Len       : Integer; WordSize : Integer;
+                          FractBits : Integer; Flags    : Integer); stdcall;
+
+{-------------------------------------------------------------------------}
+{ bFloatToS31Fix, bFloatToS15Fix, bFloatToS7Fix, bFloatToS1516Fix,        }
+{ bS31FixToFloat, bS15FixToFloat, bS7FixToFloat, bS1516FixToFloat         }
+{ Vector floating-point to fixed-point of format S.31, S.15, S.7, S15.16  }
+{                and fixed-point of format S.31, S.15, S.7, S15.16        }
+{                to floating-point conversion                             }
+{-------------------------------------------------------------------------}
+{ FUNCTION:                                                               }
+{   nsp<s,d>bFloatToS31Fix                                                }
+{   nsp<s,d>bFloatToS15Fix                                                }
+{   nsp<s,d>bFloatToS7Fix                                                 }
+{   nsp<s,d>bFloatToS1516Fix                                              }
+{ DESCRIPTION:                                                            }
+{   Converts the floating-point data in the input array and stores        }
+{   the results in the output array.                                      }
+{   nsp?bFloatToS31Fix() to format of S.31 (a sign bit,31 fractional bits)}
+{   nsp?bFloatToS15Fix() to format of S.15 (a sign bit,15 fractional bits)}
+{   nsp?bFloatToS7Fix()  to format of S.7  (a sign bit,7  fractional bits)}
+{   nsp?bFloatToS1516Fix() to format of S15.16                            }
+{                    (a sign bit, 15 integer bits, 16 fractional bits)    }
+{ PARAMETERS:                                                             }
+{   src       - an input array to be converted;                           }
+{   dst       - an output array to store the result;                      }
+{   len       - a length of the arrays;                                   }
+{   flags     - specifies the sort of the conversion and consists of the  }
+{               bitwise-OR of flags, defined in the beginnig of this file }
+
+procedure nspsbFloatToS31Fix(  Src : PFloat;   Dst   : PLongint;
+                               Len : Integer;  Flags : Integer); stdcall;
+procedure nspsbFloatToS15Fix(  Src : PFloat;   Dst   : PShort;
+                               Len : Integer;  Flags : Integer); stdcall;
+procedure nspsbFloatToS7Fix(   Src : PFloat;   Dst   : PByte;
+                               Len : Integer;  Flags : Integer); stdcall;
+procedure nspsbFloatToS1516Fix(Src : PFloat;   Dst   : PLongint;
+                               Len : Integer;  Flags : Integer); stdcall;
+
+procedure nspdbFloatToS31Fix(  Src : PDouble;  Dst   : PLongint;
+                               Len : Integer;  Flags : Integer); stdcall;
+procedure nspdbFloatToS15Fix(  Src : PDouble;  Dst   : PShort;
+                               Len : Integer;  Flags : Integer); stdcall;
+procedure nspdbFloatToS7Fix(   Src : PDouble;  Dst   : PByte;
+                               Len : Integer;  Flags : Integer); stdcall;
+procedure nspdbFloatToS1516Fix(Src : PDouble;  Dst   : PLongint;
+                               Len : Integer;  Flags : Integer); stdcall;
+
+{ FUNCTION:                                                               }
+{   nsp<s,d>bS31FixToFloat                                                }
+{   nsp<s,d>bS15FixToFloat                                                }
+{   nsp<s,d>bS7FixToFloat                                                 }
+{   nsp<s,d>bS1516FixToFloat                                              }
+{ DESCRIPTION:                                                            }
+{   Converts the fixed-point data in the input array and stores the       }
+{       results in the output array                                       }
+{  nsp?bS31FixToFloat() from format of S.31(a sign bit,31 fractional bits)}
+{  nsp?bS15FixToFloat() from format of S.15(a sign bit,15 fractional bits)}
+{  nsp?bS7FixToFloat()  from format of S.7 (a sign bit,7  fractional bits)}
+{  nsp?bS1516FixToFloat() from format of S15.16                           }
+{                    (a sign bit, 15 integer bits, 16 fractional bits)    }
+{ PARAMETERS:                                                             }
+{   src       - an input array to be converted;                           }
+{   dst       - an output array to store the result;                      }
+{   len       - a length of the arrays;                                   }
+{                                                                         }
+
+procedure nspsbS31FixToFloat(  Src : PLongint; Dst : PFloat;
+                               Len : Integer); stdcall;
+procedure nspsbS15FixToFloat(  Src : PShort;   Dst : PFloat;
+                               Len : Integer); stdcall;
+procedure nspsbS7FixToFloat(   Src : PByte;    Dst : PFloat;
+                               Len : Integer); stdcall;
+procedure nspsbS1516FixToFloat(Src : Plongint; Dst : PFloat;
+                               Len : Integer); stdcall;
+
+procedure nspdbS31FixToFloat(  Src : PLongint; Dst : PDouble;
+                               Len : Integer); stdcall;
+procedure nspdbS15FixToFloat(  Src : PShort;   Dst : PDouble;
+                               Len : Integer); stdcall;
+procedure nspdbS7FixToFloat(   Src : PByte;    Dst : PDouble;
+                               Len : Integer); stdcall;
+procedure nspdbS1516FixToFloat(Src : Plongint; Dst : PDouble;
+                               Len : Integer); stdcall;
+
+{-------------------------------------------------------------------------}
+{  bReal, bImag, bCplxTo2Real, b2RealToCplx                               }
+{                                                                         }
+{ Return the real and imaginary parts of complex vectors                  }
+{ or construct complex vectors from real and imaginary components         }
+{-------------------------------------------------------------------------}
+{ FUNCTION:                                                               }
+{   nsp<v,c,z>bReal                                                       }
+{ DESCRIPTION:                                                            }
+{   Return the real part of the coplex vector                             }
+{ PARAMETERS:                                                             }
+{   src       - an input complex vector                                   }
+{   dst       - an output vector to store the real part;                  }
+{   len       - a length of the arrays;                                   }
+{ ERRORS:                                                                 }
+{    1) Some of pointers to input or output data are NULL                 }
+{    2) The length of the arrays is less or equal zero                    }
+{  These errors are registered only if NSP_DEBUG is defined               }
+{                                                                         }
+
+procedure nspcbReal(Src : PSCplx; Dst : PFloat;  Len : Integer); stdcall;
+procedure nspzbReal(Src : PDCplx; Dst : PDouble; Len : Integer); stdcall;
+procedure nspvbReal(Src : PWCplx; Dst : PShort;  Len : Integer); stdcall;
+
+{ FUNCTION:                                                               }
+{   nsp<v,c,z>bImag                                                       }
+{ DESCRIPTION:                                                            }
+{   Return the imaginary part of the coplex vector                        }
+{ PARAMETERS:                                                             }
+{   src       - an input complex vector                                   }
+{   dst       - an output vector to store the imaginary part;             }
+{   len       - a length of the arrays;                                   }
+{ ERRORS:                                                                 }
+{    1) Some of pointers to input or output data are NULL                 }
+{    2) The length of the arrays is less or equal zero                    }
+{  These errors are registered only if NSP_DEBUG is defined               }
+{                                                                         }
+
+procedure nspcbImag(Src : PSCplx; Dst : PFloat;  Len : Integer); stdcall;
+procedure nspzbImag(Src : PDCplx; Dst : PDouble; Len : Integer); stdcall;
+procedure nspvbImag(Src : PWCplx; Dst : PShort;  Len : Integer); stdcall;
+
+{ FUNCTION:                                                               }
+{   nsp<v,c,z>bCplxTo2Real                                                }
+{ DESCRIPTION:                                                            }
+{   Return the real and imaginary parts of the coplex vector              }
+{ PARAMETERS:                                                             }
+{   src       - an input complex vector                                   }
+{   dstReal   - an output vector to store the real part                   }
+{   dstImag   - an output vector to store the imaginary part;             }
+{   len       - a length of the arrays;                                   }
+{                                                                         }
+
+procedure nspcbCplxTo2Real(Src : PSCplx; DstReal, DstImag : PFloat;
+                           Len : Integer); stdcall;
+procedure nspzbCplxTo2Real(Src : PDCplx; DstReal, DstImag : PDouble;
+                           Len : Integer); stdcall;
+procedure nspvbCplxTo2Real(Src : PWCplx; DstReal, DstImag : PShort;
+                           Len : Integer); stdcall;
+
+{ FUNCTION:                                                               }
+{   nsp<v,c,z>b2RealToCplx                                                }
+{ DESCRIPTION:                                                            }
+{   Construct complex vector from real and imaginary components           }
+{ PARAMETERS:                                                             }
+{   srcReal   - an input real component. May be NULL - a real part of the }
+{               output will be zero;                                      }
+{   srcImag   - an input imaginary component. May be NULL - an imaginary  }
+{               part of the output will be zero;                          }
+{   dst       - an output complex vector;                                 }
+{   len       - a length of the arrays;                                   }
+{                                                                         }
+
+procedure nspcb2RealToCplx(SrcReal, SrcImag : PFloat;  Dst : PSCplx;
+                           Len              : Integer); stdcall;
+procedure nspzb2RealToCplx(SrcReal, SrcImag : PDouble; Dst : PDCplx;
+                           Len              : Integer); stdcall;
+procedure nspvb2RealToCplx(SrcReal, SrcImag : PShort;  Dst : PWCplx;
+                           Len              : Integer); stdcall;
+
+{-------------------------------------------------------------------------}
+{  bCartToPolar, brCartToPolar, bPolarToCart, brPolarToCart               }
+{                                                                         }
+{ Cartesian to polar and polar to cartesian coordinate conversions.       }
+{-------------------------------------------------------------------------}
+{ FUNCTION:                                                               }
+{   nsp<v,c,z>bCartToPolar                                                }
+{ DESCRIPTION:                                                            }
+{   Convert cartesian coordinate to polar. Input data are formed as       }
+{            a complex vector.                                            }
+{ PARAMETERS:                                                             }
+{   src       - an input complex vector;                                  }
+{   mag       - an output vector to store the magnitude components;       }
+{   phase     - an output vector to store the phase components (in rad)); }
+{   len       - a length of the arrays;                                   }
+{ ERRORS:                                                                 }
+{    1) Some of pointers to input or output data are NULL                 }
+{    2) The length of the arrays is less or equal zero                    }
+{  These errors are registered only if NSP_DEBUG is defined               }
+{                                                                         }
+
+procedure nspcbCartToPolar(Src : PSCplx; Mag, Phase : PFloat;
+                           Len : Integer); stdcall;
+procedure nspzbCartToPolar(Src : PDCplx; Mag, Phase : PDouble;
+                           Len : Integer); stdcall;
+
+{ FUNCTION:                                                               }
+{   nsp<w,s,d>brCartToPolar                                               }
+{ DESCRIPTION:                                                            }
+{   Convert cartesian coordinate to polar. Input data are formed as       }
+{            two different real vectors.                                  }
+{ PARAMETERS:                                                             }
+{   srcReal   - an input vector containing the coordinates X;             }
+{   srcImag   - an input vector containing the coordinates Y;             }
+{   mag       - an output vector to store the magnitude components;       }
+{   phase     - an output vector to store the phase components (in rad)); }
+{   len       - a length of the arrays;                                   }
+{ ERRORS:                                                                 }
+{    1) Some of pointers to input or output data are NULL                 }
+{    2) The length of the arrays is less or equal zero                    }
+{  These errors are registered only if NSP_DEBUG is defined               }
+{                                                                         }
+
+procedure nspsbrCartToPolar(SrcReal : PFloat;  SrcImag : PFloat;
+                            Mag     : PFloat;  Phase   : PFloat;
+                            Len     : Integer); stdcall;
+procedure nspdbrCartToPolar(SrcReal : PDouble; SrcImag : PDouble;
+                            Mag     : PDouble; Phase   : PDouble;
+                            Len     : Integer); stdcall;
+
+{ FUNCTION:                                                               }
+{   nsp<v,c,z>bPolarToCart                                                }
+{ DESCRIPTION:                                                            }
+{   Convert polar coordinate to cartesian. Output data are formed as      }
+{            a complex vector.                                            }
+{ PARAMETERS:                                                             }
+{   mag       - an input vector containing the magnitude components;      }
+{   phase     - an input vector containing the phase components(in rad)); }
+{   dst       - an output complex vector to store the cartesian coords;   }
+{   len       - a length of the arrays;                                   }
+{ ERRORS:                                                                 }
+{    1) Some of pointers to input or output data are NULL                 }
+{    2) The length of the arrays is less or equal zero                    }
+{  These errors are registered only if NSP_DEBUG is defined               }
+{                                                                         }
+
+procedure nspcbPolarToCart(Mag : PFloat;  Phase : PFloat;
+                           Dst : PSCplx;  Len   : Integer); stdcall;
+procedure nspzbPolarToCart(Mag : PDouble; Phase : PDouble;
+                           Dst : PDCplx;  Len   : Integer); stdcall;
+
+{ FUNCTION:                                                               }
+{   nsp<s,d>brPolarToCart                                                 }
+{ DESCRIPTION:                                                            }
+{   Convert polar coordinate to cartesian. Output data are formed as      }
+{            two real vectors.                                            }
+{ PARAMETERS:                                                             }
+{   mag       - an input vector containing the magnitude components;      }
+{   phase     - an input vector containing the phase components(in rad)); }
+{   dstReal   - an output complex vector to store the coordinates X;      }
+{   dstImag   - an output complex vector to store the coordinates Y;      }
+{   len       - a length of the arrays;                                   }
+{ ERRORS:                                                                 }
+{    1) Some of pointers to input or output data are NULL                 }
+{    2) The length of the arrays is less or equal zero                    }
+{  These errors are registered only if NSP_DEBUG is defined               }
+{                                                                         }
+
+procedure nspsbrPolarToCart(Mag     : PFloat;  Phase   : PFloat;
+                            DstReal : PFloat;  DstImag : PFloat;
+                            Len     : Integer); stdcall;
+procedure nspdbrPolarToCart(Mag     : PDouble; Phase   : PDouble;
+                            DstReal : PDouble; DstImag : PDouble;
+                            Len     : Integer); stdcall;
+
+{-------------------------------------------------------------------------}
+{  bPowerSpectr, brPowerSpectr, bMag, brMag, bPhase, brPhase              }
+{                                                                         }
+{ Compute the magnitude and phase of complex vector elements.             }
+{-------------------------------------------------------------------------}
+{ FUNCTION:                                                               }
+{   nsp<v,c,z>bMag                                                        }
+{ DESCRIPTION:                                                            }
+{   Compute the magnitude of complex vector elements.                     }
+{ PARAMETERS:                                                             }
+{   src       - an input complex vector                                   }
+{   mag       - an output vector to store the magnitude components;       }
+{   len       - a length of the arrays;                                   }
+{ ERRORS:                                                                 }
+{    1) Some of pointers to input or output data are NULL                 }
+{    2) The length of the arrays is less or equal zero                    }
+{  These errors are registered only if NSP_DEBUG is defined               }
+{                                                                         }
+
+procedure nspcbMag(Src         : PSCplx; Mag : PFloat;  Len : Integer); stdcall;
+procedure nspzbMag(Src         : PDCplx; Mag : PDouble; Len : Integer); stdcall;
+procedure nspvbMag(Src         : PWCplx; Mag : PShort;  Len : Integer;
+                   ScaleMode   : Integer;
+               var ScaleFactor : Integer); stdcall;
+
+{ FUNCTION:                                                               }
+{   nsp<w,s,d>brMag                                                       }
+{ DESCRIPTION:                                                            }
+{   Compute the magnitude of complex data formed as two real vectors.     }
+{ PARAMETERS:                                                             }
+{   srcReal   - an input vector containing a real part of complex data    }
+{   srcImag   - an input vector containing an imag. part of complex data  }
+{   mag       - an output vector to store the magnitude components;       }
+{   len       - a length of the arrays;                                   }
+{ ERRORS:                                                                 }
+{    1) Some of pointers to input or output data are NULL                 }
+{    2) The length of the arrays is less or equal zero                    }
+{  These errors are registered only if NSP_DEBUG is defined               }
+{                                                                         }
+
+procedure nspsbrMag(SrcReal     : PFloat;  SrcImag : PFloat;
+                    Mag         : PFloat;  Len     : Integer); stdcall;
+procedure nspdbrMag(SrcReal     : PDouble; SrcImag : PDouble;
+                    Mag         : PDouble; Len     : Integer); stdcall;
+procedure nspwbrMag(SrcReal     : PShort;  SrcImag : PShort;
+                    Mag         : PShort;  Len     : Integer;
+                    ScaleMode   : Integer;
+                var ScaleFactor : Integer); stdcall;
+
+{ FUNCTION:                                                               }
+{   nsp<v,c,z>bPhase                                                      }
+{ DESCRIPTION:                                                            }
+{   Compute the phase (in radians) of complex vector elements.            }
+{ PARAMETERS:                                                             }
+{   src       - an input complex vector                                   }
+{   phase     - an output vector to store the phase components;           }
+{   len       - a length of the arrays;                                   }
+{ ERRORS:                                                                 }
+{    1) Some of pointers to input or output data are NULL                 }
+{    2) The length of the arrays is less or equal zero                    }
+{  These errors are registered only if NSP_DEBUG is defined               }
+
+procedure nspcbPhase(Src : PSCplx; Phase : PFloat;  Len : Integer); stdcall;
+procedure nspzbPhase(Src : PDCplx; Phase : PDouble; Len : Integer); stdcall;
+procedure nspvbPhase(Src : PWCplx; Phase : PShort;  Len : Integer); stdcall;
+
+{ FUNCTION:                                                               }
+{   nsp<w,s,d>brPhase                                                     }
+{ DESCRIPTION:                                                            }
+{   Compute the phase of complex data formed as two real vectors.         }
+{ PARAMETERS:                                                             }
+{   srcReal   - an input vector containing a real part of complex data    }
+{   srcImag   - an input vector containing an imag. part of complex data  }
+{   phase     - an output vector to store the magnitude components;       }
+{   len       - a length of the arrays;                                   }
+{ ERRORS:                                                                 }
+{    1) Some of pointers to input or output data are NULL                 }
+{    2) The length of the arrays is less or equal zero                    }
+{  These errors are registered only if NSP_DEBUG is defined               }
+
+procedure nspsbrPhase(SrcReal : PFloat;  SrcImag : PFloat;
+                      Phase   : PFloat;  Len     : Integer); stdcall;
+procedure nspdbrPhase(SrcReal : PDouble; SrcImag : PDouble;
+                      Phase   : PDouble; Len     : Integer); stdcall;
+procedure nspwbrPhase(SrcReal : PShort;  SrcImag : PShort;
+                      Phase   : PShort;  Len     : Integer); stdcall;
+
+{-------------------------------------------------------------------------}
+{  bPowerSpectr, brPowerSpectr                                            }
+{                                                                         }
+{ Compute the power spectrum of complex vector.                           }
+{-------------------------------------------------------------------------}
+{ FUNCTION:                                                               }
+{   nsp<v,c,z>bPowerSpectr                                                }
+{ DESCRIPTION:                                                            }
+{   Compute the power spectrum of complex vector.                         }
+{ PARAMETERS:                                                             }
+{   src       - an input complex vector                                   }
+{   spectr    - an output vector to store the power spectrum components;  }
+{   len       - a length of the arrays;                                   }
+{ ERRORS:                                                                 }
+{    1) Some of pointers to input or output data are NULL                 }
+{    2) The length of the arrays is less or equal zero                    }
+{  These errors are registered only if NSP_DEBUG is defined               }
+{                                                                         }
+
+procedure nspcbPowerSpectr(Src         : PSCplx; Spectr : PFloat;
+                           Len         : Integer); stdcall;
+procedure nspzbPowerSpectr(Src         : PDCplx; Spectr : PDouble;
+                           Len         : Integer); stdcall;
+procedure nspvbPowerSpectr(Src         : PWCplx; Spectr : PShort;
+                           Len         : Integer;
+                           ScaleMode   : Integer;
+                       var ScaleFactor : Integer); stdcall;
+
+{ FUNCTION:                                                               }
+{   nsp<w,s,d>brPowerSpectr                                               }
+{ DESCRIPTION:                                                            }
+{   Compute the power spectrum of complex data formed as two real vectors }
+{ PARAMETERS:                                                             }
+{   srcReal   - an input vector containing a real part of complex data    }
+{   srcImag   - an input vector containing an imag. part of complex data  }
+{   spectr    - an output vector to store the power spectrum components;  }
+{   len       - a length of the arrays;                                   }
+{ ERRORS:                                                                 }
+{    1) Some of pointers to input or output data are NULL                 }
+{    2) The length of the arrays is less or equal zero                    }
+{  These errors are registered only if NSP_DEBUG is defined               }
+{                                                                         }
+
+procedure nspsbrPowerSpectr(SrcReal     : PFloat;  SrcImag : PFloat;
+                            Spectr      : PFloat;  Len     : Integer); stdcall;
+procedure nspdbrPowerSpectr(SrcReal     : PDouble; SrcImag : PDouble;
+                            Spectr      : PDouble; Len     : Integer); stdcall;
+procedure nspwbrPowerSpectr(SrcReal     : PShort;  SrcImag : PShort;
+                            Spectr      : PShort;  Len     : Integer;
+                            ScaleMode   : Integer;
+                        var ScaleFactor : Integer); stdcall;
+
+{EOF}

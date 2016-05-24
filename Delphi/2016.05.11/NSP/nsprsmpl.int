@@ -1,0 +1,43 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1999 Intel Corporation. All Rights Reserved.
+
+From: nsprsmpl.h
+*)
+
+type TNSPSampState = record
+  NFactors    : Integer;
+  NTaps       : Integer;
+  SLen        : Integer;
+  DLen        : Integer;
+  IsSampInit  : Integer;
+  FactorRange : PFloat;
+  Freq        : PFloat;
+  Taps        : Pointer;
+  FirState    : TNSPFirState;
+end;
+
+function nspsSampInit(var SampSt : TNSPSampState;
+                          FactorRange : PFloat;
+                          Freq        : PFloat;
+                          NFactors    : Integer;
+                          NTaps       : Integer) : NSPStatus; stdcall;
+function nspdSampInit(var SampSt : TNSPSampState;
+                          FactorRange : PFloat;
+                          Freq        : PFloat;
+                          NFactors    : Integer;
+                          NTaps       : Integer) : NSPStatus; stdcall;
+
+function nspsSamp(var SampSt : TNSPSampState;
+                      Src    : PFloat; SrcLen : Integer;
+                      Dst    : PFloat; DstLen : Integer) : NSPStatus; stdcall;
+function nspdSamp(var SampSt : TNSPSampState;
+                      Src    : PDouble; SrcLen : Integer;
+                      Dst    : PDouble; DstLen : Integer) : NSPStatus; stdcall;
+
+procedure nspSampFree(var SampSt : TNSPSampState); stdcall;
+
+{EOF}

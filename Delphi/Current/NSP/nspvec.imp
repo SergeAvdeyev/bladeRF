@@ -1,0 +1,95 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+*)
+
+procedure nspsbSqr1;       external nspDLL;
+procedure nspcbSqr1;       external nspDLL;
+procedure nspdbSqr1;       external nspDLL;
+procedure nspzbSqr1;       external nspDLL;
+procedure nspwbSqr1;       external nspDLL;
+procedure nspvbSqr1;       external nspDLL;
+
+procedure nspsbSqr2;       external nspDLL;
+procedure nspcbSqr2;       external nspDLL;
+procedure nspdbSqr2;       external nspDLL;
+procedure nspzbSqr2;       external nspDLL;
+procedure nspwbSqr2;       external nspDLL;
+procedure nspvbSqr2;       external nspDLL;
+
+procedure nspsbSqrt1;      external nspDLL;
+procedure nspcbSqrt1;      external nspDLL;
+procedure nspdbSqrt1;      external nspDLL;
+procedure nspzbSqrt1;      external nspDLL;
+procedure nspwbSqrt1;      external nspDLL;
+procedure nspvbSqrt1;      external nspDLL;
+
+procedure nspsbSqrt2;      external nspDLL;
+procedure nspcbSqrt2;      external nspDLL;
+procedure nspdbSqrt2;      external nspDLL;
+procedure nspzbSqrt2;      external nspDLL;
+procedure nspwbSqrt2;      external nspDLL;
+procedure nspvbSqrt2;      external nspDLL;
+
+procedure nspsbThresh1;    external nspDLL;
+procedure nspcbThresh1;    external nspDLL;
+procedure nspdbThresh1;    external nspDLL;
+procedure nspzbThresh1;    external nspDLL;
+procedure nspwbThresh1;    external nspDLL;
+procedure nspvbThresh1;    external nspDLL;
+
+procedure nspsbThresh2;    external nspDLL;
+procedure nspcbThresh2;    external nspDLL;
+procedure nspdbThresh2;    external nspDLL;
+procedure nspzbThresh2;    external nspDLL;
+procedure nspwbThresh2;    external nspDLL;
+procedure nspvbThresh2;    external nspDLL;
+
+procedure nspsbInvThresh1; external nspDLL;
+procedure nspcbInvThresh1; external nspDLL;
+procedure nspdbInvThresh1; external nspDLL;
+procedure nspzbInvThresh1; external nspDLL;
+
+procedure nspsbInvThresh2; external nspDLL;
+procedure nspcbInvThresh2; external nspDLL;
+procedure nspdbInvThresh2; external nspDLL;
+procedure nspzbInvThresh2; external nspDLL;
+
+procedure nspsbAbs1;       external nspDLL;
+procedure nspdbAbs1;       external nspDLL;
+procedure nspwbAbs1;       external nspDLL;
+
+procedure nspsbAbs2;       external nspDLL;
+procedure nspdbAbs2;       external nspDLL;
+procedure nspwbAbs2;       external nspDLL;
+
+function nspsMax;          external nspDLL;
+function nspdMax;          external nspDLL;
+function nspwMax;          external nspDLL;
+
+function nspsMin;          external nspDLL;
+function nspdMin;          external nspDLL;
+function nspwMin;          external nspDLL;
+
+function nspsMaxExt;       external nspDLL;
+function nspdMaxExt;       external nspDLL;
+function nspwMaxExt;       external nspDLL;
+function nspsMinExt;       external nspDLL;
+function nspdMinExt;       external nspDLL;
+function nspwMinExt;       external nspDLL;
+
+function nspsMean;         external nspDLL;
+function nspdMean;         external nspDLL;
+function nspwMean;         external nspDLL;
+function nspcMean;         external nspDLL;
+function nspzMean;         external nspDLL;
+function nspvMean;         external nspDLL;
+
+function nspsStdDev;       external nspDLL;
+function nspdStdDev;       external nspDLL;
+function nspwStdDev;       external nspDLL;
+
+{EOF}

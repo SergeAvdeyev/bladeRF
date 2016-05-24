@@ -1,0 +1,312 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+
+From:    nspfft.h
+Purpose: NSP Fourier Transforms
+*)
+
+const
+  NSP_Forw        =     1;
+  NSP_Inv         =     2;
+  NSP_Init        =     4;
+  NSP_Free        =     8;
+  NSP_NoScale     =    16;
+  NSP_NoBitRev    =    32;
+  NSP_InBitRev    =    64;
+  NSP_OutBitRev   =   128;
+  NSP_OutRCPack   =   256;
+  NSP_OutRCPerm   =   512;
+  NSP_InRCPack    =  1024;
+  NSP_InRCPerm    =  4096;
+  NSP_DoIntCore   =  8192;
+  NSP_DoFloatCore = 16384;
+  NSP_DoFastMMX   = 32768;
+
+{------------------------------------------------------------------------}
+{                                                                        }
+{                                  Dft                                   }
+{                                                                        }
+{ Compute the forward  or inverse discrete Fourier transform  (DFT)      }
+{ of a complex signal.                                                   }
+{                                                                        }
+{------------------------------------------------------------------------}
+
+procedure nspvDft(InSamps   : PWCplx;      OutSamps    : PWCplx;
+                  Len       : Integer;     Flags       : Integer;
+                  ScaleMode : Integer; var ScaleFactor : Integer); stdcall;
+procedure nspcDft(InSamps   : PSCplx;      OutSamps    : PSCplx;
+                  Len       : Integer;     Flags       : Integer); stdcall;
+procedure nspzDft(InSamps   : PDCplx;      OutSamps    : PDCplx;
+                  Len       : Integer;     Flags       : Integer); stdcall;
+
+{------------------------------------------------------------------------}
+{                                                                        }
+{                                  Fft                                   }
+{                                                                        }
+{ Compute  the forward  or inverse   fast Fourier  transform (FFT)       }
+{ of a complex signal.                                                   }
+{                                                                        }
+{------------------------------------------------------------------------}
+
+procedure nspvFft(   Samps       : PWCplx;
+                     Order       : Integer;  Flags    : Integer;
+                     ScaleMode   : Integer;
+                 var ScaleFactor : Integer); stdcall;
+procedure nspcFft(   Samps       : PSCplx;
+                     Order       : Integer;  Flags    : Integer); stdcall;
+procedure nspzFft(   Samps       : PDCplx;
+                     Order       : Integer;  Flags    : Integer); stdcall;
+
+procedure nspvFftNip(InSamps     : PWCplx;   OutSamps : PWCplx;
+                     Order       : Integer;  Flags    : Integer;
+                     ScaleMode   : Integer;
+                 var ScaleFactor : Integer); stdcall;
+procedure nspcFftNip(InSamps     : PSCplx;   OutSamps : PSCplx;
+                     Order       : Integer;  Flags    : Integer); stdcall;
+procedure nspzFftNip(InSamps     : PDCplx;   OutSamps : PDCplx;
+                     Order       : Integer;  Flags    : Integer); stdcall;
+
+procedure nspvrFft(  ReSamps     : PShort;   ImSamps  : PShort;
+                     Order       : Integer;  Flags    : Integer;
+                     ScaleMode   : Integer;
+                 var ScaleFactor : Integer); stdcall;
+procedure nspcrFft(  ReSamps     : PFloat;   ImSamps  : PFloat;
+                     Order       : Integer;  Flags    : Integer); stdcall;
+procedure nspzrFft(  ReSamps     : PDouble;  ImSamps  : PDouble;
+                     Order       : Integer;  Flags    : Integer); stdcall;
+
+procedure nspvrFftNip(ReInSamps   : PShort;   ImInSamps  : PShort;
+                      ReOutSamps  : Pshort;   ImOutSamps : PShort;
+                      Order       : Integer;  Flags      : Integer;
+                      ScaleMode   : Integer;
+                  var ScaleFactor : Integer); stdcall;
+procedure nspcrFftNip(ReInSamps   : PFloat;   ImInSamps  : PFloat;
+                      ReOutSamps  : PFloat;   ImOutSamps : PFloat;
+                      Order       : Integer;  Flags      : Integer); stdcall;
+procedure nspzrFftNip(ReInSamps   : PDouble;  ImInSamps  : PDouble;
+                      ReOutSamps  : PDouble;  ImOutSamps : PDouble;
+                      Order       : Integer;  Flags      : Integer); stdcall;
+
+{------------------------------------------------------------------------}
+{                                                                        }
+{                         RealFftl, RealFftlNip                          }
+{                                                                        }
+{ Compute the  forward or inverse FFT  of a real signal  using RCPack or }
+{ RCPerm format.                                                         }
+{                                                                        }
+{------------------------------------------------------------------------}
+
+procedure nspwRealFftl(Samps       : PShort;
+                       Order       : Integer; Flags : Integer;
+                       ScaleMode   : Integer;
+                   var ScaleFactor : Integer); stdcall;
+procedure nspsRealFftl(Samps       : PFloat;
+                       Order       : Integer; Flags : Integer); stdcall;
+procedure nspdRealFftl(Samps       : PDouble;
+                       Order       : Integer; Flags : Integer); stdcall;
+
+procedure nspwRealFftlNip(InSamps     : PShort;   OutSamps : PShort;
+                          Order       : Integer;  Flags    : Integer;
+                          ScaleMode   : Integer;
+                      var ScaleFactor : Integer); stdcall;
+procedure nspsRealFftlNip(InSamps     : PFloat;   OutSamps : PFloat;
+                          Order       : Integer;  Flags    : Integer); stdcall;
+procedure nspdRealFftlNip(InSamps     : PDouble;  OutSamps : PDouble;
+                          Order       : Integer;  Flags    : Integer); stdcall;
+
+{------------------------------------------------------------------------}
+{                                                                        }
+{                            CcsFftl, CcsFftlNip                         }
+{                                                                        }
+{ Compute the  forward or inverse  FFT of a  complex conjugate-symmetric }
+{ (CCS) signal using RCPack or RCPerm format.                            }
+{                                                                        }
+{------------------------------------------------------------------------}
+
+procedure nspwCcsFftl(   Samps       : PShort;
+                         Order       : Integer;  Flags : Integer;
+                         ScaleMode   : Integer;
+                     var ScaleFactor : Integer); stdcall;
+procedure nspsCcsFftl(   Samps       : PFloat;
+                         Order       : Integer;  Flags : Integer); stdcall;
+procedure nspdCcsFftl(   Samps       : PDouble;
+                         Order       : Integer;  Flags : Integer); stdcall;
+
+procedure nspwCcsFftlNip(InSamps     : PShort;   OutSamps : PShort;
+                         Order       : Integer;  Flags : Integer;
+                         ScaleMode   : Integer;
+                     var ScaleFactor : Integer); stdcall;
+procedure nspsCcsFftlNip(InSamps     : PFloat;   OutSamps : PFloat;
+                         Order       : Integer;  Flags    : Integer); stdcall;
+procedure nspdCcsFftlNip(InSamps     : PDouble;  OutSamps : PDouble;
+                         Order       : Integer;  Flags    : Integer); stdcall;
+
+{------------------------------------------------------------------------}
+{                                                                        }
+{                       MpyRCPack2, MpyRCPack3                           }
+{                                                                        }
+{ Multiply two vectors stored in RCPack format.                          }
+{                                                                        }
+{------------------------------------------------------------------------}
+
+procedure nspwMpyRCPack2(Src         : PShort;  Dst : PShort;
+                         Order       : Integer;
+                         ScaleMode   : Integer;
+                     var ScaleFactor : Integer); stdcall;
+procedure nspsMpyRCPack2(Src         : PFloat;  Dst : PFloat;
+                         Order       : Integer); stdcall;
+procedure nspdMpyRCPack2(Src         : PDouble; Dst : PDouble;
+                         Order       : Integer); stdcall;
+
+procedure nspwMpyRCPack3(SrcA        : PShort;   SrcB : PShort;  Dst : PShort;
+                         Order       : Integer;
+                         ScaleMode   : Integer;
+                     var ScaleFactor : Integer); stdcall;
+procedure nspsMpyRCPack3(SrcA        : PFloat;   SrcB : PFloat;  Dst : PFloat;
+                         Order       : Integer); stdcall;
+procedure nspdMpyRCPack3(SrcA        : PDouble;  SrcB : PDouble; Dst : PDouble;
+                         Order       : Integer); stdcall;
+
+{------------------------------------------------------------------------}
+{                                                                        }
+{                        MpyRCPerm2, MpyRCPerm3                          }
+{                                                                        }
+{ Multiply two vectors stored in RCPerm format.                          }
+{                                                                        }
+{------------------------------------------------------------------------}
+
+procedure nspwMpyRCPerm2(Src         : PShort;   Dst : PShort;
+                         Order       : Integer;
+                         ScaleMode   : Integer;
+                     var ScaleFactor : Integer); stdcall;
+procedure nspsMpyRCPerm2(Src         : PFloat;   Dst : PFloat;
+                         Order       : Integer); stdcall;
+procedure nspdMpyRCPerm2(Src         : PDouble;  Dst : PDouble;
+                         Order       : Integer); stdcall;
+
+procedure nspwMpyRCPerm3(SrcA        : PShort;   SrcB : PShort;  Dst : PShort;
+                         Order       : Integer;
+                         ScaleMode   : Integer;
+                     var ScaleFactor : Integer); stdcall;
+procedure nspsMpyRCPerm3(SrcA        : PFloat;   SrcB : PFloat;  Dst : PFloat;
+                         Order       : Integer); stdcall;
+procedure nspdMpyRCPerm3(SrcA        : PDouble;  SrcB : PDouble; Dst : PDouble;
+                         Order       : Integer); stdcall;
+
+{------------------------------------------------------------------------}
+{                                                                        }
+{                        RealFft,  RealFftNip                            }
+{                                                                        }
+{ Compute the forward or inverse FFT of a real signal.                   }
+{                                                                        }
+{------------------------------------------------------------------------}
+
+procedure nspwRealFft(   Samps       : PShort;
+                         Order       : Integer;  Flags : Integer;
+                         ScaleMode   : Integer;
+                     var ScaleFactor : Integer); stdcall;
+procedure nspsRealFft(   Samps       : PFloat;
+                         Order       : Integer;  Flags : Integer); stdcall;
+procedure nspdRealFft(   Samps       : PDouble;
+                         Order       : Integer;  Flags : Integer); stdcall;
+
+procedure nspwRealFftNip(InSamps     : PShort;   OutSamps : PWCplx;
+                         Order       : Integer;  Flags    : Integer;
+                         ScaleMode   : Integer;
+                     var ScaleFactor : Integer); stdcall;
+procedure nspsRealFftNip(InSamps     : PFloat;   OutSamps : PSCplx;
+                         Order       : Integer;  Flags    : Integer); stdcall;
+procedure nspdRealFftNip(InSamps     : PDouble;  OutSamps : PDCplx;
+                         Order       : Integer;  Flags    : Integer); stdcall;
+
+{------------------------------------------------------------------------}
+{                                                                        }
+{                            CcsFft, CcsFftNip                           }
+{                                                                        }
+{ Compute the  forward or inverse  FFT of a  complex conjugate-symmetric }
+{ (CCS) signal.                                                          }
+{                                                                        }
+{------------------------------------------------------------------------}
+
+procedure nspwCcsFft(   Samps       : PShort;
+                        Order       : Integer;  Flags : Integer;
+                        ScaleMode   : Integer;
+                    var ScaleFactor : Integer); stdcall;
+procedure nspsCcsFft(   Samps       : PFloat;
+                        Order       : Integer;  Flags : Integer); stdcall;
+procedure nspdCcsFft(   Samps       : PDouble;
+                        Order       : Integer;  Flags : Integer); stdcall;
+
+procedure nspwCcsFftNip(InSamps     : PWCplx;   OutSamps : PShort;
+                        Order       : Integer;  Flags    : Integer;
+                        ScaleMode   : Integer;
+                    var ScaleFactor : Integer); stdcall;
+procedure nspsCcsFftNip(InSamps     : PSCplx;   OutSamps : PFloat;
+                        Order       : Integer;  Flags    : Integer); stdcall;
+procedure nspdCcsFftNip(InSamps     : PDCplx;   OutSamps : PDouble;
+                        Order       : Integer;  Flags    : Integer); stdcall;
+
+{------------------------------------------------------------------------}
+{                                                                        }
+{                    nsp?Real2Fft, nsp?Real2FftNip                       }
+{                                                                        }
+{ Compute the forward or inverse FFT of two real signals.                }
+{                                                                        }
+{------------------------------------------------------------------------}
+
+procedure nspwReal2Fft(   XSamps      : PShort;   YSamps    : PShort;
+                          Order       : Integer;  Flags     : Integer;
+                          ScaleMode   : Integer;
+                      var ScaleFactor : Integer); stdcall;
+procedure nspsReal2Fft(   XSamps      : PFloat;   YSmaps    : PFloat;
+                          Order       : integer;  Flags     : Integer); stdcall;
+procedure nspdReal2Fft(   XSamps      : PDouble;  YSmaps    : PDouble;
+                          Order       : integer;  Flags     : Integer); stdcall;
+
+procedure nspwReal2FftNip(XInSamps    : PShort;   XOutSamps : PWCplx;
+                          YInSamps    : PShort;   YOutSamps : PWCplx;
+                          Order       : Integer;  Flags     : Integer;
+                          ScaleMode   : Integer;
+                      var ScaleFactor : Integer); stdcall;
+procedure nspsReal2FftNip(XInSamps    : PFloat;   XOutSamps : PSCplx;
+                          YInSamps    : PFloat;   YOutSamps : PSCplx;
+                          Order       : Integer;  Flags     : Integer); stdcall;
+procedure nspdReal2FftNip(XInSamps    : PDouble;  XOutSamps : PDCplx;
+                          YInSamps    : PDouble;  YOutSamps : PDCplx;
+                          Order       : Integer;  Flags     : Integer); stdcall;
+
+{------------------------------------------------------------------------}
+{                                                                        }
+{                    nsp?Ccs2Fft, nsp?Ccs2FftNip                         }
+{                                                                        }
+{ Compute the forward or reverse  FFT of two complex conjugate-symmetric }
+{ (CCS) signals.                                                         }
+{                                                                        }
+{------------------------------------------------------------------------}
+
+procedure nspwCcs2Fft(   XSamps      : PShort;  YSamps     : PShort;
+                         Order       : Integer;  Flags     : Integer;
+                         ScaleMode   : Integer;
+                     var ScaleFactor : Integer); stdcall;
+procedure nspsCcs2Fft(   XSamps      : PFloat;   YSamps    : PFloat;
+                         Order       : Integer;  Flags     : Integer); stdcall;
+procedure nspdCcs2Fft(   XSamps      : PDouble;  YSamps    : PDouble;
+                         Order       : Integer;  Flags     : Integer); stdcall;
+
+procedure nspwCcs2FftNip(XInSamps    : PWCplx;   XOutSamps : PShort;
+                         YInSamps    : PWCplx;   YOutSamps : PShort;
+                         Order       : Integer;  Flags     : Integer;
+                         ScaleMode   : Integer;
+                     var ScaleFactor : Integer); stdcall;
+procedure nspsCcs2FftNip(XInSamps    : PSCplx;   XOutSamps : PFloat;
+                         YInSamps    : PSCplx;   YOutSamps : PFloat;
+                         Order       : Integer;  Flags     : Integer); stdcall;
+procedure nspdCcs2FftNip(XInSamps    : PDCplx;   XOutSamps : PDouble;
+                         YInSamps    : PDCplx;   YOutSamps : PDouble;
+                         Order       : Integer;  Flags     : Integer); stdcall;
+
+{EOF}

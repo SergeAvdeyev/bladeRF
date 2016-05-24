@@ -1,0 +1,166 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+
+From:     nsptrngl.h
+Purpose:  Generating of signals with triangle wave form.
+          Provides samples of a triangle of arbitrary frequency,
+          phase, magnitude, and asymmetry.
+
+          0 =< phase < 2PI,  -PI < asym < PI,
+          mag > 0, 0 =< rfrec < 0.5
+
+          asym = 0       => Triangle is symmetric (old version)
+          asym = -PI+eps => Triangle with sheer back (0<eps)
+          asym =  PI-eps => Triangle with sheer front-fore
+
+          Like (cos) tone functions the triangle has period equal 2PI
+          Triangle phase is given in radians.
+*)
+
+{--- Triangle structures -------------------------------------------------}
+
+type
+  TNSPWTrnglState = record
+    Mag    : Float;
+    Step   : Float;
+    Step1  : Float;
+    Step2  : Float;
+    St12   : Float;
+    St21   : Float;
+    Shft1  : Float;
+    Shft2  : Float;
+    Delta1 : Float;
+    Delta2 : Float;
+    Last   : Float;
+  end;
+
+  TNSPVTrnglState = record
+    Mag    : Float;
+    Step   : TSCplx;
+    Step1  : Float;
+    Step2  : Float;
+    St12   : Float;
+    St21   : Float;
+    Shft1  : Float;
+    Shft2  : Float;
+    Delta1 : Float;
+    Delta2 : Float;
+    Last   : TSCplx;
+  end;
+
+  TNSPSTrnglState = record
+    Mag      : Float;
+    Step     : Float;
+    Step1    : Float;
+    Step2    : Float;
+    St12     : Float;
+    St21     : Float;
+    Shft1    : Float;
+    Shft2    : Float;
+    Delta1   : Float;
+    Delta2   : Float;
+    Last     : Float;
+    Reserved : array [0..17] of Float;
+  end;
+
+  TNSPCTrnglState = record
+    Mag    : Float;
+    Step   : TSCplx;
+    Step1  : Float;
+    Step2  : Float;
+    St12   : Float;
+    St21   : Float;
+    Shft1  : Float;
+    Shft2  : Float;
+    Delta1 : Float;
+    Delta2 : Float;
+    Last   : TSCplx;
+    Reserved : array [0..12] of Float;
+  end;
+
+  TNSPDTrnglState = record
+    Mag    : Double;
+    Step   : Double;
+    Step1  : Double;
+    Step2  : Double;
+    St12   : Double;
+    St21   : Double;
+    Shft1  : Double;
+    Shft2  : Double;
+    Delta1 : Double;
+    Delta2 : Double;
+    Last   : Double;
+  end;
+
+  TNSPZTrnglState = record
+    Mag    : Double;
+    Step   : TDCplx;
+    Step1  : Double;
+    Step2  : Double;
+    St12   : Double;
+    St21   : Double;
+    Shft1  : Double;
+    Shft2  : Double;
+    Delta1 : Double;
+    Delta2 : Double;
+    Last   : TDCplx;
+  end;
+
+{--- Triangle initialization ---------------------------------------------}
+
+procedure nspwTrnglInit(RFrq  : Float;  Phase : Float;
+                        Mag   : Short;  Asym  : Float;
+                    var State : TNSPWTrnglState); stdcall;
+procedure nspvTrnglInit(RFrq  : Float;  Phase : Float;
+                        Mag   : Short;  Asym  : Float;
+                    var State : TNSPVTrnglState); stdcall;
+procedure nspsTrnglInit(RFrq  : Float;  Phase : Float;
+                        Mag   : Float;  Asym  : Float;
+                    var State : TNSPSTrnglState); stdcall;
+procedure nspcTrnglInit(RFrq  : Float;  Phase : Float;
+                        Mag   : Float;  Asym  : Float;
+                    var State : TNSPCTrnglState); stdcall;
+procedure nspdTrnglInit(RFrq  : Double; Phase : Double;
+                        Mag   : Double; Asym  : Double;
+                    var State : TNSPDTrnglState); stdcall;
+procedure nspzTrnglInit(RFrq  : Double; Phase : Double;
+                        Mag   : Double; Asym  : Double;
+                    var State : TNSPZTrnglState); stdcall;
+
+{--- Single-Sample-Generating triangle functions -------------------------}
+
+function nspwTrngl(var State : TNSPWTrnglState) : Short;  stdcall;
+function nspvTrngl(var State : TNSPVTrnglState) : TWCplx; stdcall;
+function nspsTrngl(var State : TNSPSTrnglState) : Float;  stdcall;
+function nspcTrngl(var State : TNSPCTrnglState) : TSCplx; stdcall;
+function nspdTrngl(var State : TNSPDTrnglState) : Double; stdcall;
+function nspzTrngl(var State : TNSPZTrnglState) : TDCplx; stdcall;
+procedure nspcTrnglOut(var State : TNSPCTrnglState;
+                       var Val   : TSCplx); stdcall;
+
+{--- Block-of-Samples-Generating triangle functions ----------------------}
+
+procedure nspwbTrngl(var State    : TNSPWTrnglState;
+                         Samps    : PShort;
+                         SampsLen : Integer); stdcall;
+procedure nspvbTrngl(var State    : TNSPVTrnglState;
+                         Samps    : PWCplx;
+                         SampsLen : Integer); stdcall;
+procedure nspsbTrngl(var State    : TNSPSTrnglState;
+                         Samps    : PFloat;
+                         SampsLen : Integer); stdcall;
+procedure nspcbTrngl(var State    : TNSPCTrnglState;
+                         Samps    : PSCplx;
+                         SampsLen : Integer); stdcall;
+procedure nspdbTrngl(var State    : TNSPDTrnglState;
+                         Samps    : PDouble;
+                         SampsLen : Integer); stdcall;
+procedure nspzbTrngl(var State    : TNSPZTrnglState;
+                         Samps    : PDCplx;
+                         SampsLen : Integer); stdcall;
+
+{EOF}

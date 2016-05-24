@@ -1,0 +1,73 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+*)
+
+procedure nspsFirlInit;       external nspDLL;
+procedure nspdFirlInit;       external nspDLL;
+procedure nspcFirlInit;       external nspDLL;
+procedure nspzFirlInit;       external nspDLL;
+procedure nspwFirlInit;       external nspDLL;
+
+procedure nspsFirlInitMr;     external nspDLL;
+procedure nspdFirlInitMr;     external nspDLL;
+procedure nspcFirlInitMr;     external nspDLL;
+procedure nspzFirlInitMr;     external nspDLL;
+procedure nspwFirlInitMr;     external nspDLL;
+
+procedure nspsFirlInitDlyl;   external nspDLL;
+procedure nspcFirlInitDlyl;   external nspDLL;
+procedure nspdFirlInitDlyl;   external nspDLL;
+procedure nspzFirlInitDlyl;   external nspDLL;
+procedure nspwFirlInitDlyl;   external nspDLL;
+
+function nspsFirl;            external nspDLL;
+function nspcFirl(var TapSt : TNSPFirTapState;
+                  var DlySt : TNSPFirDlyState;
+                      Samp  : TSCplx) : TSCplx;
+var
+  Val : TSCplx;
+begin
+  nspcFirlOut(TapSt,DlySt,Samp,Val);
+  Result := Val;
+end;
+
+procedure nspcFirlOut;        external nspDLL;
+function nspdFirl;            external nspDLL;
+function nspzFirl;            external nspDLL;
+function nspwFirl;            external nspDLL;
+
+procedure nspsbFirl;          external nspDLL;
+procedure nspcbFirl;          external nspDLL;
+procedure nspdbFirl;          external nspDLL;
+procedure nspzbFirl;          external nspDLL;
+procedure nspwbFirl;          external nspDLL;
+
+procedure nspsFirlGetTaps;    external nspDLL;
+procedure nspcFirlGetTaps;    external nspDLL;
+procedure nspdFirlGetTaps;    external nspDLL;
+procedure nspzFirlGetTaps;    external nspDLL;
+procedure nspwFirlGetTaps;    external nspDLL;
+
+procedure nspsFirlSetTaps;    external nspDLL;
+procedure nspcFirlSetTaps;    external nspDLL;
+procedure nspdFirlSetTaps;    external nspDLL;
+procedure nspzFirlSetTaps;    external nspDLL;
+procedure nspwFirlSetTaps;    external nspDLL;
+
+procedure nspsFirlGetDlyl;    external nspDLL;
+procedure nspcFirlGetDlyl;    external nspDLL;
+procedure nspdFirlGetDlyl;    external nspDLL;
+procedure nspzFirlGetDlyl;    external nspDLL;
+procedure nspwFirlGetDlyl;    external nspDLL;
+
+procedure nspsFirlSetDlyl;    external nspDLL;
+procedure nspcFirlSetDlyl;    external nspDLL;
+procedure nspdFirlSetDlyl;    external nspDLL;
+procedure nspzFirlSetDlyl;    external nspDLL;
+procedure nspwFirlSetDlyl;    external nspDLL;
+
+{EOF}

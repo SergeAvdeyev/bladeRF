@@ -1,0 +1,46 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+*)
+
+function  nspBitRev;         external nspDLL;
+function  nspGetBitRevTbl;   external nspDLL;
+procedure nspCalcBitRevTbl;  external nspDLL;
+procedure nspFreeBitRevTbls; external nspDLL;
+
+procedure nspwbBitRev1;      external nspDLL;
+procedure nspvbBitRev1;      external nspDLL;
+procedure nspsbBitRev1;      external nspDLL;
+procedure nspcbBitRev1;      external nspDLL;
+procedure nspdbBitRev1;      external nspDLL;
+procedure nspzbBitRev1;      external nspDLL;
+
+procedure nspwbBitRev2;      external nspDLL;
+procedure nspvbBitRev2;      external nspDLL;
+procedure nspsbBitRev2;      external nspDLL;
+procedure nspcbBitRev2;      external nspDLL;
+procedure nspdbBitRev2;      external nspDLL;
+procedure nspzbBitRev2;      external nspDLL;
+
+procedure nspvCalcDftTwdTbl; external nspDLL;
+procedure nspvCalcFftTwdTbl; external nspDLL;
+procedure nspcCalcDftTwdTbl; external nspDLL;
+procedure nspcCalcFftTwdTbl; external nspDLL;
+procedure nspzCalcDftTwdTbl; external nspDLL;
+procedure nspzCalcFftTwdTbl; external nspDLL;
+
+function nspvGetDftTwdTbl;   external nspDLL;
+function nspvGetFftTwdTbl;   external nspDLL;
+function nspcGetDftTwdTbl;   external nspDLL;
+function nspcGetFftTwdTbl;   external nspDLL;
+function nspzGetDftTwdTbl;   external nspDLL;
+function nspzGetFftTwdTbl;   external nspDLL;
+
+procedure nspvFreeTwdTbls;   external nspDLL;
+procedure nspcFreeTwdTbls;   external nspDLL;
+procedure nspzFreeTwdTbls;   external nspDLL;
+
+{EOF}

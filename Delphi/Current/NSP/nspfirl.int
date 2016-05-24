@@ -1,0 +1,199 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+
+From:    nspfirl.h
+Purpose: NSP Finite Impulse Response low level filter
+*)
+
+{--- FIR low level filter structure -------------------------------------}
+
+type
+  TFirLmsTapState = record
+    Taps         : Pointer;
+    Len          : Integer;
+    UpFactor     : Integer;
+    UpPhase      : Integer;
+    DownFactor   : Integer;
+    DownPhase    : Integer;
+    IsMultiRate  : Integer;
+    IsFilterMode : Integer;
+  end;
+
+  TFirLmsDlyState = record
+    Dlyl         : Pointer;
+    Len          : Integer;
+    IsFilterMode : Integer;
+  end;
+
+{--- Finite impulse response filter -------------------------------------}
+
+  TNSPFirTapState = record
+    FirLmsTapState : TFirLmsTapState;
+    TapsFactor     : Integer;
+  end;
+
+{--- Delay line of FIR low level filter ---------------------------------}
+
+  TNSPFirDlyState = TFirLmsDlyState;
+
+{------------------------------------------------------------------------}
+{        FirlInit, FirlInitMr, FirlInitDlyl                              }
+{                                                                        }
+{ Low level functions for cyclic FIR filtering via a tapped delay line.  }
+
+procedure nspsFirlInit(Taps  : PFloat;  TapsLen : Integer;
+                   var TapSt : TNSPFirTapState); stdcall;
+procedure nspdFirlInit(Taps  : PDouble; TapsLen : Integer;
+                   var TapSt : TNSPFirTapState); stdcall;
+procedure nspcFirlInit(Taps  : PSCplx;  TapsLen : Integer;
+                   var TapSt : TNSPFirTapState); stdcall;
+procedure nspzFirlInit(Taps  : PDCplx;  TapsLen : Integer;
+                   var TapSt : TNSPFirTapState); stdcall;
+procedure nspwFirlInit(Taps  : PFloat;  TapsLen : Integer;
+                   var TapSt : TNSPFirTapState); stdcall;
+
+procedure nspsFirlInitMr(Taps       : PFloat;  TapsLen   : Integer;
+                         UpFactor   : Integer; UpPhase   : Integer;
+                         DownFactor : Integer; DownPhase : Integer;
+                     var TapSt      : TNSPFirTapState);    stdcall;
+procedure nspdFirlInitMr(Taps       : PDouble; TapsLen   : Integer;
+                         UpFactor   : Integer; UpPhase   : Integer;
+                         DownFactor : Integer; DownPhase : Integer;
+                     var TapSt      : TNSPFirTapState);    stdcall;
+procedure nspcFirlInitMr(Taps       : PSCplx;  TapsLen   : Integer;
+                         UpFactor   : Integer; UpPhase   : Integer;
+                         DownFactor : Integer; DownPhase : Integer;
+                     var TapSt      : TNSPFirTapState);    stdcall;
+procedure nspzFirlInitMr(Taps       : PDCplx;  TapsLen   : Integer;
+                         UpFactor   : Integer; UpPhase   : Integer;
+                         DownFactor : Integer; DownPhase : Integer;
+                     var TapSt      : TNSPFirTapState);    stdcall;
+procedure nspwFirlInitMr(Taps       : PFloat;  TapsLen   : Integer;
+                         UpFactor   : Integer; UpPhase   : Integer;
+                         DownFactor : Integer; DownPhase : Integer;
+                     var TapSt      : TNSPFirTapState);    stdcall;
+
+procedure nspsFirlInitDlyl(var TapSt : TNSPFirTapState; Dlyl : PFloat;
+                           var DlySt : TNSPFirDlyState); stdcall;
+procedure nspcFirlInitDlyl(var TapSt : TNSPFirTapState; Dlyl : PSCplx;
+                           var DlySt : TNSPFirDlyState); stdcall;
+procedure nspdFirlInitDlyl(var TapSt : TNSPFirTapState; Dlyl : PDouble;
+                           var DlySt : TNSPFirDlyState); stdcall;
+procedure nspzFirlInitDlyl(var TapSt : TNSPFirTapState; Dlyl : PDCplx;
+                           var DlySt : TNSPFirDlyState); stdcall;
+procedure nspwFirlInitDlyl(var TapSt : TNSPFirTapState; Dlyl : PShort;
+                           var DlySt : TNSPFirDlyState); stdcall;
+
+{------------------------------------------------------------------------}
+{        Firl, bFirl                                                     }
+{                                                                        }
+{ Filter either a single sample or  block of samples through a low-level }
+{ FIR filter.                                                            }
+
+function nspsFirl(var TapSt       : TNSPFirTapState;
+                  var DlySt       : TNSPFirDlyState;
+                      Samp        : Float)   : Float; stdcall;
+function nspcFirl(var TapSt       : TNSPFirTapState;
+                  var DlySt       : TNSPFirDlyState;
+                      Samp        : TSCplx)  : TSCplx; stdcall;
+
+procedure nspcFirlOut(var TapSt   : TNSPFirTapState;
+                      var DlySt   : TNSPFirDlyState;
+                          Samp    : TSCplx;
+                      var Val     : TSCplx); stdcall;
+
+function nspdFirl(var TapSt       : TNSPFirTapState;
+                  var DlySt       : TNSPFirDlyState;
+                      Samp        : Double)  : Double; stdcall;
+function nspzFirl(var TapSt       : TNSPFirTapState;
+                  var DlySt       : TNSPFirDlyState;
+                      Samp        : TDCplx)  : TDCplx; stdcall;
+function nspwFirl(var TapSt       : TNSPFirTapState;
+                  var DlySt       : TNSPFirDlyState;
+                      Samp        : Short;
+                      ScaleMode   : Integer;
+                  var ScaleFactor : Integer) : Short; stdcall;
+
+procedure nspsbFirl(var TapSt       : TNSPFirTapState;
+                    var DlySt       : TNSPFirDlyState;
+                        InSamps     : PFloat;  OutSamps  : PFloat;
+                        NumIters    : Integer); stdcall;
+procedure nspcbFirl(var TapSt       : TNSPFirTapState;
+                    var DlySt       : TNSPFirDlyState;
+                        InSamps     : PSCplx;  OutSamps  : PSCplx;
+                        NumIters    : Integer); stdcall;
+procedure nspdbFirl(var TapSt       : TNSPFirTapState;
+                    var DlySt       : TNSPFirDlyState;
+                        InSamps     : PDouble; OutSamps  : PDouble;
+                        NumIters    : Integer); stdcall;
+procedure nspzbFirl(var TapSt       : TNSPFirTapState;
+                    var DlySt       : TNSPFirDlyState;
+                        InSamps     : PDCplx;  OutSamps  : PDCplx;
+                        NumIters    : Integer); stdcall;
+procedure nspwbFirl(var TapSt       : TNSPFirTapState;
+                    var DlySt       : TNSPFirDlyState;
+                        InSamps     : PShort;  OutSamps  : PShort;
+                        NumIters    : Integer; ScaleMode : Integer;
+                    var ScaleFactor : Integer); stdcall;
+
+{------------------------------------------------------------------------}
+{        FirlGetTaps, FirlSetTaps                                        }
+{                                                                        }
+{ Utility functions to get and set the tap coefficients of low-level FIR }
+{ filters.                                                               }
+
+procedure nspsFirlGetTaps(var TapSt : TNSPFirTapState; OutTaps : PFloat);  stdcall;
+procedure nspcFirlGetTaps(var TapSt : TNSPFirTapState; OutTaps : PSCplx);  stdcall;
+procedure nspdFirlGetTaps(var TapSt : TNSPFirTapState; OutTaps : PDouble); stdcall;
+procedure nspzFirlGetTaps(var TapSt : TNSPFirTapState; OutTaps : PDCplx);  stdcall;
+procedure nspwFirlGetTaps(var TapSt : TNSPFirTapState; OutTaps : PFloat);  stdcall;
+
+procedure nspsFirlSetTaps(InTaps : PFloat;  var TapSt : TNSPFirTapState); stdcall;
+procedure nspcFirlSetTaps(InTaps : PSCplx;  var TapSt : TNSPFirTapState); stdcall;
+procedure nspdFirlSetTaps(InTaps : PDouble; var TapSt : TNSPFirTapState); stdcall;
+procedure nspzFirlSetTaps(InTaps : PDCplx;  var TapSt : TNSPFirTapState); stdcall;
+procedure nspwFirlSetTaps(InTaps : PFloat;  var TapSt : TNSPFirTapState); stdcall;
+
+{------------------------------------------------------------------------}
+{        FirlGetDlyl, FirlSetDlyl                                        }
+{                                                                        }
+{ Utility functions to get and set  the delay line contents of low-level }
+{ FIR filters.                                                           }
+
+procedure nspsFirlGetDlyl(var TapSt   : TNSPFirTapState;
+                          var DlySt   : TNSPFirDlyState;
+                              OutDlyl : PFloat);  stdcall;
+procedure nspcFirlGetDlyl(var TapSt   : TNSPFirTapState;
+                          var DlySt   : TNSPFirDlyState;
+                              OutDlyl : PSCplx);  stdcall;
+procedure nspdFirlGetDlyl(var TapSt   : TNSPFirTapState;
+                          var DlySt   : TNSPFirDlyState;
+                              OutDlyl : PDouble); stdcall;
+procedure nspzFirlGetDlyl(var TapSt   : TNSPFirTapState;
+                          var DlySt   : TNSPFirDlyState;
+                              OutDlyl : PDCplx);  stdcall;
+procedure nspwFirlGetDlyl(var TapSt   : TNSPFirTapState;
+                          var DlySt   : TNSPFirDlyState;
+                              OutDlyl : PShort);  stdcall;
+
+procedure nspsFirlSetDlyl(var TapSt   : TNSPFirTapState;
+                              InDlyl  : PFloat;
+                          var DlySt   : TNSPFirDlyState); stdcall;
+procedure nspcFirlSetDlyl(var TapSt   : TNSPFirTapState;
+                              InDlyl  : PSCplx;
+                          var DlySt   : TNSPFirDlyState); stdcall;
+procedure nspdFirlSetDlyl(var TapSt   : TNSPFirTapState;
+                              InDlyl  : PDouble;
+                          var DlySt   : TNSPFirDlyState); stdcall;
+procedure nspzFirlSetDlyl(var TapSt   : TNSPFirTapState;
+                              InDlyl  : PDCplx;
+                          var DlySt   : TNSPFirDlyState); stdcall;
+procedure nspwFirlSetDlyl(var TapSt   : TNSPFirTapState;
+                              InDlyl  : PShort;
+                          var DlySt   : TNSPFirDlyState); stdcall;
+
+{EOF}

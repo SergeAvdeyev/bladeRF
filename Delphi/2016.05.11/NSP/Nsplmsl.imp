@@ -1,0 +1,114 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+*)
+
+procedure nspsLmslInit;       external nspDLL;
+procedure nspdLmslInit;       external nspDLL;
+procedure nspcLmslInit;       external nspDLL;
+procedure nspzLmslInit;       external nspDLL;
+
+procedure nspsLmslInitMr;     external nspDLL;
+procedure nspdLmslInitMr;     external nspDLL;
+procedure nspcLmslInitMr;     external nspDLL;
+procedure nspzLmslInitMr;     external nspDLL;
+
+procedure nspsLmslInitDlyl;   external nspDLL;
+procedure nspdLmslInitDlyl;   external nspDLL;
+procedure nspcLmslInitDlyl;   external nspDLL;
+procedure nspzLmslInitDlyl;   external nspDLL;
+
+function nspsLmslGetStep;     external nspDLL;
+function nspsLmslGetLeak;     external nspDLL;
+
+procedure nspsLmslSetStep;    external nspDLL;
+procedure nspsLmslSetLeak;    external nspDLL;
+
+function nspsLmsl;            external nspDLL;
+function nspcLmsl(var TapSt : TNSPLmsTapState;
+                  var DlySt : TNSPLmsDlyState;
+                      Samp  : TSCplx; Err : TSCplx) : TSCplx;
+var
+  Val : TSCplx;
+begin
+  nspcLmslOut(TapSt,DlySt,Samp,Err,Val);
+  Result := Val;
+end;
+function nspdLmsl;            external nspDLL;
+function nspzLmsl;            external nspDLL;
+procedure nspcLmslOut;        external nspDLL;
+
+function nspsbLmsl;            external nspDLL;
+function nspcbLmsl(var TapSt   : TNSPLmsTapState;
+                   var DlySt   : TNSPLmsDlyState;
+                       InSamps : PSCplx; Err : TSCplx) : TSCplx;
+var
+  Val : TSCplx;
+begin
+  nspcbLmslOut(TapSt,DlySt,InSamps,Err,Val);
+  Result := Val;
+end;
+function nspdbLmsl;            external nspDLL;
+function nspzbLmsl;            external nspDLL;
+procedure nspcbLmslOut;        external nspDLL;
+
+function nspsLmslNa;            external nspDLL;
+function nspcLmslNa(const TapSt : TNSPLmsTapState;
+                    var   DlySt : TNSPLmsDlyState;
+                          Samp  : TSCplx) : TSCplx; stdcall;
+var
+  Val : TSCplx;
+begin
+  nspcLmslNaOut(TapSt,DlySt,Samp,Val);
+  Result := Val;
+end;
+function nspdLmslNa;            external nspDLL;
+function nspzLmslNa;            external nspDLL;
+procedure nspcLmslNaOut;        external nspDLL;
+
+procedure nspsbLmslNa;      external nspDLL;
+procedure nspcbLmslNa;      external nspDLL;
+procedure nspdbLmslNa;      external nspDLL;
+procedure nspzbLmslNa;      external nspDLL;
+
+procedure nspsLmslGetTaps;  external nspDLL;
+procedure nspcLmslGetTaps;  external nspDLL;
+procedure nspdLmslGetTaps;  external nspDLL;
+procedure nspzLmslGetTaps;  external nspDLL;
+
+procedure nspsLmslSetTaps;  external nspDLL;
+procedure nspcLmslSetTaps;  external nspDLL;
+procedure nspdLmslSetTaps;  external nspDLL;
+procedure nspzLmslSetTaps;  external nspDLL;
+
+procedure nspsLmslGetDlyl;  external nspDLL;
+procedure nspcLmslGetDlyl;  external nspDLL;
+procedure nspdLmslGetDlyl;  external nspDLL;
+procedure nspzLmslGetDlyl;  external nspDLL;
+
+procedure nspsLmslSetDlyl;  external nspDLL;
+procedure nspcLmslSetDlyl;  external nspDLL;
+procedure nspdLmslSetDlyl;  external nspDLL;
+procedure nspzLmslSetDlyl;  external nspDLL;
+
+procedure nspwLmslInitDlyl; external nspDLL;
+
+procedure nspwLmslSetDlyl;  external nspDLL;
+
+procedure nspwLmslGetDlyl;  external nspDLL;
+
+procedure nspwLmslInit;     external nspDLL;
+
+procedure nspwLmslSetTaps;  external nspDLL;
+
+procedure nspwLmslGetTaps;  external nspDLL;
+
+function nspwLmsl;          external nspDLL;
+
+function  nspwLmslGetStep;  external nspDLL;
+procedure nspwLmslSetStep;  external nspDLL;
+
+{EOF}

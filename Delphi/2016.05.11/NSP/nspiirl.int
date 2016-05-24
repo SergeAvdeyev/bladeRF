@@ -1,0 +1,244 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+
+From:    nspiirl.h
+Purpose: NSP Infinite Impulse Response Filtering.
+*)
+
+const
+  MAX_IIR_FILTER = 1024;
+
+{---- User tap type ------------------------------------------------------}
+
+type
+  TNSPIirType = (NSP_IirNull, NSP_IirDefault, NSP_IirUseTapsAsPtr);
+
+{---- Implementation tap type of initialization --------------------------}
+
+  TNSPIirInit = (NSP_IirInit, NSP_IirXInit, NSP_IirInitBq, NSP_IirXInitBq);
+
+{---- IIR filter tap state structure -------------------------------------}
+
+  TNSPIirTapState = record
+    Order   : Integer;                 // order/number of biquads
+    Taps    : Pointer;                 // pointer to taps
+    IirType : TNSPIirType;             // user type
+    IniType : TNSPIirInit;             // type of initialization
+    TapsFactor : Integer;
+  end;
+
+{---- IIR filter delay line state structure ------------------------------}
+
+  TNSPIirDlyState = record
+    Dlyl : Pointer;                    // pointer to delay line
+  end;
+
+{---- IIR filter state structure -----------------------------------------}
+
+  TNSPIirState = record
+    TapSt : TNSPIirTapState;           // tap state structure
+    DlySt : TNSPIirDlyState;           // delay line state structure
+    Init  : Integer;                   // initialization flag
+  end;
+
+{-------------------------------------------------------------------------}
+{         IirlInit, IirlInitBq, IirlInitDlyl                              }
+{                                                                         }
+{ Perform infinite impulse response filtering.                            }
+{-------------------------------------------------------------------------}
+{ FUNCTION:                                                               }
+{   nsp<w,s,c,d,z>IirlInit                                                }
+{ DESCRIPTION:                                                            }
+{   Taps initialization of low-level arbitrary order IIR-filter with      }
+{   transfer function expressed as the ratio of two polinomials of order  }
+{   "order".                                                              }
+{ PARAMETERS:                                                             }
+{   iirType  - input, determines the filter structure to use, currently   }
+{              must be NSP_IirDefault;                                    }
+{   taps     - input/output, sets the array taps of filter with transfer  }
+{              function                                                   }
+{                   B0+B1/z+B2/z/z ... +Border/z**order                   }
+{              H(z)=------------------------------------                  }
+{                   A0+A1/z+A2/z/z ... +Aorder/z**order                   }
+{              in following order:                                        }
+{                  B0, B1, ... Border,A0, A1, ... Aorder.                 }
+{              A0 must not be zero;                                       }
+{   order    - input, sets polinomial order;                              }
+{   tapStPtr - output, the pointer to the tap state structure.            }
+{                                                                         }
+{   gain - input, determines gain coefficient for filter output signal.   }
+{          It have to be positive value .                                 }
+{   InputRange - input, defines the bit range of input signal             }
+{                (from 4 to 16 bit). This gives possibility for the       }
+{                optimal taps recalculation from float to the internal    }
+{                short whith a fixed point flavor when input signal       }
+{                limitation is known.                                     }
+{    When gain = 1.0 and InputRange =16 the result of nspwIirlInitGain is }
+{    equal to nspwIirlInit.                                               }
+
+procedure nspwIirlInit(IirType : TNSPIirType; Taps : PFloat;
+                       Order   : Integer;
+                   var State   : TNSPIirTapState); stdcall;
+procedure nspsIirlInit(IirType : TNSPIirType; Taps : PFloat;
+                       Order   : Integer;
+                   var State   : TNSPIirTapState); stdcall;
+procedure nspcIirlInit(IirType : TNSPIirType; Taps : PSCplx;
+                       Order   : Integer;
+                   var State   : TNSPIirTapState); stdcall;
+procedure nspdIirlInit(IirType : TNSPIirType; Taps : PDouble;
+                       Order   : Integer;
+                   var State   : TNSPIirTapState); stdcall;
+procedure nspzIirlInit(IirType : TNSPIirType; Taps : PDCplx;
+                       Order   : Integer;
+                   var State   : TNSPIirTapState); stdcall;
+procedure nspwIirlInitGain(IirType    : TNSPIirType; Taps : PFloat;
+                           Order      : Integer;
+                       var State      : TNSPIirTapState;
+                           Gain       : Float;
+                           InputRange : Integer); stdcall;
+
+{-------------------------------------------------------------------------}
+{ FUNCTION:                                                               }
+{   nsp<w,s,c,d,z>IirlInitBq                                              }
+{ DESCRIPTION:                                                            }
+{   Low-level IIR-filter iinitialization taps to reference a cascade of   }
+{   biquads. Transfer function is a product of numQuads biquads.          }
+{ PARAMETERS:                                                             }
+{   iirType  - input, determines the filter structure to use, currently   }
+{              must be NSP_IirDefault;                                    }
+{   taps     - input/output, sets the array taps of filter                }
+{              with the transfer function                                 }
+{                   (B10+B11/z+B12/z**2)* ... *(BnQ0+BnQ1/z+BnQ2/z**2)    }
+{              H(z)=--------------------------------------------------    }
+{                   (A10+A11/z+A12/z**2)* ... *(AnQ0+AnQ1/z+AnQ2/z**2)    }
+{              in following order:                                        }
+{                   B10, B11, B12, A10, A11, A12, ... ,                   }
+{                   BnQ0, BnQ1, BnQ2, AnQ0, AnQ1, AnQ2.                   }
+{              All Bi0 and Ai0 must not be zero;                          }
+{   numQuads - input, sets the number of biduads;                         }
+{   tapStPtr - output, pointer to the tap state structure.                }
+{                                                                         }
+
+procedure nspwIirlInitBq(IirType  : TNSPIirType; Taps : PFloat;
+                         NumQuads : Integer;
+                     var State    : TNSPIirTapState); stdcall;
+procedure nspsIirlInitBq(IirType  : TNSPIirType; Taps : PFloat;
+                         NumQuads : Integer;
+                     var State    : TNSPIirTapState); stdcall;
+procedure nspcIirlInitBq(IirType  : TNSPIirType; Taps : PSCplx;
+                         NumQuads : Integer;
+                     var State    : TNSPIirTapState); stdcall;
+procedure nspdIirlInitBq(IirType  : TNSPIirType; Taps : PDouble;
+                         NumQuads : Integer;
+                     var State    : TNSPIirTapState); stdcall;
+procedure nspzIirlInitBq(IirType  : TNSPIirType; Taps : PDCplx;
+                         NumQuads : Integer;
+                     var State    : TNSPIirTapState); stdcall;
+
+{-------------------------------------------------------------------------}
+{ FUNCTION:                                                               }
+{   nsp<w,s,c,d,z>IirlInitDlyl                                            }
+{ DESCRIPTION:                                                            }
+{   Initialization of delay array for low-level IIR-filter.               }
+{ PARAMETERS:                                                             }
+{   tapStPtr - input, the pointer to the tap state structure,             }
+{              initializated previously by the function nsp?IirInit or    }
+{              nsp?IirInitBq;                                             }
+{   dlyl     - input/output, the delay line array. In this implementation }
+{              the input array element values are ignored.                }
+{   dlyStPtr - output, the pointer to the delay line state structure.     }
+{                                                                         }
+
+procedure nspwIirlInitDlyl(TapState : TNSPIirTapState; Dlyl : PLongint;
+                       var DlyState : TNSPIirDlyState); stdcall;
+procedure nspsIirlInitDlyl(TapState : TNSPIirTapState; Dlyl : PFloat;
+                       var DlyState : TNSPIirDlyState); stdcall;
+procedure nspcIirlInitDlyl(TapState : TNSPIirTapState; Dlyl : PSCplx;
+                       var DlyState : TNSPIirDlyState); stdcall;
+procedure nspdIirlInitDlyl(TapState : TNSPIirTapState; Dlyl : PDouble;
+                       var DlyState : TNSPIirDlyState); stdcall;
+procedure nspzIirlInitDlyl(TapState : TNSPIirTapState; Dlyl : PDCplx;
+                       var DlyState : TNSPIirDlyState); stdcall;
+
+{-------------------------------------------------------------------------}
+{         Iirl, bIirl                                                     }
+{                                                                         }
+{ Filter a signal through a low-level IIR filter.                         }
+{-------------------------------------------------------------------------}
+{ FUNCTION:                                                               }
+{   nsp<w,s,c,d,z>Iirl                                                        }
+{ DESCRIPTION:                                                            }
+{   filters a single sample throuth a low-level IIR filter and returns    }
+{   the result.                                                           }
+{ PARAMETERS:                                                             }
+{   tapStPtr - input, pointer to the tap state structure;                 }
+{   dlyStPtr - input, pointer to the delay line state structure;          }
+{   smp      - input, the sample value.                                   }
+{ RETURNS:                                                                }
+{   the filtering result.                                                 }
+{                                                                         }
+
+function nspwIirl(const TapState    : TNSPIirTapState;
+                  var   DlyState    : TNSPIirDlyState;
+                        Samp        : Short;
+                        ScaleMode   : Integer;
+                  var   ScaleFactor : Integer) : Short;  stdcall;
+function nspsIirl(const TapState    : TNSPIirTapState;
+                  var   DlyState    : TNSPIirDlyState;
+                        Samp        : Float)   : Float;  stdcall;
+function nspcIirl(const TapState    : TNSPIirTapState;
+                  var   DlyState    : TNSPIirDlyState;
+                        Samp        : TSCplx)  : TSCplx; stdcall;
+function nspdIirl(const TapState    : TNSPIirTapState;
+                  var   DlyState    : TNSPIirDlyState;
+                        Samp        : Double)  : Double; stdcall;
+function nspzIirl(const TapState    : TNSPIirTapState;
+                  var   DlyState    : TNSPIirDlyState;
+                        Samp        : TDCplx)  : TDCplx; stdcall;
+procedure nspcIirlOut(const TapState : TNSPIirTapState;
+                      var   DlyState : TNSPIirDlyState;
+                            Samp     : TSCplx;
+                      var   Val      : TSCplx); stdcall;
+
+{-------------------------------------------------------------------------}
+{ FUNCTION:                                                               }
+{   nsp<w,s,c,d,z>bIirl                                                   }
+{ DESCRIPTION:                                                            }
+{   filters an input block of samples throuth a low-level IIR filter and  }
+{   returns the result in output block.                                   }
+{ PARAMETERS:                                                             }
+{   tapStPtr - input, the pointer to the tap state structure;             }
+{   dlyStPtr - input, the pointer to the delay line state structure;      }
+{   inSamps  - input, the block of samples;                               }
+{   outSamps - output, the block of filtered samples;                     }
+{   numIters - input, the size of samples' block.                         }
+{                                                                         }
+
+procedure nspwbIirl(const TapState    : TNSPIirTapState;
+                    var   DlyState    : TNSPIirDlyState;
+                          InSamps     : PShort;  OutSamps : PShort;
+                          NumIters    : Integer;
+                          ScaleMode   : Integer;
+                    var   ScaleFactor : Integer); stdcall;
+procedure nspsbIirl(const TapState    : TNSPIirTapState;
+                    var   DlyState    : TNSPIirDlyState;
+                          InSamps     : PFloat;  OutSamps : PFloat;
+                          NumIters    : Integer); stdcall;
+procedure nspcbIirl(const TapState    : TNSPIirTapState;
+                    var   DlyState    : TNSPIirDlyState;
+                          InSamps     : PSCplx;  OutSamps : PSCplx;
+                          NumIters    : Integer); stdcall;
+procedure nspdbIirl(const TapState    : TNSPIirTapState;
+                    var   DlyState    : TNSPIirDlyState;
+                          InSamps     : PDouble; OutSamps : PDouble;
+                          NumIters    : Integer); stdcall;
+procedure nspzbIirl(const TapState    : TNSPIirTapState;
+                    var   DlyState    : TNSPIirDlyState;
+                          InSamps     : PDCplx;  OutSamps : PDCplx;
+                          NumIters    : Integer); stdcall;
+
+{EOF}

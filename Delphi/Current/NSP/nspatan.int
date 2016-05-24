@@ -1,0 +1,18 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1999 Intel Corporation. All Rights Reserved.
+
+From:    nspatan.h
+Purpose: Header file for function nspAtan
+Author:  Turutin Y.
+*)
+
+procedure nspsbArctan1(Vec      : PFloat;  Len : Integer); stdcall;
+procedure nspsbArctan2(Src, Dst : PFloat;  Len : Integer); stdcall;
+procedure nspdbArctan1(Vec      : PDouble; Len : Integer); stdcall;
+procedure nspdbArctan2(Src, Dst : PDouble; Len : Integer); stdcall;
+
+{EOF}

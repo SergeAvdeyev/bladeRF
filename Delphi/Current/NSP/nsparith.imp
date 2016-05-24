@@ -1,0 +1,187 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+*)
+
+function nspcAdd(A, B : TSCplx) : TSCplx;
+var
+  Val : TSCplx;
+begin
+  nspcAddOut(A,B,Val);
+  Result := Val;
+end;
+
+function nspcSub(A, B : TSCplx) : TSCplx;
+var
+  Val : TSCplx;
+begin
+  nspcSubOut(A,B,Val);
+  Result := Val;
+end;
+
+function nspcMpy(A, B : TSCplx) : TSCplx;
+var
+  Val : TSCplx;
+begin
+  nspcMpyOut(A,B,Val);
+  Result := Val;
+end;
+
+function nspcDiv(A, B : TSCplx) : TSCplx;
+var
+  Val : TSCplx;
+begin
+  nspcDivOut(A,B,Val);
+  Result := Val;
+end;
+
+function nspcConj(A : TSCplx) : TSCplx;
+var
+  Val : TSCplx;
+begin
+  nspcConjOut(A,Val);
+  Result := Val;
+end;
+
+procedure nspcAddOut;  external nspDLL;
+procedure nspcSubOut;  external nspDLL;
+procedure nspcMpyOut;  external nspDLL;
+procedure nspcDivOut;  external nspDLL;
+procedure nspcConjOut; external nspDLL;
+
+function nspcSet(Re, Im : Float) : TSCplx;
+var
+  Val : TSCplx;
+begin
+  nspcSetOut(Re,Im,Val);
+  Result := Val;
+end;
+
+procedure nspcSetOut; external nspDLL;
+
+procedure nspsbZero; external nspDLL;
+procedure nspcbZero; external nspDLL;
+procedure nspsbSet;  external nspDLL;
+procedure nspcbSet;  external nspDLL;
+procedure nspsbCopy; external nspDLL;
+procedure nspcbCopy; external nspDLL;
+
+procedure nspsbAdd1; external nspDLL;
+procedure nspcbAdd1; external nspDLL;
+procedure nspsbAdd2; external nspDLL;
+procedure nspcbAdd2; external nspDLL;
+procedure nspsbAdd3; external nspDLL;
+procedure nspcbAdd3; external nspDLL;
+procedure nspsbSub1; external nspDLL;
+procedure nspcbSub1; external nspDLL;
+procedure nspsbSub2; external nspDLL;
+procedure nspcbSub2; external nspDLL;
+procedure nspsbSub3; external nspDLL;
+procedure nspcbSub3; external nspDLL;
+procedure nspsbMpy1; external nspDLL;
+procedure nspcbMpy1; external nspDLL;
+procedure nspsbMpy2; external nspDLL;
+procedure nspcbMpy2; external nspDLL;
+procedure nspsbMpy3; external nspDLL;
+procedure nspcbMpy3; external nspDLL;
+
+procedure nspcbConj1;       external nspDLL;
+procedure nspcbConj2;       external nspDLL;
+procedure nspcbConjFlip2;   external nspDLL;
+procedure nspcbConjExtend1; external nspDLL;
+procedure nspcbConjExtend2; external nspDLL;
+
+function nspvAdd;   external nspDLL;
+function nspvSub;   external nspDLL;
+function nspvMpy;   external nspDLL;
+function nspvDiv;   external nspDLL;
+function nspvConj;  external nspDLL;
+function nspvSet;   external nspDLL;
+
+procedure nspwbZero; external nspDLL;
+procedure nspvbZero; external nspDLL;
+procedure nspwbSet;  external nspDLL;
+procedure nspvbSet;  external nspDLL;
+procedure nspwbCopy; external nspDLL;
+procedure nspvbCopy; external nspDLL;
+
+procedure nspwbAdd1; external nspDLL;
+procedure nspvbAdd1; external nspDLL;
+procedure nspwbAdd2; external nspDLL;
+procedure nspvbAdd2; external nspDLL;
+procedure nspwbAdd3; external nspDLL;
+procedure nspvbAdd3; external nspDLL;
+procedure nspwbSub1; external nspDLL;
+procedure nspvbSub1; external nspDLL;
+procedure nspwbSub2; external nspDLL;
+procedure nspvbSub2; external nspDLL;
+procedure nspwbSub3; external nspDLL;
+procedure nspvbSub3; external nspDLL;
+procedure nspwbMpy1; external nspDLL;
+procedure nspvbMpy1; external nspDLL;
+procedure nspwbMpy2; external nspDLL;
+procedure nspvbMpy2; external nspDLL;
+procedure nspwbMpy3; external nspDLL;
+procedure nspvbMpy3; external nspDLL;
+
+procedure nspvbConj1;       external nspDLL;
+procedure nspvbConj2;       external nspDLL;
+procedure nspvbConjFlip2;   external nspDLL;
+procedure nspvbConjExtend1; external nspDLL;
+procedure nspvbConjExtend2; external nspDLL;
+
+function nspzAdd;              external nspDLL;
+function nspzSub;              external nspDLL;
+function nspzMpy;              external nspDLL;
+function nspzDiv;              external nspDLL;
+function nspzConj;             external nspDLL;
+
+function nspzSet;              external nspDLL;
+
+procedure nspdbZero;           external nspDLL;
+procedure nspzbZero;           external nspDLL;
+
+procedure nspdbSet;            external nspDLL;
+procedure nspzbSet;            external nspDLL;
+
+procedure nspdbCopy;           external nspDLL;
+procedure nspzbCopy;           external nspDLL;
+
+procedure nspdbAdd1;           external nspDLL;
+procedure nspzbAdd1;           external nspDLL;
+
+procedure nspdbAdd2;           external nspDLL;
+procedure nspzbAdd2;           external nspDLL;
+
+procedure nspdbAdd3;           external nspDLL;
+procedure nspzbAdd3;           external nspDLL;
+
+procedure nspdbSub1;           external nspDLL;
+procedure nspzbSub1;           external nspDLL;
+
+procedure nspdbSub2;           external nspDLL;
+procedure nspzbSub2;           external nspDLL;
+
+procedure nspdbSub3;           external nspDLL;
+procedure nspzbSub3;           external nspDLL;
+
+procedure nspdbMpy1;           external nspDLL;
+procedure nspzbMpy1;           external nspDLL;
+
+procedure nspdbMpy2;           external nspDLL;
+procedure nspzbMpy2;           external nspDLL;
+
+procedure nspdbMpy3;           external nspDLL;
+procedure nspzbMpy3;           external nspDLL;
+
+procedure nspzbConj1;          external nspDLL;
+procedure nspzbConj2;          external nspDLL;
+procedure nspzbConjFlip2;      external nspDLL;
+procedure nspzbConjExtend1;    external nspDLL;
+procedure nspzbConjExtend2;    external nspDLL;
+
+
+{EOF}

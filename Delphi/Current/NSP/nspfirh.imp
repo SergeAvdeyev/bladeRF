@@ -1,0 +1,80 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+*)
+
+procedure nspsFirInit;       external nspDLL;
+procedure nspcFirInit;       external nspDLL;
+procedure nspdFirInit;       external nspDLL;
+procedure nspzFirInit;       external nspDLL;
+procedure nspwFirInit;       external nspDLL;
+
+procedure nspsFirInitMr;     external nspDLL;
+procedure nspcFirInitMr;     external nspDLL;
+procedure nspdFirInitMr;     external nspDLL;
+procedure nspzFirInitMr;     external nspDLL;
+procedure nspwFirInitMr;     external nspDLL;
+
+procedure nspFirFree;        external nspDLL;
+
+function nspsFir;            external nspDLL;
+
+function nspcFir(var State : TNSPFirState; Samp : TSCplx) : TSCplx;
+var
+  Val : TSCplx;
+begin
+  nspcFirOut(State,Samp,Val);
+  Result := Val;
+end;
+
+procedure nspcFirOut;        external nspDLL;
+
+function nspdFir;            external nspDLL;
+function nspzFir;            external nspDLL;
+
+function nspwFir;            external nspDLL;
+
+procedure nspsbFir;          external nspDLL;
+procedure nspcbFir;          external nspDLL;
+
+procedure nspdbFir;          external nspDLL;
+procedure nspzbFir;          external nspDLL;
+
+procedure nspwbFir;          external nspDLL;
+
+procedure nspsFirGetTaps;    external nspDLL;
+procedure nspcFirGetTaps;    external nspDLL;
+
+procedure nspdFirGetTaps;    external nspDLL;
+procedure nspzFirGetTaps;    external nspDLL;
+
+procedure nspwFirGetTaps;    external nspDLL;
+
+procedure nspsFirSetTaps;    external nspDLL;
+procedure nspcFirSetTaps;    external nspDLL;
+
+procedure nspdFirSetTaps;    external nspDLL;
+procedure nspzFirSetTaps;    external nspDLL;
+
+procedure nspwFirSetTaps;    external nspDLL;
+
+procedure nspsFirGetDlyl;    external nspDLL;
+procedure nspcFirGetDlyl;    external nspDLL;
+
+procedure nspdFirGetDlyl;    external nspDLL;
+procedure nspzFirGetDlyl;    external nspDLL;
+
+procedure nspwFirGetDlyl;    external nspDLL;
+
+procedure nspsFirSetDlyl;    external nspDLL;
+procedure nspcFirSetDlyl;    external nspDLL;
+
+procedure nspdFirSetDlyl;    external nspDLL;
+procedure nspzFirSetDlyl;    external nspDLL;
+
+procedure nspwFirSetDlyl;    external nspDLL;
+
+{EOF}

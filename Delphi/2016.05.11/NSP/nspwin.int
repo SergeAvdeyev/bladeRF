@@ -1,0 +1,117 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+
+From:    nspwin.h
+Purpose: NSP Windowing Functions. Declaration
+*)
+
+{------------------------------------------------------------------------}
+{                                                                        }
+{   Win                                                                  }
+{                                                                        }
+{ Multiply a vector by a windowing function.                             }
+{                                                                        }
+
+procedure nspsWinBartlett(Vec : PFloat;  N : Integer); stdcall;
+procedure nspcWinBartlett(Vec : PSCplx;  N : Integer); stdcall;
+procedure nspdWinBartlett(Vec : PDouble; N : Integer); stdcall;
+procedure nspzWinBartlett(Vec : PDCplx;  N : Integer); stdcall;
+procedure nspwWinBartlett(Vec : PShort;  N : Integer); stdcall;
+procedure nspvWinBartlett(Vec : PWCplx;  N : Integer); stdcall;
+
+procedure nspsWinBartlett2(Src : PFloat; Dst  : PFloat;  N : Integer); stdcall;
+procedure nspcWinBartlett2(Src : PSCplx; Dst  : PSCplx;  N : Integer); stdcall;
+procedure nspdWinBartlett2(Src : PDouble; Dst : PDouble; N : Integer); stdcall;
+procedure nspzWinBartlett2(Src : PDCplx; Dst  : PDCplx;  N : Integer); stdcall;
+procedure nspwWinBartlett2(Src : PShort; Dst  : PShort;  N : Integer); stdcall;
+procedure nspvWinBartlett2(Src : PWCplx; Dst  : PWCplx;  N : Integer); stdcall;
+
+procedure nspsWinHann(Vec : PFloat;  N : Integer); stdcall;
+procedure nspcWinHann(Vec : PSCplx;  N : Integer); stdcall;
+procedure nspdWinHann(Vec : PDouble; N : Integer); stdcall;
+procedure nspzWinHann(Vec : PDCplx;  N : Integer); stdcall;
+procedure nspwWinHann(Vec : PShort;  N : Integer); stdcall;
+procedure nspvWinHann(Vec : PWCplx;  N : Integer); stdcall;
+
+procedure nspsWinHann2(Src : PFloat;  Dst : PFloat;  N : Integer); stdcall;
+procedure nspcWinHann2(Src : PSCplx;  Dst : PSCplx;  N : Integer); stdcall;
+procedure nspdWinHann2(Src : PDouble; Dst : PDouble; N : Integer); stdcall;
+procedure nspzWinHann2(Src : PDCplx;  Dst : PDCplx;  N : Integer); stdcall;
+procedure nspwWinHann2(Src : PShort;  Dst : PShort;  N : Integer); stdcall;
+procedure nspvWinHann2(Src : PWCplx;  Dst : PWCplx;  N : Integer); stdcall;
+
+procedure nspsWinHamming(Vec : PFloat;  N : Integer); stdcall;
+procedure nspcWinHamming(Vec : PSCplx;  N : Integer); stdcall;
+procedure nspdWinHamming(Vec : PDouble; N : Integer); stdcall;
+procedure nspzWinHamming(Vec : PDCplx;  N : Integer); stdcall;
+procedure nspwWinHamming(Vec : PShort;  N : Integer); stdcall;
+procedure nspvWinHamming(Vec : PWCplx;  N : Integer); stdcall;
+
+procedure nspsWinHamming2(Src : PFloat;  Dst : PFloat;  N : Integer); stdcall;
+procedure nspcWinHamming2(Src : PSCplx;  Dst : PSCplx;  N : Integer); stdcall;
+procedure nspdWinHamming2(Src : PDouble; Dst : PDouble; N : Integer); stdcall;
+procedure nspzWinHamming2(Src : PDCplx;  Dst : PDCplx;  N : Integer); stdcall;
+procedure nspwWinHamming2(Src : PShort;  Dst : PShort;  N : Integer); stdcall;
+procedure nspvWinHamming2(Src : PWCplx;  Dst : PWCplx;  N : Integer); stdcall;
+
+procedure nspsWinBlackman(Vec : PFloat;  N : Integer; Alpha : Float);  stdcall;
+procedure nspcWinBlackman(Vec : PSCplx;  N : Integer; Alpha : Float);  stdcall;
+procedure nspdWinBlackman(Vec : PDouble; N : Integer; Alpha : Double); stdcall;
+procedure nspzWinBlackman(Vec : PDCplx;  N : Integer; Alpha : Double); stdcall;
+procedure nspwWinBlackman(Vec : PShort;  N : Integer; Alpha : Float);  stdcall;
+procedure nspvWinBlackman(Vec : PWCplx;  N : Integer; Alpha : Float);  stdcall;
+
+procedure nspsWinBlackman2(Src : PFloat;  Dst : PFloat;  N : Integer; Alpha : Float);  stdcall;
+procedure nspcWinBlackman2(Src : PSCplx;  Dst : PSCplx;  N : Integer; Alpha : Float);  stdcall;
+procedure nspdWinBlackman2(Src : PDouble; Dst : PDouble; N : Integer; Alpha : Double); stdcall;
+procedure nspzWinBlackman2(Src : PDCplx;  Dst : PDCplx;  N : Integer; Alpha : Double); stdcall;
+procedure nspwWinBlackman2(Src : PShort;  Dst : PShort;  N : Integer; Alpha : Float);  stdcall;
+procedure nspvWinBlackman2(Src : PWCplx;  Dst : PWCplx;  N : Integer; Alpha : Float);  stdcall;
+
+procedure nspsWinBlackmanStd(Vec : PFloat;  N : Integer); stdcall;
+procedure nspcWinBlackmanStd(Vec : PSCplx;  N : Integer); stdcall;
+procedure nspdWinBlackmanStd(Vec : PDouble; N : Integer); stdcall;
+procedure nspzWinBlackmanStd(Vec : PDCplx;  N : Integer); stdcall;
+procedure nspwWinBlackmanStd(Vec : PShort;  N : Integer); stdcall;
+procedure nspvWinBlackmanStd(Vec : PWCplx;  N : Integer); stdcall;
+
+procedure nspsWinBlackmanStd2(Src : PFloat;  Dst : PFloat;  N : Integer); stdcall;
+procedure nspcWinBlackmanStd2(Src : PSCplx;  Dst : PSCplx;  N : Integer); stdcall;
+procedure nspdWinBlackmanStd2(Src : PDouble; Dst : PDouble; N : Integer); stdcall;
+procedure nspzWinBlackmanStd2(Src : PDCplx;  Dst : PDCplx;  N : Integer); stdcall;
+procedure nspwWinBlackmanStd2(Src : PShort;  Dst : PShort;  N : Integer); stdcall;
+procedure nspvWinBlackmanStd2(Src : PWCplx;  Dst : PWCplx;  N : Integer); stdcall;
+
+procedure nspsWinBlackmanOpt(Vec : PFloat;  N : Integer); stdcall;
+procedure nspcWinBlackmanOpt(Vec : PSCplx;  N : Integer); stdcall;
+procedure nspdWinBlackmanOpt(Vec : PDouble; N : Integer); stdcall;
+procedure nspzWinBlackmanOpt(Vec : PDCplx;  N : Integer); stdcall;
+procedure nspwWinBlackmanOpt(Vec : PShort;  N : Integer); stdcall;
+procedure nspvWinBlackmanOpt(Vec : PWCplx;  N : Integer); stdcall;
+
+procedure nspsWinBlackmanOpt2(Src : PFloat;  Dst : PFloat;  N : Integer); stdcall;
+procedure nspcWinBlackmanOpt2(Src : PSCplx;  Dst : PSCplx;  N : Integer); stdcall;
+procedure nspdWinBlackmanOpt2(Src : PDouble; Dst : PDouble; N : Integer); stdcall;
+procedure nspzWinBlackmanOpt2(Src : PDCplx;  Dst : PDCplx;  N : Integer); stdcall;
+procedure nspwWinBlackmanOpt2(Src : PShort;  Dst : PShort;  N : Integer); stdcall;
+procedure nspvWinBlackmanOpt2(Src : PWCplx;  Dst : PWCplx;  N : Integer); stdcall;
+
+procedure nspsWinKaiser(Vec : PFloat;  N : Integer; Beta : Float);  stdcall;
+procedure nspcWinKaiser(Vec : PSCplx;  N : Integer; Beta : Float);  stdcall;
+procedure nspdWinKaiser(Vec : PDouble; N : Integer; Beta : Double); stdcall;
+procedure nspzWinKaiser(Vec : PDCplx;  N : Integer; Beta : Double); stdcall;
+procedure nspwWinKaiser(Vec : PShort;  N : Integer; Beta : Float);  stdcall;
+procedure nspvWinKaiser(Vec : PWCplx;  N : Integer; Beta : Float);  stdcall;
+
+procedure nspsWinKaiser2(Src : PFloat;  Dst : PFloat;  N : Integer; Beta : Float);  stdcall;
+procedure nspcWinKaiser2(Src : PSCplx;  Dst : PSCplx;  N : Integer; Beta : Float);  stdcall;
+procedure nspdWinKaiser2(Src : PDouble; Dst : PDouble; N : Integer; Beta : Double); stdcall;
+procedure nspzWinKaiser2(Src : PDCplx;  Dst : PDCplx;  N : Integer; Beta : Double); stdcall;
+procedure nspwWinKaiser2(Src : PShort;  Dst : PShort;  N : Integer; Beta : Float);  stdcall;
+procedure nspvWinKaiser2(Src : PWCplx;  Dst : PWCplx;  N : Integer; Beta : Float);  stdcall;
+
+{EOF}

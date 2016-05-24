@@ -1,0 +1,39 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+*)
+
+function nspsDotProd;            external nspDLL;
+
+function nspcDotProd(SrcA, SrcB  : PSCplx; Len : Integer) : TSCplx;
+var
+  Val : TSCplx;
+begin
+  nspcDotProdOut(SrcA,SrcB,Len,Val);
+  Result := Val;
+end;
+
+procedure nspcDotProdOut;        external nspDLL;
+function nspdDotProd;            external nspDLL;
+function nspzDotProd;            external nspDLL;
+function nspwDotProd;            external nspDLL;
+function nspvDotProd;            external nspDLL;
+
+function nspwDotProdExt;         external nspDLL;
+
+function nspvDotProdExt(SrcA, SrcB  : PWCplx; Len : Integer;
+                        ScaleMode   : Integer;
+                    var ScaleFactor : Integer) : TICplx;
+var
+  Val : TICplx;
+begin
+  nspvDotProdExtOut(SrcA,SrcB,Len,ScaleMode,ScaleFactor,Val);
+  Result := Val;
+end;
+
+procedure nspvDotProdExtOut;     external nspDLL;
+
+{EOF}

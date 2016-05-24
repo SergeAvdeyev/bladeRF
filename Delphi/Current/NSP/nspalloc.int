@@ -1,0 +1,25 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-200 Intel Corporation. All Rights Reserved.
+
+From:    nspalloc.h
+Purpose: NSP 32 bytes aligned allocator/deallocator
+*)
+
+function nspMalloc (Length : Integer) : Pointer; stdcall;
+
+function nspsMalloc(Length : Integer) : PFloat;  stdcall;
+function nspdMalloc(Length : Integer) : PDouble; stdcall;
+
+function nspcMalloc(Length : Integer) : PSCplx;  stdcall;
+function nspzMalloc(Length : Integer) : PDCplx;  stdcall;
+
+function nspwMalloc(Length : Integer) : PShort;  stdcall;
+function nspvMalloc(Length : Integer) : PWCplx;  stdcall;
+
+procedure nspFree(  P      : Pointer);           stdcall;
+
+{EOF}

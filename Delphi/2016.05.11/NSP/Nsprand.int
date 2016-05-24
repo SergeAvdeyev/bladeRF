@@ -1,0 +1,179 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+
+From: nsprand.h
+*)
+
+const
+  XBUFLEN = 32;
+
+type
+  TNSPSRandUniState = record
+    Low, Muler   : Float;                  // Lower value and scale multiplier
+    Seed2, Carry : UINT;                   // Variables of the algorithm
+    Seed1        : array [0..2] of UINT;   // Variables of the algorithm
+    QuickSeed    : Integer;
+  end;
+
+  TNSPDRandUniState = record
+    Low, Muler   : Double;                 // Lower value and scale multiplier
+    Seed2, Carry : UINT;                   // Variables of the algorithm
+    Seed1        : array [0..2] of UINT;   // Variables of the algorithm
+    QuickSeed    : Integer;
+  end;
+
+{
+  A new state structure of the pseudo random numbers
+  generator has two seed values (m_seed) now. Generator
+  based on multiplication uses m_seed values. Generator
+  based on subtraction uses d_seed and carry.
+}
+
+  TNSPWRandUniState = record
+    Low, Muler   : Float;
+    Center, Pwr2 : Integer;
+    M_Seed       : array [0..1] of UINT;
+    D_Seed       : array [0..2] of UINT;
+    Carry        : UINT;
+    QuickSeed    : Integer;
+    Current      : Integer;
+    XBuf         : array [0..XBUFLEN-1] of Short;
+  end;
+
+  TNSPCRandUniState = TNSPSRandUniState;
+  TNSPZRandUniState = TNSPDRandUniState;
+  TNSPVRandUniState = TNSPWRandUniState;
+
+  TNSPSRandGausState = record
+    Mean, StDev  : Float;                  // Mean and standard deviation values
+    ExtraValue   : Float;                  // Value computed early
+    UseExtra     : Integer;                // Flag to use extra value
+    Seed2, Carry : UINT;                   // Variables of the algorithm
+    Seed1        : array [0..2] of UINT;   // Variables of the algorithm
+    QuickSeed    : Integer;
+  end;
+
+  TNSPDRandGausState = record
+    Mean, StDev  : Double;                 // Mean and standard deviation values
+    ExtraValue   : Double;                 // Value computed early
+    UseExtra     : Integer;                // Flag to use extra value
+    Seed2, Carry : UINT;                   // Variables of the algorithm
+    Seed1        : array [0..2] of UINT;   // Variables of the algorithm
+    QuickSeed    : Integer;
+  end;
+
+  TNSPWRandGausState = record
+    UseExtra     : Integer;
+    Seed2, Carry : UINT;
+    Seed1        : array [0..2] of UINT;
+    Mean, StDev  : Short;
+    ExtraValue   : Short;
+    QuickSeed    : Integer;
+  end;
+
+  TNSPCRandGausState = TNSPSRandGausState;
+  TNSPZRandGausState = TNSPDRandGausState;
+  TNSPVRandGausState = TNSPWRandGausState;
+
+{-------------------------------------------------------------------------}
+{
+   Uniform distribution.
+   Algorithm by G.Marsaglia and A.Zaman (Computers in Physics, vol.8,
+   #1, 1994, 117) are used to build generator of uniformly distributed
+   random numbers.
+}
+
+procedure nspsRandUniInit(Seed, Low, High : Float;
+                      var State : TNSPSRandUniState); stdcall;
+procedure nspcRandUniInit(Seed, Low, High : Float;
+                      var State : TNSPCRandUniState); stdcall;
+procedure nspdRandUniInit(Seed, Low, High : Double;
+                      var State : TNSPDRandUniState); stdcall;
+procedure nspzRandUniInit(Seed, Low, High : Double;
+                      var State : TNSPZRandUniState); stdcall;
+procedure nspwRandUniInit(Seed : UINT; Low, High : Short;
+                      var State : TNSPWRandUniState); stdcall;
+procedure nspvRandUniInit(Seed : UINT; Low, High : Short;
+                      var State : TNSPVRandUniState); stdcall;
+
+function  nspsRandUni(var State : TNSPSRandUniState) : Float;  stdcall;
+function  nspcRandUni(var State : TNSPCRandUniState) : TSCplx; stdcall;
+function  nspdRandUni(var State : TNSPDRandUniState) : Double; stdcall;
+function  nspzRandUni(var State : TNSPZRandUniState) : TDCplx; stdcall;
+function  nspwRandUni(var State : TNSPWRandUniState) : Short;  stdcall;
+function  nspvRandUni(var State : TNSPVRandUniState) : TWCplx; stdcall;
+procedure nspcRandUniOut(var State : TNSPCRandUniState;
+                         var Val   : TSCplx); stdcall;
+
+procedure nspsbRandUni(var State    : TNSPSRandUniState;
+                           Samps    : PFloat;
+                           SampsLen : Integer); stdcall;
+procedure nspcbRandUni(var State    : TNSPCRandUniState;
+                           Samps    : PSCplx;
+                           SampsLen : Integer); stdcall;
+procedure nspdbRandUni(var State    : TNSPDRandUniState;
+                           Samps    : PDouble;
+                           SampsLen : Integer); stdcall;
+procedure nspzbRandUni(var State    : TNSPZRandUniState;
+                           Samps    : PDCplx;
+                           SampsLen : Integer); stdcall;
+procedure nspwbRandUni(var State    : TNSPWRandUniState;
+                           Samps    : PShort;
+                           SampsLen : Integer); stdcall;
+procedure nspvbRandUni(var State    : TNSPVRandUniState;
+                           Samps    : PWCplx;
+                           SampsLen : Integer); stdcall;
+
+{
+   Normal distribution.
+   Algorithm by G.Box and M.Muller and by G.Marsaglia (Reference:
+   D.Knuth. The Art of Computer Programming. vol.2, 1969) are used
+   to build generator of normally distributed random numbers.
+}
+
+procedure nspsRandGausInit(Seed, Mean, StDev : Float;
+                       var State : TNSPSRandGausState); stdcall;
+procedure nspcRandGausInit(Seed, Mean, StDev : Float;
+                       var State : TNSPCRandGausState); stdcall;
+procedure nspdRandGausInit(Seed, Mean, StDev : Double;
+                       var State : TNSPDRandGausState); stdcall;
+procedure nspzRandGausInit(Seed, Mean, StDev : Double;
+                       var State : TNSPZRandGausState); stdcall;
+procedure nspwRandGausInit(Seed, Mean, StDev : Short;
+                       var State : TNSPWRandGausState); stdcall;
+procedure nspvRandGausInit(Seed, Mean, StDev : Short;
+                       var State : TNSPVRandGausState); stdcall;
+
+function nspsRandGaus(var State : TNSPSRandGausState) : Float;  stdcall;
+function nspcRandGaus(var State : TNSPCRandGausState) : TSCplx; stdcall;
+function nspdRandGaus(var State : TNSPDRandGausState) : Double; stdcall;
+function nspzRandGaus(var State : TNSPZRandGausState) : TDCplx; stdcall;
+function nspwRandGaus(var State : TNSPWRandGausState) : Short;  stdcall;
+function nspvRandGaus(var State : TNSPVRandGausState) : TWCplx; stdcall;
+procedure nspcRandGausOut(var State : TNSPCRandGausState;
+                          var Val   : TSCplx); stdcall;
+
+procedure nspsbRandGaus(var State    : TNSPSRandGausState;
+                            Samps    : PFloat;
+                            SampsLen : Integer); stdcall;
+procedure nspcbRandGaus(var State    : TNSPCRandGausState;
+                            Samps    : PSCplx;
+                            SampsLen : Integer); stdcall;
+procedure nspdbRandGaus(var State    : TNSPDRandGausState;
+                            Samps    : PDouble;
+                            SampsLen : Integer); stdcall;
+procedure nspzbRandGaus(var State    : TNSPZRandGausState;
+                            Samps    : PDCplx;
+                            SampsLen : Integer); stdcall;
+procedure nspwbRandGaus(var State    : TNSPWRandGausState;
+                            Samps    : PShort;
+                            SampsLen : Integer); stdcall;
+procedure nspvbRandGaus(var State    : TNSPVRandGausState;
+                            Samps    : PWCplx;
+                            SampsLen : Integer); stdcall;
+
+{EOF}

@@ -1,0 +1,35 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+
+From:    nspconv.h
+Purpose: NSP Convolution
+*)
+
+{-------------------------------------------------------------------------}
+{         Conv                                                            }
+{                                                                         }
+{ Performs finite, linear convolution of two sequences.                   }
+
+procedure nspsConv(X           : PFloat;  XLen : Integer;
+                   H           : PFloat;  HLen : Integer;
+                   Y           : PFloat); stdcall;
+procedure nspcConv(X           : PSCplx;  XLen : Integer;
+                   H           : PSCplx;  HLen : Integer;
+                   Y           : PFloat); stdcall;
+procedure nspdConv(X           : PDouble; XLen : Integer;
+                   H           : PDouble; HLen : Integer;
+                   Y           : PDouble); stdcall;
+procedure nspzConv(X           : PDCplx;  XLen : Integer;
+                   H           : PDCplx;  HLen : Integer;
+                   Y           : PDCplx); stdcall;
+procedure nspwConv(X           : PShort;  XLen : Integer;
+                   H           : PShort;  HLen : Integer;
+                   Y           : PShort;
+                   ScaleMode   : Integer;
+               var ScaleFactor : Integer); stdcall;
+
+{EOF}

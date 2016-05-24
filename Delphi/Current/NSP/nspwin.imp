@@ -1,0 +1,107 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+*)
+
+procedure nspsWinBartlett;    external nspDLL;
+procedure nspcWinBartlett;    external nspDLL;
+procedure nspdWinBartlett;    external nspDLL;
+procedure nspzWinBartlett;    external nspDLL;
+procedure nspwWinBartlett;    external nspDLL;
+procedure nspvWinBartlett;    external nspDLL;
+
+procedure nspsWinBartlett2;   external nspDLL;
+procedure nspcWinBartlett2;   external nspDLL;
+procedure nspdWinBartlett2;   external nspDLL;
+procedure nspzWinBartlett2;   external nspDLL;
+procedure nspwWinBartlett2;   external nspDLL;
+procedure nspvWinBartlett2;   external nspDLL;
+
+procedure nspsWinHann;        external nspDLL;
+procedure nspcWinHann;        external nspDLL;
+procedure nspdWinHann;        external nspDLL;
+procedure nspzWinHann;        external nspDLL;
+procedure nspwWinHann;        external nspDLL;
+procedure nspvWinHann;        external nspDLL;
+
+procedure nspsWinHann2;       external nspDLL;
+procedure nspcWinHann2;       external nspDLL;
+procedure nspdWinHann2;       external nspDLL;
+procedure nspzWinHann2;       external nspDLL;
+procedure nspwWinHann2;       external nspDLL;
+procedure nspvWinHann2;       external nspDLL;
+
+procedure nspsWinHamming;     external nspDLL;
+procedure nspcWinHamming;     external nspDLL;
+procedure nspdWinHamming;     external nspDLL;
+procedure nspzWinHamming;     external nspDLL;
+procedure nspwWinHamming;     external nspDLL;
+procedure nspvWinHamming;     external nspDLL;
+
+procedure nspsWinHamming2;    external nspDLL;
+procedure nspcWinHamming2;    external nspDLL;
+procedure nspdWinHamming2;    external nspDLL;
+procedure nspzWinHamming2;    external nspDLL;
+procedure nspwWinHamming2;    external nspDLL;
+procedure nspvWinHamming2;    external nspDLL;
+
+procedure nspsWinBlackman;    external nspDLL;
+procedure nspcWinBlackman;    external nspDLL;
+procedure nspdWinBlackman;    external nspDLL;
+procedure nspzWinBlackman;    external nspDLL;
+procedure nspwWinBlackman;    external nspDLL;
+procedure nspvWinBlackman;    external nspDLL;
+
+procedure nspsWinBlackman2;   external nspDLL;
+procedure nspcWinBlackman2;   external nspDLL;
+procedure nspdWinBlackman2;   external nspDLL;
+procedure nspzWinBlackman2;   external nspDLL;
+procedure nspwWinBlackman2;   external nspDLL;
+procedure nspvWinBlackman2;   external nspDLL;
+
+procedure nspsWinBlackmanStd; external nspDLL;
+procedure nspcWinBlackmanStd; external nspDLL;
+procedure nspdWinBlackmanStd; external nspDLL;
+procedure nspzWinBlackmanStd; external nspDLL;
+procedure nspwWinBlackmanStd; external nspDLL;
+procedure nspvWinBlackmanStd; external nspDLL;
+
+procedure nspsWinBlackmanStd2; external nspDLL;
+procedure nspcWinBlackmanStd2; external nspDLL;
+procedure nspdWinBlackmanStd2; external nspDLL;
+procedure nspzWinBlackmanStd2; external nspDLL;
+procedure nspwWinBlackmanStd2; external nspDLL;
+procedure nspvWinBlackmanStd2; external nspDLL;
+
+procedure nspsWinBlackmanOpt; external nspDLL;
+procedure nspcWinBlackmanOpt; external nspDLL;
+procedure nspdWinBlackmanOpt; external nspDLL;
+procedure nspzWinBlackmanOpt; external nspDLL;
+procedure nspwWinBlackmanOpt; external nspDLL;
+procedure nspvWinBlackmanOpt; external nspDLL;
+
+procedure nspsWinBlackmanOpt2; external nspDLL;
+procedure nspcWinBlackmanOpt2; external nspDLL;
+procedure nspdWinBlackmanOpt2; external nspDLL;
+procedure nspzWinBlackmanOpt2; external nspDLL;
+procedure nspwWinBlackmanOpt2; external nspDLL;
+procedure nspvWinBlackmanOpt2; external nspDLL;
+
+procedure nspsWinKaiser;      external nspDLL;
+procedure nspcWinKaiser;      external nspDLL;
+procedure nspdWinKaiser;      external nspDLL;
+procedure nspzWinKaiser;      external nspDLL;
+procedure nspwWinKaiser;      external nspDLL;
+procedure nspvWinKaiser;      external nspDLL;
+
+procedure nspsWinKaiser2;     external nspDLL;
+procedure nspcWinKaiser2;     external nspDLL;
+procedure nspdWinKaiser2;     external nspDLL;
+procedure nspzWinKaiser2;     external nspDLL;
+procedure nspwWinKaiser2;     external nspDLL;
+procedure nspvWinKaiser2;     external nspDLL;
+
+{EOF}

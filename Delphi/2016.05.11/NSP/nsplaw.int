@@ -1,0 +1,49 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+
+From:    nsplaw.h
+Purpose: Convert samples from 8-bit A-law and Mu-law encoded format
+         to linear, or vice-versa.
+Contents:
+           nsp?bLinToALaw  -
+                   Convert linear PCM samples to 8-bit A-law format.
+           nsp?bALawToLin  -
+                   Convert samples from 8-bit A-law encoded format
+                   to linear PCM.
+           nsp?bLinToMuLaw  -
+                   Convert linear PCM samples to 8-bit Mu-law format.
+           nsp?bMuLawToLin  -
+                   Convert samples from 8-bit Mu-law encoded format
+                   to linear PCM.
+           nspMuLawToALaw  -
+                   Converts samples from Mu-law encoded format
+                   to A-law encoded format.
+           nspALawToMuLaw  -
+                   Converts samples from A-law encoded format
+                   to Mu-law encoded format.
+*)
+
+procedure nspwbLinToALaw( Src : PShort;  Dst : PUCHAR; Len : Integer); stdcall;
+procedure nspsbLinToALaw( Src : PFloat;  Dst : PUCHAR; Len : Integer); stdcall;
+procedure nspdbLinToALaw( Src : PDouble; Dst : PUCHAR; Len : Integer); stdcall;
+
+procedure nspwbALawToLin( Src : PUCHAR; Dst : PShort;  Len : Integer); stdcall;
+procedure nspsbALawToLin( Src : PUCHAR; Dst : PFloat;  Len : Integer); stdcall;
+procedure nspdbALawToLin( Src : PUCHAR; Dst : PDouble; Len : Integer); stdcall;
+
+procedure nspwbLinToMuLaw(Src : PShort;  Dst : PUCHAR; Len : Integer); stdcall;
+procedure nspsbLinToMuLaw(Src : PFloat;  Dst : PUCHAR; Len : Integer); stdcall;
+procedure nspdbLinToMuLaw(Src : PDouble; Dst : PUCHAR; Len : Integer); stdcall;
+
+procedure nspwbMuLawToLin(Src : PUCHAR; Dst : PShort;  Len : Integer); stdcall;
+procedure nspsbMuLawToLin(Src : PUCHAR; Dst : PFloat;  Len : Integer); stdcall;
+procedure nspdbMuLawToLin(Src : PUCHAR; Dst : PDouble; Len : Integer); stdcall;
+
+procedure nspMuLawToALaw( Src : PUCHAR; Dst : PUCHAR; Len : Integer); stdcall;
+procedure nspALawToMuLaw( Src : PUCHAR; Dst : PUCHAR; Len : Integer); stdcall;
+
+{EOF}

@@ -1,0 +1,79 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+
+From:    nspmisc.h
+Purpose: NSP Miscellaneous Signal Processing Functions
+*)
+
+{------------------------------------------------------------------------}
+{                                                                        }
+{      BitRev, CalcBitRevTbl, GetBitRevTbl, FreeBitRevTbls               }
+{                                                                        }
+{ Obtain bit-reversed numbers, indices, and indexing tables.             }
+{                                                                        }
+{------------------------------------------------------------------------}
+
+function  nspBitRev(       A   : Integer;  Order : Integer) : Integer;  stdcall;
+function  nspGetBitRevTbl(                 Order : Integer) : PInteger; stdcall;
+procedure nspCalcBitRevTbl(Tbl : PInteger; Order : Integer);            stdcall;
+procedure nspFreeBitRevTbls;                                            stdcall;
+
+{------------------------------------------------------------------------}
+{                                                                        }
+{                     bBitRev1, bBitRev2                                 }
+{                                                                        }
+{ Permute a vector into binary bit-reversed order.                       }
+{                                                                        }
+{------------------------------------------------------------------------}
+
+procedure nspwbBitRev1(Vec   : PShort;  Order : Integer); stdcall;
+procedure nspvbBitRev1(Vec   : PWCplx;  Order : Integer); stdcall;
+procedure nspsbBitRev1(Vec   : PFloat;  Order : Integer); stdcall;
+procedure nspcbBitRev1(Vec   : PSCplx;  Order : Integer); stdcall;
+procedure nspdbBitRev1(Vec   : PDouble; Order : Integer); stdcall;
+procedure nspzbBitRev1(Vec   : PDCplx;  Order : Integer); stdcall;
+
+procedure nspwbBitRev2(Src   : PShort;  Dst   : PShort;
+                       Order : Integer);                 stdcall;
+procedure nspvbBitRev2(Src   : PWCplx;  Dst   : PWCplx;
+                       Order : Integer);                 stdcall;
+procedure nspsbBitRev2(Src   : PFloat;  Dst   : PFloat;
+                       Order : Integer);                 stdcall;
+procedure nspcbBitRev2(Src   : PSCplx;  Dst   : PSCplx;
+                       Order : Integer);                 stdcall;
+procedure nspdbBitRev2(Src   : PDouble; Dst   : PDouble;
+                       Order : Integer);                 stdcall;
+procedure nspzbBitRev2(Src   : PDCplx;  Dst   : PDCplx;
+                       Order : Integer);                 stdcall;
+
+{------------------------------------------------------------------------}
+{                                                                        }
+{                  GetFftTwdTbl, GetDftTwdTbl, FreeTwdTbls               }
+{                                                                        }
+{ Compute and store twiddle factors for FFT and DFT computations.        }
+{                                                                        }
+{------------------------------------------------------------------------}
+
+procedure nspvCalcDftTwdTbl(Tbl : PWCplx; Len   : Integer); stdcall;
+procedure nspvCalcFftTwdTbl(Tbl : PWCplx; Order : Integer); stdcall;
+procedure nspcCalcDftTwdTbl(Tbl : PSCplx; Len   : Integer); stdcall;
+procedure nspcCalcFftTwdTbl(Tbl : PSCplx; Order : Integer); stdcall;
+procedure nspzCalcDftTwdTbl(Tbl : PDCplx; Len   : Integer); stdcall;
+procedure nspzCalcFftTwdTbl(Tbl : PDCplx; Order : Integer); stdcall;
+
+function nspvGetDftTwdTbl(Len   : Integer) : PWCplx; stdcall;
+function nspvGetFftTwdTbl(Order : Integer) : PWCplx; stdcall;
+function nspcGetDftTwdTbl(Len   : Integer) : PSCplx; stdcall;
+function nspcGetFftTwdTbl(Order : Integer) : PSCplx; stdcall;
+function nspzGetDftTwdTbl(Len   : Integer) : PDCplx; stdcall;
+function nspzGetFftTwdTbl(Order : Integer) : PDCplx; stdcall;
+
+procedure nspvFreeTwdTbls; stdcall;
+procedure nspcFreeTwdTbls; stdcall;
+procedure nspzFreeTwdTbls; stdcall;
+
+{EOF}

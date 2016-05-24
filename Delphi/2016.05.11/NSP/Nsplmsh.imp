@@ -1,0 +1,113 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+*)
+
+procedure nspsLmsInit;       external nspDLL;
+procedure nspdLmsInit;       external nspDLL;
+procedure nspcLmsInit;       external nspDLL;
+procedure nspzLmsInit;       external nspDLL;
+
+procedure nspsLmsInitMr;     external nspDLL;
+procedure nspdLmsInitMr;     external nspDLL;
+procedure nspcLmsInitMr;     external nspDLL;
+procedure nspzLmsInitMr;     external nspDLL;
+
+procedure nspLmsFree;        external nspDLL;
+
+function nspsLms;            external nspDLL;
+function nspdLms;            external nspDLL;
+function nspcLms(var State : TNSPLmsState; Samp : TSCplx;
+                     Err   : TSCplx) : TSCplx;
+var
+  Val : TSCplx;
+begin
+  nspcLmsOut(State,Samp,Err,Val);
+  Result := Val;
+end;
+
+function nspzLms;            external nspDLL;
+
+function nspsbLms;            external nspDLL;
+function nspdbLms;            external nspDLL;
+function nspcbLms(var State : TNSPLmsState; InSamps  : PSCplx;
+                      Err   : TSCplx) : TSCplx;
+var
+  Val : TSCplx;
+begin
+  nspcbLmsOut(State,InSamps,Err,Val);
+  Result := Val;
+end;
+
+function nspzbLms;            external nspDLL;
+
+procedure nspsLmsGetTaps;       external nspDLL;
+procedure nspdLmsGetTaps;       external nspDLL;
+procedure nspcLmsGetTaps;       external nspDLL;
+procedure nspzLmsGetTaps;       external nspDLL;
+
+procedure nspsLmsSetTaps;       external nspDLL;
+procedure nspdLmsSetTaps;       external nspDLL;
+procedure nspcLmsSetTaps;       external nspDLL;
+procedure nspzLmsSetTaps;       external nspDLL;
+
+procedure nspsLmsGetDlyl;       external nspDLL;
+procedure nspdLmsGetDlyl;       external nspDLL;
+procedure nspcLmsGetDlyl;       external nspDLL;
+procedure nspzLmsGetDlyl;       external nspDLL;
+
+procedure nspsLmsSetDlyl;       external nspDLL;
+procedure nspdLmsSetDlyl;       external nspDLL;
+procedure nspcLmsSetDlyl;       external nspDLL;
+procedure nspzLmsSetDlyl;       external nspDLL;
+
+function  nspsLmsGetStep;       external nspDLL;
+function  nspsLmsGetLeak;       external nspDLL;
+
+procedure nspsLmsSetStep;       external nspDLL;
+procedure nspsLmsSetLeak;       external nspDLL;
+
+function nspsLmsDes;            external nspDLL;
+function nspdLmsDes;            external nspDLL;
+function nspcLmsDes(var State : TNSPLmsState; Samp : TSCplx;
+                        Des   : TSCplx) : TSCplx;
+var
+  Val : TSCplx;
+begin
+  nspcLmsDesOut(State,Samp,Des,Val);
+  Result := Val;
+end;
+
+function nspzLmsDes;            external nspDLL;
+
+procedure nspsbLmsDes;                external nspDLL;
+procedure nspdbLmsDes;                external nspDLL;
+procedure nspcbLmsDes;                external nspDLL;
+procedure nspzbLmsDes;                external nspDLL;
+
+function nspsLmsGetErrVal;            external nspDLL;
+function nspdLmsGetErrVal;            external nspDLL;
+function nspcLmsGetErrVal(const State : TNSPLmsState) : TSCplx;
+var
+  Val : TSCplx;
+begin
+  nspcLmsGetErrValOut(State,Val);
+  Result := Val;
+end;
+
+function nspzLmsGetErrVal;            external nspDLL;
+
+procedure nspsLmsSetErrVal;            external nspDLL;
+procedure nspdLmsSetErrVal;            external nspDLL;
+procedure nspcLmsSetErrVal;            external nspDLL;
+procedure nspzLmsSetErrVal;            external nspDLL;
+
+procedure nspcLmsOut;                  external nspDLL;
+procedure nspcbLmsOut;                 external nspDLL;
+procedure nspcLmsDesOut;               external nspDLL;
+procedure nspcLmsGetErrValOut;         external nspDLL;
+
+{EOF}

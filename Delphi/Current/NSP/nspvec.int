@@ -1,0 +1,140 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+
+From:    nspvec.h
+Purpose: NSP Vector Arithmetic and Algebraic Functions
+*)
+
+{ ------------------------------------------------------------------------}
+const
+  NSP_GT     = 1;
+  NSP_LT     = 0;
+  HUGE_VAL_S = 3.402823466e+38;
+
+procedure nspsbSqr1(Vec         : PFloat;  Len : Integer); stdcall;
+procedure nspcbSqr1(Vec         : PSCplx;  Len : Integer); stdcall;
+procedure nspdbSqr1(Vec         : PDouble; Len : Integer); stdcall;
+procedure nspzbSqr1(Vec         : PDCplx;  Len : Integer); stdcall;
+procedure nspwbSqr1(Vec         : PShort;  Len : Integer;
+                    ScaleMode   : Integer;
+                var ScaleFactor : Integer); stdcall;
+procedure nspvbSqr1(Vec         : PWCplx;  Len : Integer;
+                    ScaleMode   : Integer;
+                var ScaleFactor : Integer); stdcall;
+
+procedure nspsbSqr2(Src, Dst    : PFloat;  Len : Integer); stdcall;
+procedure nspcbSqr2(Src, Dst    : PSCplx;  Len : Integer); stdcall;
+procedure nspdbSqr2(Src, Dst    : PDouble; Len : Integer); stdcall;
+procedure nspzbSqr2(Src, Dst    : PDCplx;  Len : Integer); stdcall;
+procedure nspwbSqr2(Src, Dst    : PShort;  Len : Integer;
+                    ScaleMode   : Integer;
+                var ScaleFactor : Integer); stdcall;
+procedure nspvbSqr2(Src, Dst    : PWCplx;  Len : Integer;
+                    ScaleMode   : Integer;
+                var ScaleFactor : Integer); stdcall;
+
+procedure nspsbSqrt1(Vec        : PFloat;  Len : Integer); stdcall;
+procedure nspcbSqrt1(Vec        : PSCplx;  Len : Integer); stdcall;
+procedure nspdbSqrt1(Vec        : PDouble; Len : Integer); stdcall;
+procedure nspzbSqrt1(Vec        : PDCplx;  Len : Integer); stdcall;
+procedure nspwbSqrt1(Vec        : PShort;  Len : Integer); stdcall;
+procedure nspvbSqrt1(Vec        : PWCplx;  Len : Integer); stdcall;
+
+procedure nspsbSqrt2(Src, Dst   : PFloat;  Len : Integer); stdcall;
+procedure nspcbSqrt2(Src, Dst   : PSCplx;  Len : Integer); stdcall;
+procedure nspdbSqrt2(Src, Dst   : PDouble; Len : Integer); stdcall;
+procedure nspzbSqrt2(Src, Dst   : PDCplx;  Len : Integer); stdcall;
+procedure nspwbSqrt2(Src, Dst   : PShort;  Len : Integer); stdcall;
+procedure nspvbSqrt2(Src, Dst   : PWCplx;  Len : Integer); stdcall;
+
+procedure nspsbThresh1(Vec      : PFloat;  Len   : Integer;
+                       Thresh   : Float;   RelOp : Integer); stdcall;
+procedure nspcbThresh1(Vec      : PSCplx;  Len   : Integer;
+                       Thresh   : Float;   RelOp : Integer); stdcall;
+procedure nspdbThresh1(Vec      : PDouble; Len   : Integer;
+                       Thresh   : Double;  RelOp : Integer); stdcall;
+procedure nspzbThresh1(Vec      : PDCplx;  Len   : Integer;
+                       Thresh   : Double;  RelOp : Integer); stdcall;
+procedure nspwbThresh1(Vec      : PShort;  Len   : Integer;
+                       Thresh   : Short;   RelOp : Integer); stdcall;
+procedure nspvbThresh1(Vec      : PWCplx;  Len   : Integer;
+                       Thresh   : Short;   RelOp : Integer); stdcall;
+
+procedure nspsbThresh2(Src, Dst : PFloat;  Len   : Integer;
+                       Thresh   : Float;   RelOp : Integer); stdcall;
+procedure nspcbThresh2(Src, Dst : PSCplx;  Len   : Integer;
+                       Thresh   : Float;   RelOp : Integer); stdcall;
+procedure nspdbThresh2(Src, Dst : PDouble; Len   : Integer;
+                       Thresh   : Double;  RelOp : Integer); stdcall;
+procedure nspzbThresh2(Src, Dst : PDCplx;  Len   : Integer;
+                       Thresh   : Double;  RelOp : Integer); stdcall;
+procedure nspwbThresh2(Src, Dst : PShort;  Len   : Integer;
+                       Thresh   : Short;   RelOp : Integer); stdcall;
+procedure nspvbThresh2(Src, Dst : PWCplx;  Len   : Integer;
+                       Thresh   : Short;   RelOp : Integer); stdcall;
+
+procedure nspsbInvThresh1(Vec    : PFloat;  Len : Integer;
+                          Thresh : Float);  stdcall;
+procedure nspcbInvThresh1(Vec    : PSCplx;  Len : Integer;
+                          Thresh : Float);  stdcall;
+procedure nspdbInvThresh1(Vec    : PDouble; Len : Integer;
+                          Thresh : Double); stdcall;
+procedure nspzbInvThresh1(Vec    : PDCplx;  Len : Integer;
+                          Thresh : Double); stdcall;
+
+procedure nspsbInvThresh2(Src, Dst : PFloat;  Len : Integer;
+                          Thresh   : Float);  stdcall;
+procedure nspcbInvThresh2(Src, Dst : PSCplx;  Len : Integer;
+                          Thresh   : Float);  stdcall;
+procedure nspdbInvThresh2(Src, Dst : PDouble; Len : Integer;
+                          Thresh   : Double); stdcall;
+procedure nspzbInvThresh2(Src, Dst : PDCplx;  Len : Integer;
+                          Thresh   : Double); stdcall;
+
+procedure nspsbAbs1(Vec : PFloat;  Len : Integer); stdcall;
+procedure nspdbAbs1(Vec : PDouble; Len : Integer); stdcall;
+procedure nspwbAbs1(Vec : PShort;  Len : Integer); stdcall;
+
+procedure nspsbAbs2(Src, Dst : PFloat;  Len : Integer); stdcall;
+procedure nspdbAbs2(Src, Dst : PDouble; Len : Integer); stdcall;
+procedure nspwbAbs2(Src, Dst : PShort;  Len : Integer); stdcall;
+
+function nspsMax(Vec            : PFloat;  Len : Integer) : Float;  stdcall;
+function nspdMax(Vec            : PDouble; Len : Integer) : Double; stdcall;
+function nspwMax(Vec            : PShort;  Len : Integer) : Short;  stdcall;
+
+function nspsMin(Vec            : PFloat;  Len : Integer) : Float;  stdcall;
+function nspdMin(Vec            : PDouble; Len : Integer) : Double; stdcall;
+function nspwMin(Vec            : PShort;  Len : Integer) : Short;  stdcall;
+
+function nspsMaxExt(Vec         : PFloat;  Len : Integer;
+                var Index       : Integer)     : Float;             stdcall;
+function nspdMaxExt(Vec         : PDouble; Len : Integer;
+                var Index       : Integer)     : Double;            stdcall;
+function nspwMaxExt(Vec         : PShort;  Len : Integer;
+                var Index       : Integer)     : Short;             stdcall;
+function nspsMinExt(Vec         : PFloat;  Len : Integer;
+                var Index       : Integer)     : Float;             stdcall;
+function nspdMinExt(Vec         : PDouble; Len : Integer;
+                var Index       : Integer)     : Double;            stdcall;
+function nspwMinExt(Vec         : PShort;  Len : Integer;
+                var Index       : Integer)     : Short;             stdcall;
+
+function nspsMean(Vec           : PFloat;  Len : Integer) : Float;  stdcall;
+function nspdMean(Vec           : PDouble; Len : Integer) : Double; stdcall;
+function nspwMean(Vec           : PShort;  Len : Integer) : Short;  stdcall;
+function nspcMean(Vec : PSCplx; Len : Integer; var Mean : TSCplx) : NSPStatus; stdcall;
+function nspzMean(Vec : PDCplx; Len : Integer; var Mean : TDCplx) : NSPStatus; stdcall;
+function nspvMean(Vec : PWCplx; Len : Integer; var Mean : TWCplx) : NSPStatus; stdcall;
+
+function nspsStdDev(Vec         : PFloat;  Len : Integer) : Float;  stdcall;
+function nspdStdDev(Vec         : PDouble; Len : Integer) : Double; stdcall;
+function nspwStdDev(Vec         : PShort;  Len : Integer;
+                    ScaleMode   : Integer;
+                var ScaleFactor : Integer) : Short; stdcall;
+
+{EOF}

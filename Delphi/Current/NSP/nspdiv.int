@@ -1,0 +1,96 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+
+From:    nspdiv.h
+Purpose: NSP Vector Arithmetics
+*)
+
+{-------------------------------------------------------------------------}
+{                 Vector division functions                               }
+{-------------------------------------------------------------------------}
+
+{
+  FUNCTION
+    nsp?bDiv1
+
+  DESCRIPTION
+    Performs an element-wise division of elements
+    of vectors and value.
+
+       dst[i] /= val
+
+  PARAMETERS
+    val  value operand
+    dst  Pointer to the input/output vector.
+    n    The number of elements to be operated on.
+
+  RETURN
+    status
+}
+function nspsbDiv1(Val : Float;  Dst : PFloat;  N : Integer) : Integer; stdcall;
+function nspdbDiv1(Val : Double; Dst : PDouble; N : Integer) : Integer; stdcall;
+function nspwbDiv1(Val : Short;  Dst : PShort;  N : Integer) : Integer; stdcall;
+function nspcbDiv1(Val : TSCplx; Dst : PSCplx;  N : Integer) : Integer; stdcall;
+function nspzbDiv1(Val : TDCplx; Dst : PDCplx;  N : Integer) : Integer; stdcall;
+function nspvbDiv1(Val : TWCplx; Dst : PWCplx;  N : Integer) : Integer; stdcall;
+
+{
+  FUNCTION
+    nspsbDiv2
+
+  DESCRIPTION
+    Division the elements of two vectors and stores the results
+    in the output array.
+
+       dst[i] /= src[i]
+
+  PARAMETERS
+    src  Pointer to the vector to be Div
+    dst  Pointer to the vector dst which stores the results
+         of the Div operation src and dst.
+    n    The number of elements to be operated on.
+
+  RETURN
+    status
+
+}
+function nspsbDiv2(Src : PFloat;  Dst : PFloat;  N : Integer) : Integer; stdcall;
+function nspdbDiv2(Src : PDouble; Dst : PDouble; N : Integer) : Integer; stdcall;
+function nspwbDiv2(Src : PShort;  Dst : PShort;  N : Integer) : Integer; stdcall;
+function nspcbDiv2(Src : PSCplx;  Dst : PSCplx;  N : Integer) : Integer; stdcall;
+function nspzbDiv2(Src : PDCplx;  Dst : PDCplx;  N : Integer) : Integer; stdcall;
+function nspvbDiv2(Src : PWCplx;  Dst : PWCplx;  N : Integer) : Integer; stdcall;
+
+{
+  FUNCTION
+    nspsbDiv3
+
+  DESCRIPTION
+    Performs an element-wise operation of elements
+    of vectors and stores the results in a third.
+
+       dst[i] = srcA[i] / srcB[i]
+
+  PARAMETERS
+    srcA Points to the first source vector
+    srcB Pointers to the second source vector.
+    dst  Pointer to the vector dst which stores the results
+         of the Div operation srcA and srcB.
+    n    The number of elements to be operated on.
+
+  RETURN
+    status
+}
+
+function nspsbDiv3(SrcA, SrcB, Dst : PFloat;  N : Integer) : Integer; stdcall;
+function nspdbDiv3(SrcA, SrcB, Dst : PDouble; N : Integer) : Integer; stdcall;
+function nspwbDiv3(SrcA, SrcB, Dst : PShort;  N : Integer) : Integer; stdcall;
+function nspcbDiv3(SrcA, SrcB, Dst : PSCplx;  N : Integer) : Integer; stdcall;
+function nspzbDiv3(SrcA, SrcB, Dst : PDCplx;  N : Integer) : Integer; stdcall;
+function nspvbDiv3(SrcA, SrcB, Dst : PWCplx;  N : Integer) : Integer; stdcall;
+
+{EOF}

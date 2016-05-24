@@ -1,0 +1,23 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+*)
+
+procedure nspsAutoCorr;  external nspDLL;
+procedure nspcAutoCorr;  external nspDLL;
+procedure nspdAutoCorr;  external nspDLL;
+procedure nspzAutoCorr;  external nspDLL;
+procedure nspwAutoCorr;  external nspDLL;
+procedure nspvAutoCorr;  external nspDLL;
+
+procedure nspsCrossCorr; external nspDLL;
+procedure nspcCrossCorr; external nspDLL;
+procedure nspdCrossCorr; external nspDLL;
+procedure nspzCrossCorr; external nspDLL;
+procedure nspwCrossCorr; external nspDLL;
+procedure nspvCrossCorr; external nspDLL;
+
+{EOF}

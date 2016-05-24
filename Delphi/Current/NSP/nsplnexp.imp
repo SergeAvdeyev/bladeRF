@@ -1,0 +1,31 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+*)
+
+procedure nspsbLn1;  external nspDLL;
+procedure nspsbLn2;  external nspDLL;
+procedure nspsbExp1; external nspDLL;
+procedure nspsbExp2; external nspDLL;
+
+procedure nspdbLn1;  external nspDLL;
+procedure nspdbLn2;  external nspDLL;
+procedure nspdbExp1; external nspDLL;
+procedure nspdbExp2; external nspDLL;
+
+procedure nspwbLn1;  external nspDLL;
+procedure nspwbLn2;  external nspDLL;
+procedure nspwbExp1; external nspDLL;
+procedure nspwbExp2; external nspDLL;
+
+procedure nspsbLg1;  external nspDLL;
+procedure nspsbLg2;  external nspDLL;
+procedure nspdbLg1;  external nspDLL;
+procedure nspdbLg2;  external nspDLL;
+procedure nspcbLg1;  external nspDLL;
+procedure nspcbLg2;  external nspDLL;
+
+{EOF}

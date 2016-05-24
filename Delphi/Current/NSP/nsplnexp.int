@@ -1,0 +1,58 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+
+From:    nsplnexp.h
+Purpose: Compute the natural log of vector elements
+         Compute e to the power of vector elements
+
+Contents:
+         nsp?bLn1   -
+                    Computes the natural log of each element
+                    in the array in-place
+         nsp?bLn2   -
+                    Computes the natural log of each element
+                    in the array and stores the results
+                    in the another array
+         nsp?bExp1  -
+                    Computes e to the power of each element
+                    in the array in-place
+         nsp?bExp2  -
+                    Computes e to the power of each element
+                    in the array and stores the results
+                    in the another array
+*)
+
+procedure nspsbLn1( Vec         : PFloat; Len : Integer); stdcall;
+procedure nspsbLn2( Src         : PFloat; Dst : PFloat; Len : Integer); stdcall;
+procedure nspsbExp1(Vec         : PFloat; Len : Integer); stdcall;
+procedure nspsbExp2(Src         : PFloat; Dst : PFloat; Len : Integer); stdcall;
+
+procedure nspdbLn1( Vec         : PDouble; Len : Integer); stdcall;
+procedure nspdbLn2( Src         : PDouble; Dst : PDouble; Len : Integer); stdcall;
+procedure nspdbExp1(Vec         : PDouble; Len : Integer); stdcall;
+procedure nspdbExp2(Src         : PDouble; Dst : PDouble; Len : Integer); stdcall;
+
+procedure nspwbLn1( Vec         : PShort; Len : Integer); stdcall;
+procedure nspwbLn2( Src         : PShort; Dst : PShort; Len : Integer); stdcall;
+procedure nspwbExp1(Vec         : PShort; Len : Integer;
+                    ScaleMode   : Integer;
+                var ScaleFactor : Integer); stdcall;
+procedure nspwbExp2(Src         : PShort; Dst : PShort; Len : Integer;
+                    ScaleMode   : Integer;
+                var ScaleFactor : Integer); stdcall;
+
+{***** decimal functions        ****}
+procedure nspsbLg1(Vec : PFloat;  Len : Integer ); stdcall;
+procedure nspsbLg2(Src : PFloat;  Dst : PFloat; Len : Integer); stdcall;
+procedure nspdbLg1(Vec : PDouble; Len : Integer); stdcall;
+procedure nspdbLg2(Src : PDouble; Dst : PDouble; Len : Integer); stdcall;
+
+{***** complex decimal functions  **}
+procedure nspcbLg1(Vec : PSCplx;  Len : Integer); stdcall;
+procedure nspcbLg2(Src : PSCplx;  Dst : PSCplx; Len : Integer); stdcall;
+
+{EOF}

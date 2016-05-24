@@ -1,0 +1,175 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+
+From:    nspfirh.h
+Purpose: NSP Finite Impulse Response high-level filter.
+*)
+
+{=== FIR high-level ======================================================}
+
+type
+  PFirSect = ^TFirSect;
+  TFirSect = record
+    Num : Integer;                 // section number
+    Len : Integer;                 // section taps length in use
+    XId : Integer;                 // section input data index
+    TId : Integer;                 // section taps index
+  end;
+
+  PNSPFirState = ^TNSPFirState;
+  TNSPFirState = record
+    UpFactor    : Integer;         // up
+    UpPhase     : Integer;         //   parameters
+    DownFactor  : Integer;         // down
+    DownPhase   : Integer;         //   parameters
+    IsMultiRate : Integer;         // multi-rate mode flag
+    IsInit      : Pointer;         // init flag
+
+    TapsLen     : Integer;         // number of filter taps
+    TapsBlk     : Integer;
+    Taps        : Pointer;         // taps pointer in use
+
+    DlylLen     : Integer;         // delay line length
+    InpLen      : Integer;         // input buffer length
+    UseInp      : Integer;         // input buffer length used
+    Dlyl        : Pointer;         // extended dilter delay line
+    DlylLimit   : Pointer;         // delay line buffer end pointer
+    UseDlyl     : Pointer;         // delay line pointer in use
+
+    Sect        : PFirSect;        // FIR sections
+
+    TapsFactor  : Integer;         // taps scale factor
+    UTapsLen    : Integer;         // number of filter taps (user def)
+  end;
+
+{-------------------------------------------------------------------------}
+{ nsp?FirInit(), nsp?FirInitMr()                                          }
+{ nspFirFree()                                                            }
+{                                                                         }
+{ Initialize a finite impulse response high-level (FIRH) filter           }
+
+procedure nspsFirInit(   TapVals    : PFloat;  TapsLen   : Integer;
+                         DlyVals    : PFloat;
+                     var State      : TNSPFirState); stdcall;
+procedure nspcFirInit(   TapVals    : PSCplx;  TapsLen   : Integer;
+                         DlyVals    : PSCplx;
+                     var State      : TNSPFirState); stdcall;
+procedure nspdFirInit(   TapVals    : PDouble; TapsLen   : Integer;
+                         DlyVals    : PDouble;
+                     var State      : TNSPFirState); stdcall;
+procedure nspzFirInit(   TapVals    : PDCplx;  TapsLen   : Integer;
+                         DlyVals    : PDCplx;
+                     var State      : TNSPFirState); stdcall;
+procedure nspwFirInit(   TapVals    : PFloat;  TapsLen   : Integer;
+                         DlyVals    : PShort;
+                     var State      : TNSPFirState); stdcall;
+
+procedure nspsFirInitMr( TapVals    : PFloat;  TapsLen   : Integer;
+                         DlyVals    : PFloat;
+                         UpFactor   : Integer; UpPhase   : Integer;
+                         DownFactor : Integer; DownPhase : Integer;
+                     var State      : TNSPFirState); stdcall;
+procedure nspcFirInitMr( TapVals    : PSCplx;  TapsLen   : Integer;
+                         DlyVals    : PSCplx;
+                         UpFactor   : Integer; UpPhase   : Integer;
+                         DownFactor : Integer; DownPhase : Integer;
+                     var State      : TNSPFirState); stdcall;
+procedure nspdFirInitMr( TapVals    : PDouble; TapsLen   : Integer;
+                         DlyVals    : PDouble;
+                         UpFactor   : Integer; UpPhase   : Integer;
+                         DownFactor : Integer; DownPhase : Integer;
+                     var State      : TNSPFirState); stdcall;
+procedure nspzFirInitMr( TapVals    : PDCplx;  TapsLen   : Integer;
+                         DlyVals    : PDCplx;
+                         UpFactor   : Integer; UpPhase   : Integer;
+                         DownFactor : Integer; DownPhase : Integer;
+                     var State      : TNSPFirState); stdcall;
+procedure nspwFirInitMr( TapVals    : PFloat;  TapsLen   : Integer;
+                         DlyVals    : PShort;
+                         UpFactor   : Integer; UpPhase   : Integer;
+                         DownFactor : Integer; DownPhase : Integer;
+                     var State      : TNSPFirState); stdcall;
+
+procedure nspFirFree(var State      : TNSPFirState); stdcall;
+
+{-------------------------------------------------------------------------}
+{ nsp?Fir(), nsp?bFir()                                                   }
+{                                                                         }
+{ Dot and block product FIRH filtering                                    }
+
+function nspsFir(  var State       : TNSPFirState; Samp : Float)  : Float;  stdcall;
+function nspcFir(  var State       : TNSPFirState; Samp : TSCplx) : TSCplx; stdcall;
+
+procedure nspcFirOut(var State : TNSPFirState;
+                         Samp  : TSCplx;
+                     var Val   : TSCplx); stdcall;
+
+function nspdFir(  var State       : TNSPFirState; Samp : Double) : Double; stdcall;
+function nspzFir(  var State       : TNSPFirState; Samp : TDCplx) : TDCplx; stdcall;
+
+function nspwFir(  var State       : TNSPFirState; Samp : Short;
+                       ScaleMode   : Integer;
+                   var ScaleFactor : Integer) : Short; stdcall;
+
+procedure nspsbFir(var State       : TNSPFirState; InSamps  : PFloat;
+                       OutSamps    : PFloat;       NumIters : Integer); stdcall;
+procedure nspcbFir(var State       : TNSPFirState; InSamps  : PSCplx;
+                       OutSamps    : PSCplx;       NumIters : Integer); stdcall;
+
+procedure nspdbFir(var State       : TNSPFirState; InSamps  : PDouble;
+                       OutSamps    : PDouble;      NumIters : Integer); stdcall;
+procedure nspzbFir(var State       : TNSPFirState; InSamps  : PDCplx;
+                       OutSamps    : PDCplx;       NumIters : Integer); stdcall;
+
+procedure nspwbFir(var State       : TNSPFirState; InSamps  : PShort;
+                       OutSamps    : PShort;       NumIters : Integer;
+                       ScaleMode   : Integer;
+                   var ScaleFactor : Integer); stdcall;
+
+{-------------------------------------------------------------------------}
+{ nsp?FirGetTaps(), nsp?FirSetTaps()                                      }
+{                                                                         }
+{ Utility functions to get and set the FIR taps coefficients              }
+
+procedure nspsFirGetTaps(const State : TNSPFirState; OutTaps : PFloat);  stdcall;
+procedure nspcFirGetTaps(const State : TNSPFirState; OutTaps : PSCplx);  stdcall;
+
+procedure nspdFirGetTaps(const State : TNSPFirState; OutTaps : PDouble); stdcall;
+procedure nspzFirGetTaps(const State : TNSPFirState; OutTaps : PDCplx);  stdcall;
+
+procedure nspwFirGetTaps(const State : TNSPFirState; OutTaps : PFloat);  stdcall;
+
+procedure nspsFirSetTaps(InTaps : PFloat;  var State : TNSPFirState); stdcall;
+procedure nspcFirSetTaps(InTaps : PSCplx;  var State : TNSPFirState); stdcall;
+
+procedure nspdFirSetTaps(InTaps : PDouble; var State : TNSPFirState); stdcall;
+procedure nspzFirSetTaps(InTaps : PDCplx;  var State : TNSPFirState); stdcall;
+
+procedure nspwFirSetTaps(InTaps : PFloat;  var State : TNSPFirState); stdcall;
+
+{-------------------------------------------------------------------------}
+{ nsp?FirGetDlyl(), nsp?FirSetDlyl()                                      }
+{                                                                         }
+{ Utility functions to get and set the FIR delay line contents            }
+
+procedure nspsFirGetDlyl(const State : TNSPFirState; OutDlyl : PFloat);  stdcall;
+procedure nspcFirGetDlyl(const State : TNSPFirState; OutDlyl : PSCplx);  stdcall;
+
+procedure nspdFirGetDlyl(const State : TNSPFirState; OutDlyl : PDouble); stdcall;
+procedure nspzFirGetDlyl(const State : TNSPFirState; OutDlyl : PDCplx);  stdcall;
+
+procedure nspwFirGetDlyl(const State : TNSPFirState; OutDlyl : PShort);  stdcall;
+
+procedure nspsFirSetDlyl(InDlyl : PFloat;  var State : TNSPFirState); stdcall;
+procedure nspcFirSetDlyl(InDlyl : PSCplx;  var State : TNSPFirState); stdcall;
+
+procedure nspdFirSetDlyl(InDlyl : PDouble; var State : TNSPFirState); stdcall;
+procedure nspzFirSetDlyl(InDlyl : PDCplx;  var State : TNSPFirState); stdcall;
+
+procedure nspwFirSetDlyl(InDlyl : PShort;  var State : TNSPFirState); stdcall;
+
+{EOF}

@@ -1,0 +1,256 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+
+From:    nspwlt.h
+Purpose: NSP wavelet transform.
+*)
+
+{-------------------------------------------------------------------------}
+{ Structure for store all information needed to decompose and reconstruct }
+{ of wavelet transform:                                                   }
+{-------------------------------------------------------------------------}
+
+type
+  TIntArray4     = array [0..3] of Integer;
+  TPtrArray4     = array [0..3] of Pointer;
+  TPFloatArray4  = array [0..3] of PFloat;
+  TPDoubleArray4 = array [0..3] of PDouble;
+
+  TNSPWtState = record
+    WtCore    : Integer;
+    WtType    : Integer;
+    WtOrtType : Integer;
+    Par1      : Integer;
+    Par2      : Integer;
+    DataOrder : Integer;
+    Level     : Integer;
+    Len_Filt  : TIntArray4;
+    Ofs_Filt  : TIntArray4;
+    Tap_Filt  : TPtrArray4;
+    Src_Pad   : Pointer;
+    Len_Dec   : Integer;
+    Tree      : array [0..32] of Integer;
+  end;
+
+{ wtCore  -  for calculation core (float, double or short) control       }
+
+const
+  NSP_WtCoreFloat  =  1;
+  NSP_WtCoreDouble =  2;
+  NSP_WtCoreShort  =  4;
+
+{ wtType  -  the type of wavelet                                         }
+
+  NSP_Haar         =  1;
+  NSP_Daublet      =  2;
+  NSP_Symmlet      =  3;
+  NSP_Coiflet      =  4;
+  NSP_Vaidyanathan =  5;
+  NSP_BSpline      =  6;
+  NSP_BSplineDual  =  7;
+  NSP_LinSpline    =  8;
+  NSP_QuadSpline   =  9;
+  NSP_WtByFilter   = 10;
+
+{ wtOrtType  -  the orthogonality type of wavelet for add. control       }
+
+  NSP_WtOrtType    =  1;
+  NSP_WtBiOrtType  =  2;
+  NSP_WtOrtUnknown =  3;
+
+{
+  par1, par2   -  the parameters of wavelet,
+                  dependent from the type of wavelet.
+  NSP_Haar           par1 - dummy
+                     par2 - dummy
+  NSP_Daublet        par1 = 1,2,3,4,5,6,7,8,9,10.
+                     par2 - dummy
+  NSP_Symmlet        par1 = 1,2,3,4,5,6,7.
+                     par2 - dummy
+  NSP_Coiflet        par1 = 1,2,3,4,5.
+                     par2 - dummy
+  NSP_Vaidyanathan   par1 - dummy
+                     par2 - dummy
+
+  NSP_BSpline        B - spline,
+  NSP_BSplineDual               (par1, par2) must be:
+                     box -
+                         ( 1, 1 ), ( 1, 3 ), ( 1, 5 );
+                     lin. spline -
+                         ( 2, 2 ), ( 2, 4 ), ( 2, 6 ), ( 2, 8 );
+                     quad. spline -
+                         ( 3, 1 ), ( 3, 3 ), ( 3, 5 ), ( 3, 7 ), ( 3, 9 ).
+
+  NSP_LinSpline      (eq. case NSP_BSpline with par1=2, par2=2.)
+                     par1 - dummy
+                     par2 - dummy
+  NSP_QuadSpline     (eq. case NSP_BSpline with par1=3, par2=3.)
+                     par1 - dummy
+                     par2 - dummy
+}
+
+{ dataOrder  -  the length of data  L = pow(2,dataOrder)                 }
+
+{ level  -  determines the number of levels of decompositions we need.   }
+
+{
+  Filters
+  len_filt[] - length
+  ofs_filt[] - offset
+  tap_filt[] - taps
+               [ 0 ] - low  pass analysis  filter
+               [ 1 ] - high pass analysis  filter
+               [ 2 ] - low  pass synthesis filter
+               [ 3 ] - high pass synthesis filter
+  Must be
+      2 <= len_filt[ i ] ,
+      0 <= ofs_filt[ i ] < len_filt[ i ] ,
+      i = 0, 1, 2, 3;
+      len_filt[ 0 ] = len_filt[ 3 ] ,
+      len_filt[ 1 ] = len_filt[ 2 ] .
+
+  src_pad - working array
+}
+
+{------------------------------------------------------------------------}
+{                                                                        }
+{ Free own wavelet memory                                                }
+{                                                                        }
+{------------------------------------------------------------------------}
+
+procedure nspWtFree(var State : TNSPWtState); stdcall;
+
+{------------------------------------------------------------------------}
+{                                                                        }
+{                The initialization of the wavelet transform.            }
+{                                                                        }
+{------------------------------------------------------------------------}
+
+procedure nspsWtInit(Par1      : Integer;     Par2   : Integer;
+                     DataOrder : Integer;     Level  : Integer;
+                 var State     : TNSPWtState; WtType : Integer); stdcall;
+procedure nspdWtInit(Par1      : Integer;     Par2   : Integer;
+                     DataOrder : Integer;     Level  : Integer;
+                 var State     : TNSPWtState; WtType : Integer); stdcall;
+procedure nspwWtInit(Par1      : Integer;     Par2   : Integer;
+                     DataOrder : Integer;     Level  : Integer;
+                 var State     : TNSPWtState; WtType : Integer); stdcall;
+
+procedure nspsWtInitLen(Par1    : Integer;     Par2   : Integer;
+                        Len     : Integer;     Level  : Integer;
+                    var State   : TNSPWtState; WtType : Integer;
+                    var Len_Dec : Integer);                      stdcall;
+procedure nspdWtInitLen(Par1    : Integer;     Par2   : Integer;
+                        Len     : Integer;     Level  : Integer;
+                    var State   : TNSPWtState; WtType : Integer;
+                    var Len_Dec : Integer);                      stdcall;
+procedure nspwWtInitLen(Par1    : Integer;     Par2   : Integer;
+                        Len     : Integer;     Level  : Integer;
+                    var State   : TNSPWtState; WtType : Integer;
+                    var Len_Dec : Integer);                      stdcall;
+
+function nspsWtInitUserFilter(Tap_Filt : TPFloatArray4;
+                              Len_Filt : TIntArray4;
+                              Ofs_Filt : TIntArray4;
+                              Len      : Integer;
+                              Level    : Integer;
+                          var State    : TNSPWtState;
+                          var Len_Dec  : Integer) : NSPStatus; stdcall;
+
+function nspdWtInitUserFilter(Tap_Filt : TPDoubleArray4;
+                              Len_Filt : TIntArray4;
+                              Ofs_Filt : TIntArray4;
+                              Len      : Integer;
+                              Level    : Integer;
+                          var State    : TNSPWtState;
+                          var Len_Dec  : Integer) : NSPStatus; stdcall;
+
+function nspwWtInitUserFilter(Tap_Filt : TPFloatArray4;
+                              Len_Filt : TIntArray4;
+                              Ofs_Filt : TIntArray4;
+                              Len      : Integer;
+                              Level    : Integer;
+                          var State    : TNSPWtState;
+                          var Len_Dec  : Integer) : NSPStatus; stdcall;
+
+{------------------------------------------------------------------------}
+{                                                                        }
+{                      Set all parameters of wavelet.                    }
+{                                                                        }
+{------------------------------------------------------------------------}
+
+procedure nspsWtSetState(var State     : TNSPWtState;    WtType : Integer;
+                             Par1      : Integer;        Par2   : Integer;
+                             DataOrder : Integer;        Level  : Integer;
+                             fTaps     : TPFloatArray4;  fLen   : TIntArray4;
+                             fOffset   : TIntArray4);             stdcall;
+procedure nspdWtSetState(var State     : TNSPWtState;    WtType : Integer;
+                             Par1      : Integer;        Par2   : Integer;
+                             DataOrder : Integer;        Level  : Integer;
+                             fTaps     : TPDoubleArray4; fLen   : TIntArray4;
+                             fOffset   : TIntArray4);             stdcall;
+procedure nspwWtSetState(var State     : TNSPWtState;    WtType : Integer;
+                             Par1      : Integer;        Par2   : Integer;
+                             DataOrder : Integer;        Level  : Integer;
+                             fTaps     : TPFloatArray4;  fLen   : TIntArray4;
+                             fOffset   : TIntArray4);             stdcall;
+
+{------------------------------------------------------------------------}
+{                                                                        }
+{                      Get all parameters of wavelet.                    }
+{                                                                        }
+{------------------------------------------------------------------------}
+
+procedure nspsWtGetState(var State     : TNSPWtState;    var WtType : Integer;
+                         var Par1      : Integer;        var Par2   : Integer;
+                         var DataOrder : Integer;        var Level  : Integer;
+                         var fTaps     : TPFloatArray4;  var fLen   : TIntArray4;
+                         var fOffset   : TIntArray4);                 stdcall;
+procedure nspdWtGetState(var State     : TNSPWtState;    var WtType : Integer;
+                         var Par1      : Integer;        var Par2   : Integer;
+                         var DataOrder : Integer;        var Level  : Integer;
+                         var fTaps     : TPDoubleArray4; var fLen   : TIntArray4;
+                         var fOffset   : TIntArray4);                 stdcall;
+procedure nspwWtGetState(var State     : TNSPWtState;    var WtType : Integer;
+                         var Par1      : Integer;        var Par2   : Integer;
+                         var DataOrder : Integer;        var Level  : Integer;
+                         var fTaps     : TPFloatArray4;  var fLen   : TIntArray4;
+                         var fOffset   : TIntArray4);                 stdcall;
+
+{------------------------------------------------------------------------}
+{                                                                        }
+{                          Wavelet decomposition.                        }
+{                                                                        }
+{------------------------------------------------------------------------}
+
+procedure nspsWtDecompose(var State : TNSPWtState;
+                              Src   : PFloat;
+                              Dst   : PFloat);  stdcall;
+procedure nspdWtDecompose(var State : TNSPWtState;
+                              Src   : PDouble;
+                              Dst   : PDouble); stdcall;
+procedure nspwWtDecompose(var State : TNSPWtState;
+                              Src   : PShort;
+                              Dst   : PShort);  stdcall;
+
+{------------------------------------------------------------------------}
+{                                                                        }
+{                         Wavelet reconstruction.                        }
+{                                                                        }
+{------------------------------------------------------------------------}
+
+procedure nspsWtReconstruct(var State : TNSPWtState;
+                                Src   : PFloat;
+                                Dst   : PFloat);  stdcall;
+procedure nspdWtReconstruct(var State : TNSPWtState;
+                                Src   : PDouble;
+                                Dst   : PDouble); stdcall;
+procedure nspwWtReconstruct(var State : TNSPWtState;
+                                Src   : PShort;
+                                Dst   : PShort);  stdcall;
+
+{EOF}

@@ -1,0 +1,28 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+
+From:    nspmed.h
+Purpose: NSP Median Filter
+*)
+
+procedure nspsbMedianFilter1(InOut    : PFloat; Len : Integer;
+                             MaskSize : Integer); stdcall;
+procedure nspdbMedianFilter1(InOut    : PDouble; Len : Integer;
+                             MaskSize : Integer); stdcall;
+procedure nspwbMedianFilter1(InOut    : PShort; Len : Integer;
+                             MaskSize : Integer); stdcall;
+
+procedure nspsbMedianFilter2(const pIn      : PFloat;  pOut : PFloat;
+                                   Len      : Integer;
+                                   MaskSize : Integer); stdcall;
+procedure nspdbMedianFilter2(const pIn      : PDouble; pOut : PDouble;
+                                   Len      : Integer;
+                                   MaskSize : Integer); stdcall;
+procedure nspwbMedianFilter2(const pIn      : PShort;  pOut : PShort;
+                                   Len      : Integer;
+                                   MaskSize : Integer); stdcall;
+{EOF}

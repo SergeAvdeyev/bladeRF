@@ -1,0 +1,167 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+
+From:    nspiirh.h
+Purpose: NSP Infinite Impulse Response Filtering.
+*)
+
+{-------------------------------------------------------------------------}
+{         IirInit, IirInitBq, IirFree                                     }
+{                                                                         }
+{ These functions initialize an IIR filter and provide a higher-level     }
+{ interface than the corresponding low-level IIR functions.               }
+{                                                                         }
+
+{-------------------------------------------------------------------------}
+{ FUNCTION:                                                               }
+{   nsp<s,c,d,z,w>IirInit                                                     }
+{ DESCRIPTION:                                                            }
+{   These functions initialize an arbitrary order IIR filter.             }
+{ PARAMETERS:                                                             }
+{   iirType  - input, describes the filter structure to use, and currently}
+{              must be NSP_IirDefault;                                    }
+{   tapVals  - input, the 2*(order+1) length array specifies the filter   }
+{              coefficients as discussed for the low-level IIR function   }
+{              nsp?IirlInit());                                           }
+{   order    - input, sets polinomial order;                              }
+{   statePtr - output, the pointer to the IIR filter state structure.     }
+{                                                                         }
+
+procedure nspsIirInit(IirType : TNSPIirType; TapVals : PFloat;
+                      Order   : Integer;
+                  var State   : TNSPIirState);         stdcall;
+procedure nspcIirInit(IirType : TNSPIirType; TapVals : PSCplx;
+                      Order   : Integer;
+                  var State   : TNSPIirState);         stdcall;
+procedure nspdIirInit(IirType : TNSPIirType; TapVals : PDouble;
+                      Order   : Integer;
+                  var State   : TNSPIirState);         stdcall;
+procedure nspzIirInit(IirType : TNSPIirType; TapVals : PDCplx;
+                      Order   : Integer;
+                  var State   : TNSPIirState);         stdcall;
+procedure nspwIirInit(IirType : TNSPIirType; TapVals : PFloat;
+                      Order   : Integer;
+                  var State   : TNSPIirState);         stdcall;
+procedure nspwIirInitGain(IirType    : TNSPIirType; TapVals : PFloat;
+                          Order      : Integer;
+                      var State      : TNSPIirState;
+                          Gain       : Float;
+                          InputRange : Integer); stdcall;
+
+{-------------------------------------------------------------------------}
+{ FUNCTION:                                                               }
+{   nsp<s,c,d,z,w>IirInitBq                                                   }
+{ DESCRIPTION:                                                            }
+{   These functions initialize an IIR filter defined by a cascade of      }
+{   biquads.                                                              }
+{ PARAMETERS:                                                             }
+{   iirType  - input, describes the filter structure to use, and currently}
+{              must be NSP_IirDefault;                                    }
+{   tapVals  - input, the 6*numQuads length array specifies the filter    }
+{              coefficients as discussed for the low-level IIR function   }
+{              nsp?IirlInitBq());                                         }
+{   numQuads - input, sets the number of biduads;                         }
+{   tapStPtr - output, pointer to the IIR state structure.                }
+{                                                                         }
+
+procedure nspsIirInitBq(IirType  : TNSPIirType; TapVals : PFloat;
+                        NumQuads : Integer;
+                    var State    : TNSPIirState);         stdcall;
+procedure nspcIirInitBq(IirType  : TNSPIirType; TapVals : PSCplx;
+                        NumQuads : Integer;
+                    var State    : TNSPIirState);         stdcall;
+procedure nspdIirInitBq(IirType  : TNSPIirType; TapVals : PDouble;
+                        NumQuads : Integer;
+                    var State    : TNSPIirState);         stdcall;
+procedure nspzIirInitBq(IirType  : TNSPIirType; TapVals : PDCplx;
+                        NumQuads : Integer;
+                    var State    : TNSPIirState);         stdcall;
+procedure nspwIirInitBq(IirType  : TNSPIirType; TapVals : PFloat;
+                        NumQuads : Integer;
+                    var State    : TNSPIirState);         stdcall;
+
+{-------------------------------------------------------------------------}
+{ FUNCTION:                                                               }
+{   nspIirFree                                                            }
+{ DESCRIPTION:                                                            }
+{   This function must be called after all filtering is done to free      }
+{   dynamic memory associated with statePtr. After calling this function, }
+{   statePtr should not be referenced again.                              }
+{ PARAMETERS:                                                             }
+{   statePtr - pointer to the IIR filter state structure.                 }
+{                                                                         }
+
+procedure nspIirFree(var State : TNSPIirState); stdcall;
+
+{-------------------------------------------------------------------------}
+{         Iir, bIir                                                       }
+{                                                                         }
+{ Filter a signal through a IIR filter.                                   }
+{                                                                         }
+
+{-------------------------------------------------------------------------}
+{ FUNCTION:                                                               }
+{   nsp<s,c,d,z,w>Iir                                                         }
+{ DESCRIPTION:                                                            }
+{   These functions filter a single sample samp through an IIR filter and }
+{   return the result.                                                    }
+{ PARAMETERS:                                                             }
+{   statePtr - input, pointer to the IIR state structure;                 }
+{   samp     - input, the sample value.                                   }
+{ RETURNS:                                                                }
+{   the filtering result.                                                 }
+{                                                                         }
+
+function nspsIir(var State       : TNSPIirState;
+                     Samp        : Float)   : Float;  stdcall;
+function nspcIir(var State       : TNSPIirState;
+                     Samp        : TSCplx)  : TSCplx; stdcall;
+function nspdIir(var State       : TNSPIirState;
+                     Samp        : Double)  : Double; stdcall;
+function nspzIir(var State       : TNSPIirState;
+                     Samp        : TDCplx)  : TDCplx; stdcall;
+function nspwIir(var State       : TNSPIirState;
+                     Samp        : Short;
+                     ScaleMode   : Integer;
+                 var ScaleFactor : Integer) : Short;  stdcall;
+
+procedure nspcIirOut(var State : TNSPIirState;
+                         Samp  : TSCplx;
+                     var Val   : TSCplx); stdcall;
+
+{-------------------------------------------------------------------------}
+{ FUNCTION:                                                               }
+{   nsp<s,c,d,z,w>bIir                                                        }
+{ DESCRIPTION:                                                            }
+{   These functions filter a block of numIters samples inSamps through an }
+{   IIR filter and return the result in outSamps.                         }
+{ PARAMETERS:                                                             }
+{   statePtr - input, pointer to the IIR state structure;                 }
+{   inSamps  - input, the pointer to block of numIters samples;           }
+{   outSamps - output, the pointer to block of numIters filtered samples; }
+{   numIters - input, the size of samples' block.                         }
+{                                                                         }
+
+procedure nspsbIir(var State       : TNSPIirState;
+                       InSamps     : PFloat;  OutSamps : PFloat;
+                       NumIters    : Integer);          stdcall;
+procedure nspcbIir(var State       : TNSPIirState;
+                       InSamps     : PSCplx;  OutSamps : PSCplx;
+                       NumIters    : Integer);          stdcall;
+procedure nspdbIir(var State       : TNSPIirState;
+                       InSamps     : PDouble; OutSamps : PDouble;
+                       NumIters    : Integer);          stdcall;
+procedure nspzbIir(var State       : TNSPIirState;
+                       InSamps     : PDCplx;  OutSamps : PDCplx;
+                       NumIters    : Integer);          stdcall;
+procedure nspwbIir(var State       : TNSPIirState;
+                       InSamps     : PShort;  OutSamps : PShort;
+                       NumIters    : Integer;
+                       ScaleMode   : Integer;
+                   var ScaleFactor : Integer);          stdcall;
+
+{EOF}

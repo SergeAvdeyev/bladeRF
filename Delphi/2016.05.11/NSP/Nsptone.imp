@@ -1,0 +1,37 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+*)
+
+procedure nspwToneInit;       external nspDLL;
+procedure nspvToneInit;       external nspDLL;
+procedure nspsToneInit;       external nspDLL;
+procedure nspcToneInit;       external nspDLL;
+procedure nspdToneInit;       external nspDLL;
+procedure nspzToneInit;       external nspDLL;
+
+function nspwTone;            external nspDLL;
+function nspvTone;            external nspDLL;
+function nspsTone;            external nspDLL;
+function nspcTone(var State : TNSPCToneState) : TSCplx;
+var
+  Val : TSCplx;
+begin
+  nspcToneOut(State,Val);
+  Result := Val;
+end;
+function nspdTone;            external nspDLL;
+function nspzTone;            external nspDLL;
+procedure nspcToneOut;        external nspDLL;
+
+procedure nspwbTone;          external nspDLL;
+procedure nspvbTone;          external nspDLL;
+procedure nspsbTone;          external nspDLL;
+procedure nspcbTone;          external nspDLL;
+procedure nspdbTone;          external nspDLL;
+procedure nspzbTone;          external nspDLL;
+
+{EOF}

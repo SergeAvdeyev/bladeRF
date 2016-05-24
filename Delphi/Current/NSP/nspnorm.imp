@@ -1,0 +1,31 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+*)
+
+function nspsNorm;        external nspDLL;
+function nspcNorm;        external nspDLL;
+function nspdNorm;        external nspDLL;
+function nspzNorm;        external nspDLL;
+function nspwNorm;        external nspDLL;
+function nspvNorm;        external nspDLL;
+
+function nspwNormExt;     external nspDLL;
+function nspvNormExt;     external nspDLL;
+
+procedure nspsbNormalize; external nspDLL;
+procedure nspcbNormalize; external nspDLL;
+procedure nspdbNormalize; external nspDLL;
+procedure nspzbNormalize; external nspDLL;
+procedure nspwbNormalize; external nspDLL;
+procedure nspvbNormalize; external nspDLL;
+
+function nspsSum;         external nspDLL;
+function nspdSum;         external nspDLL;
+function nspcSum;         external nspDLL;
+function nspzSum;         external nspDLL;
+function nspwSum;         external nspDLL;
+{EOF}

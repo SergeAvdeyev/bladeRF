@@ -1,0 +1,45 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+*)
+
+procedure nspsIirInit;       external nspDLL;
+procedure nspcIirInit;       external nspDLL;
+procedure nspdIirInit;       external nspDLL;
+procedure nspzIirInit;       external nspDLL;
+procedure nspwIirInit;       external nspDLL;
+procedure nspwIirInitGain;   external nspDLL;
+
+procedure nspsIirInitBq;     external nspDLL;
+procedure nspcIirInitBq;     external nspDLL;
+procedure nspdIirInitBq;     external nspDLL;
+procedure nspzIirInitBq;     external nspDLL;
+procedure nspwIirInitBq;     external nspDLL;
+
+procedure nspIirFree;        external nspDLL;
+
+function nspsIir;            external nspDLL;
+function nspcIir(var State       : TNSPIirState;
+                     Samp        : TSCplx)  : TSCplx;
+var
+  Val : TSCplx;
+begin
+  nspcIirOut(State,Samp,Val);
+  Result := Val;
+end;
+
+function nspdIir;            external nspDLL;
+function nspzIir;            external nspDLL;
+function nspwIir;            external nspDLL;
+procedure nspcIirOut;        external nspDLL;
+
+procedure nspsbIir;          external nspDLL;
+procedure nspcbIir;          external nspDLL;
+procedure nspdbIir;          external nspDLL;
+procedure nspzbIir;          external nspDLL;
+procedure nspwbIir;          external nspDLL;
+
+{EOF}

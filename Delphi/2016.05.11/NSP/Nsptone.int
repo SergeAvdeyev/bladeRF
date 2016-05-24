@@ -1,0 +1,106 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+
+From:    nsptone.h
+Purpose: NSP Tone Generator. Declarator
+*)
+
+{--- Tone structures -----------------------------------------------------}
+
+type
+  TNSPSToneState = record
+    CosBase  : Double;
+    CosCurr  : Double;
+    CosPrev  : Double;
+    Mag      : Float;
+    RFreq    : Float;
+    Phase    : Float;
+    IsInit   : array [0..3] of Char;
+    Reserved : array [0..13] of Float;
+  end;
+
+  TNSPCToneState = record
+    CosBase  : Double;
+    CosCurr  : TDCplx;
+    CosPrev  : TDCplx;
+    Mag      : Float;
+    RFreq    : Float;
+    Phase    : Float;
+    IsInit   : array [0..3] of Char;
+    Reserved : array [0..9] of Float;
+  end;
+
+  TNSPDToneState = record
+    CosBase : Double;
+    CosCurr : Double;
+    CosPrev : Double;
+    Mag     : Double;
+    RFreq   : Double;
+    Phase   : Double;
+    IsInit  : array [0..3] of Char;
+  end;
+
+  TNSPZToneState = record
+    CosBase : Double;
+    CosCurr : TDCplx;
+    CosPrev : TDCplx;
+    Mag     : Double;
+    RFreq   : Double;
+    Phase   : Double;
+    IsInit  : array [0..3] of Char;
+  end;
+
+  TNSPWToneState = record
+    Dummy   : array [0..31] of Double;
+  end;
+
+  TNSPVToneState = record
+    Dummy   : array [0..31] of Double;
+  end;
+
+{--- Initialization ------------------------------------------------------}
+
+procedure nspwToneInit(RFreq : Float;  Phase : Float;  Mag : Short;
+                   var State : TNSPWToneState); stdcall;
+procedure nspvToneInit(RFreq : Float;  Phase : Float;  Mag : Short;
+                   var State : TNSPVToneState); stdcall;
+procedure nspsToneInit(RFreq : Float;  Phase : Float;  Mag : Float;
+                   var State : TNSPSToneState) ; stdcall;
+procedure nspcToneInit(RFreq : Float;  Phase : Float;  Mag : Float;
+                   var State : TNSPCToneState); stdcall;
+procedure nspdToneInit(RFreq : Double; Phase : Double; Mag : Double;
+                   var State : TNSPDToneState) ; stdcall;
+procedure nspzToneInit(RFreq : Double; Phase : Double; Mag : Double;
+                   var State : TNSPZToneState); stdcall;
+
+{--- Dot product tone functions ------------------------------------------}
+
+function nspwTone(var State : TNSPWToneState) : Short;  stdcall;
+function nspvTone(var State : TNSPVToneState) : TWCplx; stdcall;
+function nspsTone(var State : TNSPSToneState) : Float;  stdcall;
+function nspcTone(var State : TNSPCToneState) : TSCplx; stdcall;
+function nspdTone(var State : TNSPDToneState) : Double; stdcall;
+function nspzTone(var State : TNSPZToneState) : TDCplx; stdcall;
+procedure nspcToneOut(var State : TNSPCToneState;
+                      var Val   : TSCplx); stdcall;
+
+{--- Array product tone functions ----------------------------------------}
+
+procedure nspwbTone(var State : TNSPWToneState;
+                        Samps : PShort;  SampsLen : Integer); stdcall;
+procedure nspvbTone(var State : TNSPVToneState;
+                        Samps : PWCplx;  SampsLen : Integer); stdcall;
+procedure nspsbTone(var State : TNSPSToneState;
+                        Samps : PFloat;  SampsLen : Integer); stdcall;
+procedure nspcbTone(var State : TNSPCToneState;
+                        Samps : PSCplx;  SampsLen : Integer); stdcall;
+procedure nspdbTone(var State : TNSPDToneState;
+                        Samps : PDouble; SampsLen : Integer); stdcall;
+procedure nspzbTone(var State : TNSPZToneState;
+                        Samps : PDCplx;  SampsLen : Integer); stdcall;
+
+{EOF}

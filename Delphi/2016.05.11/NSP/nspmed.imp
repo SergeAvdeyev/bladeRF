@@ -1,0 +1,16 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+*)
+
+procedure nspsbMedianFilter1; external nspDLL;
+procedure nspdbMedianFilter1; external nspDLL;
+procedure nspwbMedianFilter1; external nspDLL;
+
+procedure nspsbMedianFilter2; external nspDLL;
+procedure nspdbMedianFilter2; external nspDLL;
+procedure nspwbMedianFilter2; external nspDLL;
+{EOF}

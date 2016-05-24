@@ -1,0 +1,188 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+
+From:    nsplmsh.h
+Purpose: NSP Adaptive FIR filter that uses the LMS algorithm
+*)
+
+type
+  TNSPLmsState = record
+    TapState : TNSPLmsTapState;
+    DlyState : TNSPLmsDlyState;
+    Err      : record
+      case Integer of
+        0: (sVal : Float);
+        1: (dVal : Double);
+        2: (cVal : TSCplx);
+        3: (zVal : TDCplx);
+    end;
+  end;
+
+{------------------------------------------------------------------------}
+
+procedure nspsLmsInit(  LmsType    : TNSPLmsType; TapVals   : PFloat;
+                        TapsLen    : Integer;     DlyVals   : PFloat;
+                        Step       : Float;       Leak      : Float;
+                        ErrDly     : Integer;
+                    var State      : TNSPLmsState);           stdcall;
+procedure nspdLmsInit(  LmsType    : TNSPLmsType; TapVals   : PDouble;
+                        TapsLen    : Integer;     DlyVals   : PDouble;
+                        Step       : Float;       Leak      : Float;
+                        ErrDly     : Integer;
+                    var State      : TNSPLmsState);           stdcall;
+procedure nspcLmsInit(  LmsType    : TNSPLmsType; TapVals   : PSCplx;
+                        TapsLen    : Integer;     DlyVals   : PSCplx;
+                        Step       : Float;       Leak      : Float;
+                        ErrDly     : Integer;
+                    var State      : TNSPLmsState);           stdcall;
+procedure nspzLmsInit(  LmsType    : TNSPLmsType; TapVals   : PDCplx;
+                        TapsLen    : Integer;     DlyVals   : PDCplx;
+                        Step       : Float;       Leak      : Float;
+                        ErrDly     : Integer;
+                    var State      : TNSPLmsState);           stdcall;
+
+procedure nspsLmsInitMr(LmsType    : TNSPLmsType; TapVals   : PFloat;
+                        TapsLen    : Integer;     DlyVals   : PFloat;
+                        Step       : Float;       Leak      : Float;
+                        ErrDly     : Integer;
+                        DownFactor : Integer;     DownPhase : Integer;
+                    var State      : TNSPLmsState);           stdcall;
+procedure nspdLmsInitMr(LmsType    : TNSPLmsType; TapVals   : PDouble;
+                        TapsLen    : Integer;     DlyVals   : PDouble;
+                        Step       : Float;       Leak      : Float;
+                        ErrDly     : Integer;
+                        DownFactor : Integer;     DownPhase : Integer;
+                    var State      : TNSPLmsState);           stdcall;
+procedure nspcLmsInitMr(LmsType    : TNSPLmsType; TapVals   : PSCplx;
+                        TapsLen    : Integer;     DlyVals   : PSCplx;
+                        Step       : Float;       Leak      : Float;
+                        ErrDly     : Integer;
+                        DownFactor : Integer;     DownPhase : Integer;
+                    var State      : TNSPLmsState);           stdcall;
+procedure nspzLmsInitMr(LmsType    : TNSPLmsType; TapVals   : PDCplx;
+                        TapsLen    : Integer;     DlyVals   : PDCplx;
+                        Step       : Float;       Leak      : Float;
+                        ErrDly     : Integer;
+                        DownFactor : Integer;     DownPhase : Integer;
+                    var State      : TNSPLmsState);           stdcall;
+
+procedure nspLmsFree(var State     : TNSPLmsState);           stdcall;
+
+function nspsLms(    var State     : TNSPLmsState; Samp     : Float;
+                         Err       : Float)  : Float;         stdcall;
+function nspdLms(    var State     : TNSPLmsState; Samp     : Double;
+                         Err       : Double) : Double;        stdcall;
+function nspcLms(    var State     : TNSPLmsState; Samp     : TSCplx;
+                         Err       : TSCplx) : TSCplx;        stdcall;
+function nspzLms(    var State     : TNSPLmsState; Samp     : TDCplx;
+                         Err       : TDCplx) : TDCplx;        stdcall;
+
+function nspsbLms(   var State     : TNSPLmsState; InSamps  : PFloat;
+                         Err       : Float)  : Float;         stdcall;
+function nspdbLms(   var State     : TNSPLmsState; InSamps  : PDouble;
+                         Err       : Double) : Double;        stdcall;
+function nspcbLms(   var State     : TNSPLmsState; InSamps  : PSCplx;
+                         Err       : TSCplx) : TSCplx;        stdcall;
+function nspzbLms(   var State     : TNSPLmsState; InSamps  : PDCplx;
+                         Err       : TDCplx) : TDCplx;        stdcall;
+
+procedure nspsLmsGetTaps(const State    : TNSPLmsState;
+                               OutTaps  : PFloat);  stdcall;
+procedure nspdLmsGetTaps(const State    : TNSPLmsState;
+                               OutTaps  : PDouble); stdcall;
+procedure nspcLmsGetTaps(const State    : TNSPLmsState;
+                               OutTaps  : PSCplx);  stdcall;
+procedure nspzLmsGetTaps(const State    : TNSPLmsState;
+                               OutTaps  : PDCplx);  stdcall;
+
+procedure nspsLmsSetTaps(      InTaps   : PFloat;
+                         var   State    : TNSPLmsState); stdcall;
+procedure nspdLmsSetTaps(      InTaps   : PDouble;
+                         var   State    : TNSPLmsState); stdcall;
+procedure nspcLmsSetTaps(      InTaps   : PSCplx;
+                         var   State    : TNSPLmsState); stdcall;
+procedure nspzLmsSetTaps(      InTaps   : PDCplx;
+                         var   State    : TNSPLmsState); stdcall;
+
+procedure nspsLmsGetDlyl(const State    : TNSPLmsState;
+                               OutDlyl  : PFloat);       stdcall;
+procedure nspdLmsGetDlyl(const State    : TNSPLmsState;
+                               OutDlyl  : PDouble);      stdcall;
+procedure nspcLmsGetDlyl(const State    : TNSPLmsState;
+                               OutDlyl  : PSCplx);       stdcall;
+procedure nspzLmsGetDlyl(const State    : TNSPLmsState;
+                               OutDlyl  : PDCplx);       stdcall;
+
+procedure nspsLmsSetDlyl(      InDlyl   : PFloat;
+                         var   State    : TNSPLmsState); stdcall;
+procedure nspdLmsSetDlyl(      InDlyl   : PDouble;
+                         var   State    : TNSPLmsState); stdcall;
+procedure nspcLmsSetDlyl(      InDlyl   : PSCplx;
+                         var   State    : TNSPLmsState); stdcall;
+procedure nspzLmsSetDlyl(      InDlyl   : PDCplx;
+                         var   State    : TNSPLmsState); stdcall;
+
+function  nspsLmsGetStep(const State    : TNSPLmsState) : Float; stdcall;
+function  nspsLmsGetLeak(const State    : TNSPLmsState) : Float; stdcall;
+
+procedure nspsLmsSetStep(      Step     : Float;
+                         var   State    : TNSPLmsState); stdcall;
+procedure nspsLmsSetLeak(      Leak     : Float;
+                         var   State    : TNSPLmsState); stdcall;
+
+function nspsLmsDes(     var   State    : TNSPLmsState; Samp : Float;
+                               Des      : Float)  : Float;     stdcall;
+function nspdLmsDes(     var   State    : TNSPLmsState; Samp : Double;
+                               Des      : Double) : Double;    stdcall;
+function nspcLmsDes(     var   State    : TNSPLmsState; Samp : TSCplx;
+                               Des      : TSCplx) : TSCplx;    stdcall;
+function nspzLmsDes(     var   State    : TNSPLmsState; Samp : TDCplx;
+                               Des      : TDCplx) : TDCplx;    stdcall;
+
+procedure nspsbLmsDes(   var   State    : TNSPLmsState; InSamps  : PFloat;
+                               DesSamps : PFloat;       OutSamps : PFloat;
+                               NumIters : Integer);                stdcall;
+procedure nspdbLmsDes(   var   State    : TNSPLmsState; InSamps  : PDouble;
+                               DesSamps : PDouble;      OutSamps : PDouble;
+                               NumIters : Integer);                stdcall;
+procedure nspcbLmsDes(   var   State    : TNSPLmsState; InSamps  : PSCplx;
+                               DesSamps : PSCplx;       OutSamps : PSCplx;
+                               NumIters : Integer);                stdcall;
+procedure nspzbLmsDes(   var   State    : TNSPLmsState; InSamps  : PDCplx;
+                               DesSamps : PDCplx;       OutSamps : PDCplx;
+                               NumIters : Integer);                stdcall;
+
+function nspsLmsGetErrVal( const State : TNSPLmsState) : Float;  stdcall;
+function nspdLmsGetErrVal( const State : TNSPLmsState) : Double; stdcall;
+function nspcLmsGetErrVal( const State : TNSPLmsState) : TSCplx; stdcall;
+function nspzLmsGetErrVal( const State : TNSPLmsState) : TDCplx; stdcall;
+
+procedure nspsLmsSetErrVal(      Err   : Float;
+                           var   State : TNSPLmsState); stdcall;
+procedure nspdLmsSetErrVal(      Err   : Double;
+                           var   State : TNSPLmsState); stdcall;
+procedure nspcLmsSetErrVal(      Err   : TSCplx;
+                           var   State : TNSPLmsState); stdcall;
+procedure nspzLmsSetErrVal(      Err   : TDCplx;
+                           var   State : TNSPLmsState); stdcall;
+
+procedure nspcLmsOut( var State : TNSPLmsState;
+                          Samp  : TSCplx;
+                          Err   : TSCplx;
+                      var Val   : TSCplx); stdcall;
+procedure nspcbLmsOut(var State   : TNSPLmsState;
+                          InSamps : PSCplx;
+                          Err     : TSCplx;
+                      var Val     : TSCplx); stdcall;
+procedure nspcLmsDesOut(var State : TNSPLmsState;
+                            Samp  : TSCplx;
+                            Des   : TSCplx;
+                        var Val   : TSCplx); stdcall;
+procedure nspcLmsGetErrValOut(const State : TNSPLmsState;
+                              var   Val   : TSCplx); stdcall;
+
+{EOF}

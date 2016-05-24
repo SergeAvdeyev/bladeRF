@@ -1,0 +1,126 @@
+(*
+       INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or
+nondisclosure agreement with Intel Corporation and may not be copied
+or disclosed except in accordance with the terms of that agreement.
+  Copyright (c) 1998-2000 Intel Corporation. All Rights Reserved.
+
+From:    nspgrtzl.h, nspgrtzw.h
+Purpose: NSP Single Frequency DFT (Goertzel)
+*)
+
+{ Single Frequency DFT structures.                                       }
+
+type
+  TNSPSGoertzState = record
+    Freq    : Float;
+    CosV    : Float;
+    SinV    : Float;
+    CpcV    : Float;
+    Prev2Re : Float;
+    Prev2Im : Float;
+    Prev1Re : Float;
+    Prev1Im : Float;
+  end;
+
+  TNSPCGoertzState = TNSPSGoertzState;
+  TNSPWGoertzState = TNSPSGoertzState;
+  TNSPVGoertzState = TNSPSGoertzState;
+
+  TNSPDGoertzState = record
+    Freq    : Double;
+    CosV    : Double;
+    SinV    : Double;
+    CpcV    : Double;
+    Prev2Re : Double;
+    Prev2Im : Double;
+    Prev1Re : Double;
+    Prev1Im : Double;
+  end;
+
+  TNSPZGoertzState = TNSPDGoertzState;
+{------------------------------------------------------------------------}
+{        GoertzInit                                                      }
+{                                                                        }
+{ Initializes the coefficients and zeros the delay line.                 }
+
+procedure nspsGoertzInit(Freq : Float;  var State : TNSPSGoertzState); stdcall;
+procedure nspcGoertzInit(Freq : Float;  var State : TNSPCGoertzState); stdcall;
+procedure nspdGoertzInit(Freq : Double; var State : TNSPDGoertzState); stdcall;
+procedure nspzGoertzInit(Freq : Double; var State : TNSPZGoertzState); stdcall;
+procedure nspwGoertzInit(Freq : Float;  var State : TNSPWGoertzState); stdcall;
+procedure nspvGoertzInit(Freq : Float;  var State : TNSPVGoertzState); stdcall;
+
+{------------------------------------------------------------------------}
+{        GoertzReset                                                     }
+{                                                                        }
+{ Zeros the delay line.                                                  }
+
+procedure nspsGoertzReset(var State : TNSPSGoertzState); stdcall;
+procedure nspcGoertzReset(var State : TNSPCGoertzState); stdcall;
+procedure nspdGoertzReset(var State : TNSPDGoertzState); stdcall;
+procedure nspzGoertzReset(var State : TNSPZGoertzState); stdcall;
+procedure nspwGoertzReset(var State : TNSPWGoertzState); stdcall;
+procedure nspvGoertzReset(var State : TNSPVGoertzState); stdcall;
+
+{------------------------------------------------------------------------}
+{        Goertz                                                          }
+{                                                                        }
+{ Single Frequency DFT (Goertzel algorithm)                              }
+
+function nspsGoertz( var State       : TNSPSGoertzState;
+                         Sample      : Float)   : TSCplx; stdcall;
+function nspcGoertz( var State       : TNSPCGoertzState;
+                         Sample      : TSCplx)  : TSCplx; stdcall;
+function nspdGoertz( var State       : TNSPDGoertzState;
+                         Sample      : Double)  : TDCplx; stdcall;
+function nspzGoertz( var State       : TNSPZGoertzState;
+                         Sample      : TDCplx)  : TDCplx; stdcall;
+function nspwGoertz( var State       : TNSPWGoertzState;
+                         Sample      : Short;
+                         ScaleMode   : Integer;
+                     var ScaleFactor : Integer) : TWCplx; stdcall;
+function nspvGoertz( var State       : TNSPVGoertzState;
+                         Sample      : TWCplx;
+                         ScaleMode   : Integer;
+                     var ScaleFactor : Integer) : TWCplx; stdcall;
+
+function nspsbGoertz(var State       : TNSPSGoertzState;
+                         InSamps     : PFloat;
+                         Len         : Integer) : TSCplx; stdcall;
+function nspcbGoertz(var State       : TNSPCGoertzState;
+                         InSamps     : PSCplx;
+                         Len         : Integer) : TSCplx; stdcall;
+function nspdbGoertz(var State       : TNSPDGoertzState;
+                         InSamps     : PDouble;
+                         Len         : Integer) : TDCplx; stdcall;
+function nspzbGoertz(var State       : TNSPZGoertzState;
+                         InSamps     : PDCplx;
+                         Len         : Integer) : TDCplx; stdcall;
+function nspwbGoertz(var State       : TNSPWGoertzState;
+                         InSamps     : PShort;
+                         Len         : Integer;
+                         ScaleMode   : Integer;
+                     var ScaleFactor : Integer) : TWCplx; stdcall;
+function nspvbGoertz(var State       : TNSPVGoertzState;
+                         InSamps     : PWCplx;
+                         Len         : Integer;
+                         ScaleMode   : Integer;
+                     var ScaleFactor : Integer) : TWCplx; stdcall;
+
+procedure nspsGoertzOut( var State   : TNSPSGoertzState;
+                             Sample  : Float;
+                         var Val     : TSCplx); stdcall;
+procedure nspcGoertzOut( var State   : TNSPCGoertzState;
+                             Sample  : TSCplx;
+                         var Val     : TSCplx); stdcall;
+procedure nspsbGoertzOut(var State   : TNSPSGoertzState;
+                             InSamps : PFloat;
+                             Len     : Integer;
+                         var Val     : TSCplx); stdcall;
+procedure nspcbGoertzOut(var State   : TNSPCGoertzState;
+                             InSamps : PSCplx;
+                             Len     : Integer;
+                         var Val     : TSCplx); stdcall;
+
+{EOF}
