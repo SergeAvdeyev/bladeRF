@@ -7,11 +7,10 @@ INCLUDEPATH += ../libs
 
 SOURCES += \
     main.cpp \
-    ../libs/wave_gen.cpp
-
-#include(deployment.pri)
-#qtcAddDeployment()
+    ../libs/wave_gen.cpp \
+    ../libs/butt_filter.cpp
 
 HEADERS += \
-    ../libs/wave_gen.h
+    ../libs/wave_gen.h \
+    ../libs/butt_filter.h
 
