@@ -13,6 +13,7 @@ TBladeRfDevice::TBladeRfDevice(QObject *parent) : QObject(parent) {
 	FTxConfigured = false;
 
 	FRxThread = NULL;
+	FTxThread = NULL;
 	FRxContainer = NULL;
 	FTxContainer = NULL;
 
@@ -325,6 +326,7 @@ void TBladeRfDevice::RxStop() {
 
 	FRxThread->Terminate();
 	FRxContainer->terminate();
+	FRxContainer->wait();
 }
 
 void TBladeRfDevice::OnRxFinished() {
@@ -380,6 +382,7 @@ void TBladeRfDevice::TxStop() {
 
 	FTxThread->Terminate();
 	FTxContainer->terminate();
+	FTxContainer->wait();
 }
 
 

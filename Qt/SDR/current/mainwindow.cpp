@@ -1087,6 +1087,12 @@ void TMainWindow::SetRxFreq() {
 	if (I == 0) {
 		if (ui->AllBox->isChecked())
 			ui->Memo->appendPlainText("Set RX Frequency - OK");
+//		if (ui->SpectrBtn->isChecked()) {
+//			uint32_t tmp = FRxSR / 2;
+//			//ui->customPlot->xAxis->setRange(FRxFreq - tmp, FRxFreq + tmp);
+//			ui->customPlot->xAxis->scaleRange(2, 1);
+//			ui->customPlot->replot();
+//		};
 	} else {
 		S = QString::fromUtf8(bladerf_strerror(I));
 		ui->Memo->appendPlainText("Failed to set RX Frequency: " + S);
@@ -1436,26 +1442,35 @@ void TMainWindow::OnRxData(void *Buffer, int BufferSize) {
 		fft_nip_1((PWCplx)Buffer, FSpectrBuffer, 2048);
 		//fft_nip_2(FloatBuf, FSpectrBuffer, 2048);
 		FSpectrBufferPtr = FSpectrBuffer + 1024;
+		double x_value = FRxFreq - FRxSR / 2 / 1000;
+		//double to = FRxFreq + FRxSR / 2 / 1000;
+		double delta = FRxSR;
+		delta = delta / 2048 / 1000;
+		//double x_value = from;
 		for (i = 0; i < 1024; i++) {
-			x[i] = i;
+			x[i] = x_value;
 			if (FSpectrBufferPtr->Re < 0)
 				FSpectrBufferPtr->Re *= -1;
 			if (FSpectrBufferPtr->Im < 0)
 				FSpectrBufferPtr->Im *= -1;
 			y[i] = 20*log10((FSpectrBufferPtr->Re + FSpectrBufferPtr->Im)); //FSpectrBufferPtr->Re;
 			FSpectrBufferPtr++;
+			x_value += delta;
 		};
 		FSpectrBufferPtr = FSpectrBuffer;
 		for (i = 1024; i < 2048; i++) {
-			x[i] = i;
+			x[i] = x_value;
 			if (FSpectrBufferPtr->Re < 0)
 				FSpectrBufferPtr->Re *= -1;
 			if (FSpectrBufferPtr->Im < 0)
 				FSpectrBufferPtr->Im *= -1;
 			y[i] = 20*log10((FSpectrBufferPtr->Re + FSpectrBufferPtr->Im)); //FSpectrBufferPtr->Re;
 			FSpectrBufferPtr++;
+			x_value += delta;
 		};
 		ui->customPlot->graph(0)->setData(x, y);
+		//ui->customPlot->xAxis->setRange(from, to);
+		ui->customPlot->xAxis->rescale(true);
 		ui->customPlot->replot();
 	};
 
@@ -1558,7 +1573,23 @@ void TMainWindow::OnRxData(void *Buffer, int BufferSize) {
 
 
 void TMainWindow::on_SpectrBtn_clicked() {
-	ui->customPlot->xAxis->setRange(0, 2048);
+	//ui->customPlot->xAxis->setRange(0, 2048);
+	QVector<double> x(2048), y(2048);
+	double from = FRxFreq - FRxSR / 2 / 1000;
+	//double to = FRxFreq + FRxSR / 2 / 1000;
+	double delta = FRxSR;
+	delta = delta / 2048 / 1000;
+	double x_value = from;
+	for (int i = 0; i < 2048; i++) {
+		x[i] = x_value;
+		y[i] = 0;
+		x_value += delta;
+	};
+	ui->customPlot->graph(0)->setData(x, y);
+	//ui->customPlot->xAxis->setRange(from, to);
+	ui->customPlot->xAxis->rescale(true);
+	//ui->customPlot->xAxis->rescale(false);
+
 	ui->customPlot->yAxis->setRange(-5, 200);
 	ui->customPlot->graph(1)->setVisible(false);
 	ui->customPlot->replot();
