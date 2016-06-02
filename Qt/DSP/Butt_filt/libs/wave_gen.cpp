@@ -111,13 +111,32 @@ TWaveGenerator_Par::TWaveGenerator_Par() {
 	FInitPhase = 0;
 }
 
-void TWaveGenerator_Par::Init(int SampleRate, int Frequency, int InitPhase) {
+void TWaveGenerator_Par::Init(int SampleRate, int Frequency, int Amplitude, int InitPhase) {
 	FSampleRate = SampleRate;
-	if (InitPhase == 0)
-		FInitPhase = 0;
-	else
-		FInitPhase = (TWOPI)/(360/InitPhase);
+//	if (InitPhase == 0)
+//		FInitPhase = 0;
+//	else
+//		FInitPhase = (TWOPI)/(360/InitPhase);
 	FFrequency = Frequency;
+
+	m = FSampleRate/(2.0*FFrequency);
+	a = -m;
+	b = 0;
+	ph = 0;
+	A = Amplitude * 4.0/(double)(m*m);
+	if (InitPhase == 0) return;
+	FInitPhase = (m*InitPhase)/180;
+
+	for (int i = 0; i < m; i++) {
+		if (ph % m == 0) {
+			a += m;
+			b += m;
+			A = -A;
+		};
+		if ((ph % FInitPhase == 0) && (ph != 0))
+			break;
+		ph++;
+	};
 
 	//FAngle = 0;
 
@@ -144,8 +163,7 @@ void TWaveGenerator_Par::Init(int SampleRate, int Frequency, int InitPhase) {
 bool TWaveGenerator_Par::GetWave(QVector<double> & DataBufferX,
 							 QVector<double> & DataBufferY,
 							 int Offset,
-							 int NumSamples,
-							 int Amplitude) {
+							 int NumSamples) {
 	if (FSampleRate == 0) return false;
 	if (Offset > DataBufferX.size()) return false;
 	long i, to;
@@ -154,72 +172,67 @@ bool TWaveGenerator_Par::GetWave(QVector<double> & DataBufferX,
 	if (to > DataBufferX.size())
 		to = DataBufferX.size();
 
-	long m = FSampleRate/(2.0*FFrequency);
-	long a = -m;
-	long b = 0;
+//	long m = FSampleRate/(2.0*FFrequency);
+//	long a = -m;
+//	long b = 0;
 
-	double A = Amplitude * 4.0/(double)(m*m);
+//	double A = Amplitude * 4.0/(double)(m*m);
 	for (i = Offset; i < to; i++) {
 		DataBufferX[i] = i;
-		if (i % m == 0) {
+		if (ph % m == 0) {
 			a += m;
 			b += m;
 			A = -A;
 		};
-		DataBufferY[i] = A*(i - a)*(i - b);
+		DataBufferY[i] = A*(ph - a)*(ph - b);
+		ph++;
 	};
 
 	return true;
 }
 
 
-bool TWaveGenerator_Par::GetWave(QVector<double> & DataBuffer,
-							 int NumSamples,
-							 int Amplitude) {
+bool TWaveGenerator_Par::GetWave(QVector<double> & DataBuffer, int NumSamples) {
 	if (FSampleRate == 0) return false;
-	int i, to;
+	int i, to; //, ph;
 
 	to = NumSamples;
 	if (to > DataBuffer.size())
 		to = DataBuffer.size();
 
-	long m = FSampleRate/(2.0*FFrequency);
-	double a = -m;
-	double b = 0;
-
-	double A = Amplitude * 4.0/(double)(m*m);
 	for (i = 0; i < to; i++) {
-		if (i % m == 0) {
+		if (ph % m == 0) {
 			a += m;
 			b += m;
 			A = -A;
 		};
-		DataBuffer[i] = A*(i - a)*(i - b);
+		DataBuffer[i] = A*(ph - a)*(ph - b);
+		ph++;
 	};
 
 	return true;
 }
 
 bool TWaveGenerator_Par::GetWave(float * DataBuffer,
-							 int NumSamples,
-							 int Amplitude) {
+							 int NumSamples) {
 	if (FSampleRate == 0) return false;
 	int i;
 	float * DataBufferPtr = DataBuffer;
 
-	long m = FSampleRate/(2.0*FFrequency);
-	long a = -m;
-	long b = 0;
+//	long m = FSampleRate/(2.0*FFrequency);
+//	long a = -m;
+//	long b = 0;
 
-	double A = Amplitude * 4.0/(double)(m*m);
+//	double A = Amplitude * 4.0/(double)(m*m);
 	for (i = 0; i < NumSamples; i++) {
-		if (i % m == 0) {
+		if (ph % m == 0) {
 			a += m;
 			b += m;
 			A = -A;
 		};
-		*DataBufferPtr = A*(i - a)*(i - b);
+		*DataBufferPtr = A*(ph - a)*(ph - b);
 		DataBufferPtr++;
+		ph++;
 	};
 
 	return true;

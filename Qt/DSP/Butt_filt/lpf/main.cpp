@@ -28,12 +28,12 @@ int main(int argc, char *argv[] ) {
 	WG->Init(SAMPLE_RATE, SIGNAL_FREQ, 0);
 
 	TWaveGenerator_Par * WG_PAR = new TWaveGenerator_Par;
-	WG_PAR->Init(SAMPLE_RATE, SIGNAL_FREQ, 0);
+	WG_PAR->Init(SAMPLE_RATE, SIGNAL_FREQ, 5, 90);
 
 	QVector<double> Signal(NUM_SAMPLES);
 
-	WG->GetWave(Signal, NUM_SAMPLES, 200);
-	//WG_PAR->GetWave(Signal, NUM_SAMPLES, 5);
+	//WG->GetWave(Signal, NUM_SAMPLES, 200);
+	WG_PAR->GetWave(Signal, NUM_SAMPLES);
 
 	TButtFilter * Filter;
 	Filter = new TButtFilter;
