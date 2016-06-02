@@ -38,26 +38,29 @@ class TWaveGenerator_Par {  // paraboloc generator
 	public:
 		TWaveGenerator_Par();
 		~TWaveGenerator_Par() {}
-		void Init(int SampleRate, int Frequency, int InitPhase);
+		void Init(int SampleRate, int Frequency, int Amplitude, int InitPhase);
 
 	private:
 		int FSampleRate;
-		double FInitPhase;
+		int FInitPhase;
 		int FFrequency;
+
+		long m; // = FSampleRate/(2.0*FFrequency);
+		double a; // = -m;
+		double b; // = 0;
+		double A;
+		int ph;
 		//long double FInterval;
 		//double FAngle;
 	public:
 		bool GetWave(QVector<double> & DataBufferX,
 					 QVector<double> & DataBufferY,
 					 int Offset,
-					 int NumSamples,
-					 int Amplitude);
+					 int NumSamples);
 		bool GetWave(QVector<double> &DataBuffer,
-					 int NumSamples,
-					 int Amplitude);
+					 int NumSamples);
 		bool GetWave(float * DataBuffer,
-					 int NumSamples,
-					 int Amplitude);
+					 int NumSamples);
 
 };
 
