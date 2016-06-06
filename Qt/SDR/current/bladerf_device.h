@@ -36,11 +36,11 @@
 
 #define FromDev_TxProcessError WM_USER + 112	// Result of receiving
 
-struct TTxDataItem {
-	char * Data;
-	int DataSize;
-};
-typedef TTxDataItem * PTxDataItem;
+//struct TTxDataItem {
+//	char * Data;
+//	int DataSize;
+//};
+//typedef TTxDataItem * PTxDataItem;
 
 class TMainWindow;
 
@@ -129,6 +129,8 @@ class TBladeRfDevice : public QObject {
 		int TxSetVga2Sync(int AVga2, int * AVga2Actual);
 		int TxGetVga2Sync(int * AVga2Actual);
 
+		int TxData(PWCplx Buffer, int BufferSize);
+		bool TxCanSend();
 
 	public slots:
 		void OnRxFinished();

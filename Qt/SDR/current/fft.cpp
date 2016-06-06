@@ -608,3 +608,51 @@ void ifft_nip_1(PDCplx Spectr, PWCplx Signal, int WindowSize) {
 
 
 
+
+
+
+
+
+
+
+
+
+
+TDCBlocker::TDCBlocker() {
+	pole = 0.9999;
+	A = (long)(32768.0*(1.0 - pole));
+	acc = 0;
+	prev_x = 0;
+	prev_y = 0;
+
+	gain = 0.9999;
+}
+
+TDCBlocker::~TDCBlocker() {
+
+}
+
+
+
+void TDCBlocker::Process(int16_t &in_out) {
+
+	float inp = (float)in_out;
+	float outp;
+
+	outp = inp - lastinput + gain * lastoutput;
+	lastinput  = inp;
+	lastoutput = outp;
+
+	in_out = outp;
+
+	return;
+
+	acc   -= prev_x;
+	prev_x = (long)in_out << 15;
+	acc   += prev_x;
+	acc   -= A*prev_y;
+	prev_y = acc >> 15;               // quantization happens here
+	in_out = (short)prev_y;
+}
+
+

@@ -300,7 +300,6 @@ int TBladeRfDevice::TxGetVga2Sync(int *AVga2Actual) {
 
 
 
-
 void TBladeRfDevice::RxStart() {
 
 	if ((!FConnected) || (FDevice == NULL)) return;
@@ -399,6 +398,20 @@ void TBladeRfDevice::OnTxFinished() {
 	delete FTxContainer;
 	FTxThread = NULL;
 	FTxContainer = NULL;
+}
+
+bool TBladeRfDevice::TxCanSend() {
+	if ((!FConnected) || (FDevice == NULL)) return false;
+	if (FTxThread == NULL) return false;
+
+	return FTxThread->CanSend();
+}
+
+int TBladeRfDevice::TxData(PWCplx Buffer, int BufferSize) {
+	if ((!FConnected) || (FDevice == NULL)) return -1;
+	if (FTxThread == NULL) return -1;
+
+	return FTxThread->AddBuffer(Buffer, BufferSize);
 }
 
 

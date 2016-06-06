@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <complex>
 #include <vector>
+#include <chrono>
 
 #define TWOPI 2*M_PI
 #define HALFPI 0.5*M_PI
@@ -43,6 +44,24 @@ void ifft_nip_1(PDCplx Spectr, PWCplx Signal, int WindowSize);
 
 
 inline std::complex<double> expj(double x) { return (std::complex<double>(std::cos(x), std::sin(x))); }
+
+
+
+class TDCBlocker {
+	public:
+		TDCBlocker();
+		~TDCBlocker();
+
+		void Process(int16_t &in_out);
+
+	private:
+		long acc, A, prev_x, prev_y;
+		double pole;
+
+		float gain;
+		float lastinput;
+		float lastoutput;
+};
 
 
 #endif // FFT_H

@@ -20,8 +20,10 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define BUFFER_SIZE     1000
-#define SAMPLE_RANGE    8000
+#include "qpsk.h"
+
+//#define BUFFER_SIZE     800
+//#define SAMPLE_RANGE    8000
 
 extern void encodeQPSK(short message[], short signal[], int size);
 extern void decodeQPSK(short signal[], short message[], int size);

@@ -55,9 +55,16 @@ extern void encodeQPSK(short message[], short signal[], int size) {
 	halfsize     = size >> 1;
 	Sample_Range = NUM_SAMPLES * halfsize;
 
+	short tmp;
+
 	// Remap to {-1, 1}
-	for (i = 0; i < size; ++i)
-		message[i] = (message[i] << 1) - 1;
+	for (i = 0; i < size; ++i) {
+		tmp = message[i];
+		tmp = tmp << 1;
+		tmp -= 1;
+		message[i] = tmp;
+		//message[i] = (message[i] << 1) - 1;
+	};
 
 	oldI = 1;
 	oldQ = 0;

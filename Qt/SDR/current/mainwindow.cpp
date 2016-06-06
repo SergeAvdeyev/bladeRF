@@ -2,6 +2,223 @@
 #include "ui_mainwindow.h"
 
 
+#define NUM_TAPS        40     /* Number of Filter TAPS */
+#define BUFFER_SIZE     1000   /* The size of the buffer */
+#define CARRIER_SIZE    8   /* The size of the carrier for each period*/
+#define HALF_BUFF_SIZE  500   /* Half of the message buffer*/
+#define NUM_SAMPLES     16   /* The number of samples*/
+#define SAMPLE_RANGE    8000   /* The size of modulated signal*/
+
+#define multFact  23170       /*   SQRT(2) / 2   in Q15 format */
+
+
+short Q15(int a) {
+	if (a >= 0)
+		return (a >> 15) ? (a >> 15) : a;
+	else
+		return (-a >> 15) ? -(-a >> 15) : a;
+}
+
+
+/* The RRC filter coefficients */
+const short bcoeff[] = {
+	184,
+	278,
+	331,
+	320,
+	231,
+	67,
+	-156,
+	-403,
+	-629,
+	-778,
+	-798,
+	-648,
+	-307,
+	223,
+	912,
+	1703,
+	2520,
+	3278,
+	3892,
+	4292,
+	4431,
+	4292,
+	3892,
+	3278,
+	2520,
+	1703,
+	912,
+	223,
+	-307,
+	-648,
+	-798,
+	-778,
+	-629,
+	-403,
+	-156,
+	67,
+	231,
+	320,
+	331,
+	278,
+	184
+};
+
+/* The In-phase channel */
+const short Icarrier[] = {
+	32767,
+	 23170,
+	 0,
+	 -23170,
+	 -32768,
+	 -23170,
+	 0,
+	 23170
+};
+
+/* The Quadrature Channel */
+const short Qcarrier[] = {
+	0,
+	23170,
+	32767,
+	23170,
+	0,
+	-23170,
+	-32768,
+	-23170
+};
+
+void fir_filter(short signal[], int size) {
+	short R_in[NUM_TAPS]; 		/* Input samples R_in[0] most recent, R_in[NUM_TAPS-1]  oldest */
+	int acc;
+	int prod;
+	int i, j;
+
+	for (j = 0; j < NUM_TAPS; ++j)
+		R_in[j] = 0;
+
+	for (j = 0; j < size; ++j) {
+		R_in[0] =  signal[j] ;         		/* Update most recent sample */
+
+		acc = 0;
+
+		for (i = 0; i < NUM_TAPS; i++) {
+			prod = (int)bcoeff[i] * R_in[i];
+			acc += prod;
+		};
+
+		signal[j] = acc >> 15;
+
+		for (i = NUM_TAPS-1; i > 0; i--)         	/* Shift delay samples */
+			R_in[i]=R_in[i-1];
+	};
+}
+
+
+
+void encodeQPSK(short message[], short signal[], int size) {
+//void encodeQPSK(QVector<short> &message, QVector<short> &signal, int size) {
+	short Ik[HALF_BUFF_SIZE], Qk[HALF_BUFF_SIZE];
+	short Isam[SAMPLE_RANGE], Qsam[SAMPLE_RANGE];
+	int i, j, halfsize, Sample_Range;
+	int oldI, oldQ, newI, newQ;
+	int replicate_carrier;
+	short tbc1, tbc2, t1, t2;
+
+	halfsize     = size >> 1;
+	Sample_Range = NUM_SAMPLES * halfsize;
+
+	short tmp;
+
+	// Remap to {-1, 1}
+	for (i = 0; i < size; ++i) {
+		tmp = message[i];
+		tmp = tmp << 1;
+		tmp -= 1;
+		message[i] = tmp;
+		//message[i] = (message[i] << 1) - 1;
+	};
+
+	oldI = 1;
+	oldQ = 0;
+
+	// Returns the phase shifts for pi/4 DQPSK from the input binary data stream
+	for (i = 0; i < halfsize; ++i) {
+		tbc1 = message[i * 2];
+		tbc2 = message[i * 2 + 1];
+
+		newI = Q15( (oldI * tbc1 - oldQ * tbc2) * multFact );
+		newQ = Q15( (oldQ * tbc1 + oldI * tbc2) * multFact );
+
+		oldI = newI;
+		oldQ = newQ;
+
+		Ik[i] = newI;
+		Qk[i] = newQ;
+	};
+
+	j = 0;
+
+	for (i = 0; i < Sample_Range; ++i) {
+		if (i % NUM_SAMPLES == 0) {
+			Isam[i] = Ik[j];
+			Qsam[i] = Qk[j];
+			j = j + 1;
+		} else
+			Isam[i] = Qsam[i] = 0;
+		//signal[i] = Isam[i];
+	};
+
+	fir_filter( Isam, Sample_Range );
+	fir_filter( Qsam, Sample_Range );
+
+	// Upmix with carrier
+	for (j = 0; j < Sample_Range; ++j) {
+		replicate_carrier = j % CARRIER_SIZE;
+		t1 = Q15(Isam[j] * Icarrier[replicate_carrier]);
+		t2 = Q15(Qsam[j] * Qcarrier[replicate_carrier]);
+		signal[j] =  t1 + t2;
+//		signal[j] = Isam[t1];
+	};
+}
+
+
+void decodeQPSK(short signal[], short message[], int size) {
+	int i, j, replicate_carrier;
+	short Irec[SAMPLE_RANGE], Qrec[SAMPLE_RANGE];
+	short Ik[HALF_BUFF_SIZE], Qk[HALF_BUFF_SIZE];
+
+	for (j = 0; j < size; ++j) {
+		replicate_carrier = j % CARRIER_SIZE;
+
+		Irec[j] = Q15(signal[j] * Icarrier[replicate_carrier]);
+		Qrec[j] = Q15(signal[j] * Qcarrier[replicate_carrier]);
+	};
+
+	fir_filter(Irec, size);
+	fir_filter(Qrec, size);
+
+	i = 0;
+	for (j = NUM_TAPS; j < size; j +=NUM_SAMPLES ) {
+		Ik[i] = Irec[j];
+		Qk[i] = Qrec[j];
+		++i;
+	};
+
+	// Loop through and decode the phases
+	for (j = 1; j < HALF_BUFF_SIZE; ++j) {
+		message[(j << 1) - 2] = (Qk[j] * Qk[j-1] + Ik[j] * Ik[j-1]) > 0;
+		message[(j << 1) - 1] = (Ik[j-1] * Qk[j] - Ik[j] * Qk[j-1]) > 0;
+	};
+}
+
+
+
+
+
+
+
 TWaveGenerator::TWaveGenerator() {
 	FSampleRate = 0;
 	FInitPhase = 0;
@@ -20,23 +237,23 @@ void TWaveGenerator::Init(int SampleRate, int Frequency, int InitPhase) {
 	FInterval = (2*M_PI)/(FSampleRate/FFrequency);
 }
 
-bool TWaveGenerator::GetWave(QVector<double> * DataBufferX,
-							 QVector<double> * DataBufferY,
+bool TWaveGenerator::GetWave(QVector<double> &DataBufferX,
+							 QVector<double> &DataBufferY,
 							 int Offset,
 							 int NumSamples,
 							 int Amplitude) {
 	if (FSampleRate == 0) return false;
-	if (Offset > DataBufferX->size()) return false;
+	if (Offset > DataBufferX.size()) return false;
 	int i, to;
 
 	to = Offset + NumSamples;
-	if (to > DataBufferX->size())
-		to = DataBufferX->size();
+	if (to > DataBufferX.size())
+		to = DataBufferX.size();
 
 	for (i = Offset; i < to; i++) {
-		(*DataBufferX)[i] = i;
+		DataBufferX[i] = i;
 
-		(*DataBufferY)[i] = Amplitude*sin((FInterval*FAngle) + FInitPhase);
+		DataBufferY[i] = Amplitude*sin((FInterval*FAngle) + FInitPhase);
 		FAngle++;
 	};
 	FAngle = FAngle % FSampleRate;
@@ -93,7 +310,7 @@ TMainWindow::TMainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::Main
 	FSettings = new QSettings("settings.conf", QSettings::NativeFormat);
 
 	WG = new TWaveGenerator;
-	WG->Init(44100, 10, 0);
+	WG->Init(44100, 400, 0);
 	FSpectrBuffer = NULL;
 
 	FRxFreq = 100;
@@ -122,8 +339,17 @@ TMainWindow::TMainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::Main
 
 	IIR_FILTER_I = new TButtFilter;
 	IIR_FILTER_Q = new TButtFilter;
-	IIR_FILTER_I->InitLowPass(4, 2000000, 40000);
-	IIR_FILTER_Q->InitLowPass(4, 2000000, 40000);
+	IIR_FILTER_I->InitLowPass(4, 2000000, 20000);
+	IIR_FILTER_Q->InitLowPass(4, 2000000, 20000);
+
+	PLL_Counter = 0;
+	Demod = modem_create(LIQUID_MODEM_QPSK);
+	nco_rx = nco_crcf_create(LIQUID_VCO);
+	nco_crcf_pll_set_bandwidth(nco_rx, 0.01f);
+	sym_out_last = 22; // Some value more than 3 (max qpsk)
+	output_size = 2048;
+	output = (unsigned short *)malloc(output_size*sizeof(unsigned short));
+	output_index = 0;
 
 //	IIR_Filter.setup(3,    // order
 //					 480000,// sample rate
@@ -194,6 +420,15 @@ TMainWindow::TMainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::Main
 	connect(ui->customPlot->yAxis, SIGNAL(rangeChanged(QCPRange)), ui->customPlot->yAxis2, SLOT(setRange(QCPRange)));
 
 	FDevice = new TBladeRfDevice(this);
+
+	//FTxBuffer = NULL;
+	//FTxBufferSize = 0;
+	FTxResult = false;
+	FTxValue = 1000;
+
+	FTxTimer = new QTimer;
+	FTxTimer->setInterval(5);
+	connect(FTxTimer, SIGNAL(timeout()), this, SLOT(OnTxTimer()));
 
 	readSettings();
 
@@ -610,6 +845,10 @@ void TMainWindow::OnTxStart(int Status) {
 		ui->StartTxBtn->setText("Stop TX");
 		if (ui->AllBox->isChecked())
 			ui->Memo->appendPlainText("TX started");
+
+		//FTxBuffer = (PWCplx)malloc(TxSamplesLen*sizeof(TWCplx));
+		FTxResult = 0;
+		FTxTimer->start();
 	} else if (ui->DebugBox->isChecked()) {
 		S = QString::fromUtf8(bladerf_strerror(Status));
 		ui->Memo->appendPlainText("Failed to start TX: " + S);
@@ -618,6 +857,9 @@ void TMainWindow::OnTxStart(int Status) {
 }
 
 void TMainWindow::OnTxStop() {
+	FTxResult = false;
+	FTxTimer->stop();
+
 	ui->StartTxBtn->setText("Start TX");
 	if (ui->AllBox->isChecked())
 		ui->Memo->appendPlainText("TX stopped");
@@ -678,14 +920,46 @@ void TMainWindow::addRandomGraph() {
 //	int from, to;
 //	bool last = false;
 
+/*
+	short m[BUFFER_SIZE] = {0};
+	short recm[BUFFER_SIZE] = {0};
+	short s[SAMPLE_RANGE] = {0};
+	srand((unsigned int)time(0));
+
+	for (int i = 0; i < BUFFER_SIZE; ++i) {
+		m[i] = rand() % 2;
+		x[i] = i;
+		y[i] = m[i];
+	};
+	ui->customPlot->yAxis->setRange(-4, 2);
+	ui->customPlot->xAxis->setRange(0, 200);
+	ui->customPlot->graph(0)->setData(x, y);
+	encodeQPSK(m, s, BUFFER_SIZE);
+	decodeQPSK(s, recm, SAMPLE_RANGE);
+
+	for (int i = 0; i < BUFFER_SIZE; ++i) {
+		x[i] = i + 2;
+		y[i] = recm[i] - 2;
+	};
+	ui->customPlot->graph(1)->setData(x, y);
+	ui->customPlot->graph(1)->setVisible(true);
+	ui->customPlot->replot();
+*/
+
 	bool res;
 	for (int j = 0; j < 1000; j++) {
-		res = WG->GetWave(&x, &y, 2048*j, 2048, 5);
+		res = WG->GetWave(x, y, 2048*j, 2048, 1500);
 		if (!res)
 			break;
 	};
+	int a = -1;
+	for (int j = 0; j < x.size(); j++) {
+		if (j % 200 == 0)
+			a *= -1;
+		y[j] = y[j]*a;
+	};
 
-	ui->customPlot->graph()->setData(x, y);
+	ui->customPlot->graph(0)->setData(x, y);
 	ui->customPlot->replot();
 }
 
@@ -1346,6 +1620,8 @@ void TMainWindow::OnRxData(void *Buffer, int BufferSize) {
 
 	int samples_len_in;
 	int samples_len_out;
+	liquid_float_complex r, v;
+	unsigned int sym_out;
 
 
 //	WBufferPtr : PWCplx;
@@ -1366,11 +1642,25 @@ void TMainWindow::OnRxData(void *Buffer, int BufferSize) {
 	//BufferPtr := Buffer;
 	//BufferTmpPtr := Buffer;
 
-
-
 	samples_len_in = BufferSize / 4;
-	samples_len_out = samples_len_in / 5;
+	samples_len_out = samples_len_in / 2;
 
+
+	/*  DC Blocking  */
+	//int elapsed_microseconds;
+	if (ui->DCBlockBox->isChecked()) {
+		int n;
+		//std::chrono::time_point<std::chrono::system_clock> start, end;
+		//start = std::chrono::system_clock::now();
+		for (n = 0; n < samples_len_in; n++) {
+			DCBlockerRe.Process(FBufferPtr[n].Re);
+			DCBlockerIm.Process(FBufferPtr[n].Im);
+		};
+		//end = std::chrono::system_clock::now();
+		//elapsed_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(end-start).count();
+	};
+
+	QString S = "";
 
 	if (ui->BsfBox->isChecked()) {
 		double * TmpBuf = (double *)malloc(samples_len_in*sizeof(double));
@@ -1389,17 +1679,54 @@ void TMainWindow::OnRxData(void *Buffer, int BufferSize) {
 		free(TmpBuf);
 	};
 
+
+	if (ui->RecordBox->isChecked()) {
+		for (i = 0; i < samples_len_in; i++) {
+			PLL_Counter++;
+//			if (PLL_Counter % 100 == 0) {
+				r.real((float)FBufferPtr[i].Re/2048);
+				r.imag((float)FBufferPtr[i].Im/2048);
+				nco_crcf_mix_down(nco_rx, r, &v);
+
+				// demodulate
+				modem_demodulate(Demod, v, &sym_out);
+				//num_errors += count_bit_errors(sym_in, sym_out);
+				if (sym_out != sym_out_last) {
+					S += QString::number(sym_out);
+					sym_out_last = sym_out;
+					//fprintf(fid, "r(%u) = %10.6E + j*%10.6E;\n", output_index + 1, crealf(v), cimagf(v));
+//					if (output_index < output_size) {
+//						output[output_index] = sym_out;
+//						output_index++;
+//					} else
+//						ui->RecordBox->setChecked(false);
+				};
+
+				// error estimation
+				////phase_error = cargf(r*conjf(v));
+				phase_error = modem_get_demodulator_phase_error(Demod);
+
+				// update pll
+				nco_crcf_pll_step(nco_rx, phase_error);
+
+				// update rx nco object
+				nco_crcf_step(nco_rx);
+//			};
+		};
+		ui->Memo->appendPlainText(S);
+	};
+
 	if (ui->SignalBtn->isChecked()) {
-		QVector<double> x(samples_len_out), y(samples_len_out);
+		QVector<double> x(4800), y(4800);
 		if (ui->IBox->isChecked()) {
-			for (i = 0; i < samples_len_out; i++) {
+			for (i = 0; i < 4800; i++) {
 				x[i] = i;
 				y[i] = FBufferPtr[i].Re;
 			};
 			ui->customPlot->graph(0)->setData(x, y);
 		};
 		if (ui->QBox->isChecked()) {
-			for (i = 0; i < samples_len_out; i++) {
+			for (i = 0; i < 4800; i++) {
 				x[i] = i;
 				y[i] = FBufferPtr[i].Im;
 			};
@@ -1409,22 +1736,6 @@ void TMainWindow::OnRxData(void *Buffer, int BufferSize) {
 	} else {
 		QVector<double> x(2048), y(2048);
 
-//		if (ui->BsfBox->isChecked()) {
-//			double * TmpBuf = (double *)malloc(2048*sizeof(double));
-//			for (i = 0; i < 2048; i++)
-//				TmpBuf[i] = FBufferPtr[i].Re;
-//			IIR_FILTER->Process(TmpBuf, 2048);
-//			for (i = 0; i < 2048; i++)
-//				FBufferPtr[i].Re = TmpBuf[i];
-//			for (i = 0; i < 2048; i++)
-//				TmpBuf[i] = FBufferPtr[i].Im;
-//			IIR_FILTER->Process(TmpBuf, 2048);
-//			for (i = 0; i < 2048; i++)
-//				FBufferPtr[i].Im = TmpBuf[i];
-
-//			free(TmpBuf);
-//		};
-
 		if (FSpectrBuffer == NULL) {
 			FSpectrBuffer = (PDCplx)malloc(2048*sizeof(TDCplx));
 			HannCoefs = (double *)malloc(2048*sizeof(double));
@@ -1433,7 +1744,6 @@ void TMainWindow::OnRxData(void *Buffer, int BufferSize) {
 		};
 		if (ui->HannBox->isChecked()) {
 			for (i = 0; i < 2048; i++) {
-				//double multiplier = 0.5 * (1 - cos(2*M_PI*i/2047));
 				FBufferPtr[i].Re = HannCoefs[i] * FBufferPtr[i].Re;
 				FBufferPtr[i].Im = HannCoefs[i] * FBufferPtr[i].Im;
 			};
@@ -1443,10 +1753,8 @@ void TMainWindow::OnRxData(void *Buffer, int BufferSize) {
 		//fft_nip_2(FloatBuf, FSpectrBuffer, 2048);
 		FSpectrBufferPtr = FSpectrBuffer + 1024;
 		double x_value = FRxFreq - FRxSR / 2 / 1000;
-		//double to = FRxFreq + FRxSR / 2 / 1000;
 		double delta = FRxSR;
 		delta = delta / 2048 / 1000;
-		//double x_value = from;
 		for (i = 0; i < 1024; i++) {
 			x[i] = x_value;
 			if (FSpectrBufferPtr->Re < 0)
@@ -1477,6 +1785,9 @@ void TMainWindow::OnRxData(void *Buffer, int BufferSize) {
 
 	free(Buffer);
 	return;
+
+
+
 
 //	WBufferPtr := PWCplx(Buffer);
 
@@ -1611,4 +1922,26 @@ void TMainWindow::on_IBox_clicked() {
 void TMainWindow::on_QBox_clicked() {
 	ui->customPlot->graph(1)->setVisible(ui->QBox->isChecked());
 	ui->customPlot->replot();
+}
+
+
+void TMainWindow::OnTxTimer() {
+	if (FDevice == NULL) return;
+
+	if (!FDevice->TxCanSend()) return;
+
+	PWCplx FTxBuffer = (PWCplx)malloc(TxSamplesLen*sizeof(TWCplx));
+	int i = 0;
+	int Val = 1000;
+	while (i < TxSamplesLen) {
+		FTxBuffer[i].Re = Val;
+		FTxBuffer[i].Im = -Val;
+		i++;
+		if (i % 1000 == 0)
+			Val = -Val;
+	};
+
+	FTxResult = FDevice->TxData(FTxBuffer, TxSamplesLen);
+	if (FTxResult == -1)
+		FTxTimer->stop();
 }

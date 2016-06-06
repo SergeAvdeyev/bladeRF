@@ -3,10 +3,13 @@
 
 #include <QMainWindow>
 #include <QList>
+//#include <complex.h>
 #include "qcustomplot.h"
 #include "bladerf_device.h"
 #include "fft.h"
 #include "butt_filter.h"
+
+#include "liquid.h"
 
 //#include "DspFilters/Dsp.h"
 //#include "iir_filter.h"
@@ -38,8 +41,8 @@ class TWaveGenerator {
 		long double FInterval;
 		int FAngle;
 	public:
-		bool GetWave(QVector<double> * DataBufferX,
-					 QVector<double> * DataBufferY,
+		bool GetWave(QVector<double> &DataBufferX,
+					 QVector<double> &DataBufferY,
 					 int Offset,
 					 int NumSamples,
 					 int Amplitude);
@@ -65,6 +68,8 @@ class TFreqLabel : public QLabel {
 		//void mouseRelease(QMouseEvent *event);
 		void mouseWheel(QWheelEvent *event);
 };
+
+
 
 class TMainWindow : public QMainWindow {
 	Q_OBJECT
@@ -97,9 +102,26 @@ class TMainWindow : public QMainWindow {
 
 		//FRxActive : Boolean;
 
+		TDCBlocker DCBlockerRe;
+		TDCBlocker DCBlockerIm;
+
+		int PLL_Counter;
+		modem Demod;
+		nco_crcf nco_rx;
+		float phase_error;
+		unsigned int sym_out_last;
+		unsigned short * output;
+		int output_size;
+		int output_index;
+
 		uint64_t FTxFreq;
 		uint32_t FTxSR;
 		uint32_t FTxBW;
+		QTimer * FTxTimer;
+		//PWCplx   FTxBuffer;
+		//int FTxBufferSize;
+		int FTxResult;
+		int FTxValue;
 
 		bool	FRxBwBlocked;
 		bool	FRxSrBlocked;
@@ -190,6 +212,8 @@ class TMainWindow : public QMainWindow {
 		//void contextMenuRequest(QPoint pos);
 		//void moveLegend();
 		//void graphClicked(QCPAbstractPlottable *plottable);
+
+		void OnTxTimer();
 
 		void FreqLabelWheel(QWheelEvent* event);
 		void on_RxSrSlider_valueChanged(int value);

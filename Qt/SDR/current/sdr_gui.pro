@@ -7,6 +7,7 @@
 QT       += core gui printsupport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+CONFIG += c++11
 
 TARGET = ../bin/srd_gui
 TEMPLATE = app
@@ -15,6 +16,7 @@ INCLUDEPATH += /home/savdeev/Projects/qt_components/qcustomplot \
                /home/savdeev/Projects/bladeRF/bladeRF_orig/host/libraries/libbladeRF/include \
                /home/savdeev/Projects/bladeRF/Qt/DSP/Butt_filt/libs
 #                /home/savdeev/Projects/dsp_libs/DSPFilters/shared/DSPFilters/include
+INCLUDEPATH += /usr/local/include/liquid
 
 
 SOURCES += main.cpp\
@@ -80,3 +82,4 @@ HEADERS  += mainwindow.h \
 FORMS    += mainwindow.ui
 
 LIBS += -lbladeRF
+LIBS += -lliquid

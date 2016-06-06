@@ -894,6 +894,32 @@
      <string>Q</string>
     </property>
    </widget>
+   <widget class="QCheckBox" name="RecordBox">
+    <property name="geometry">
+     <rect>
+      <x>780</x>
+      <y>300</y>
+      <width>86</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>QPSK</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="DCBlockBox">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>300</y>
+      <width>86</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>DC Block</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
