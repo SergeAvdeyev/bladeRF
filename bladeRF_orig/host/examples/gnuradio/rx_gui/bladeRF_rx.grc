@@ -1071,53 +1071,6 @@
     </param>
   </block>
   <block>
-    <key>fosphor_qt_sink_c</key>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>freq_center</key>
-      <value>gui_rx_frequency</value>
-    </param>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(896, 555)</value>
-    </param>
-    <param>
-      <key>gui_hint</key>
-      <value>2, 0, 5, 10</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>fosphor_qt_sink_c_0</value>
-    </param>
-    <param>
-      <key>freq_span</key>
-      <value>gui_rx_sample_rate</value>
-    </param>
-    <param>
-      <key>wintype</key>
-      <value>window.WIN_BLACKMAN_hARRIS</value>
-    </param>
-  </block>
-  <block>
     <key>parameter</key>
     <param>
       <key>alias</key>
@@ -2813,7 +2766,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>1</value>
     </param>
     <param>
       <key>fftsize</key>
@@ -4396,12 +4349,6 @@
   <connection>
     <source_block_id>blocks_complex_to_float_0</source_block_id>
     <sink_block_id>blocks_add_const_vxx_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>blocks_float_to_complex_0</source_block_id>
-    <sink_block_id>fosphor_qt_sink_c_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>

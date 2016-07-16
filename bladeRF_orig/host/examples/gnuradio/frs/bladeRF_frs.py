@@ -5,7 +5,7 @@
 # Title: FRS Transceiver
 # Author: Nuand, LLC <bladeRF@nuand.com>
 # Description: Multi-channel FRS transceiver with CTCSS.  A USB 3.0 connection is required for full-duplex operation.
-# Generated: Thu May 19 21:44:13 2016
+# Generated: Tue Jun 21 00:01:08 2016
 ##################################################
 
 if __name__ == '__main__':
@@ -133,6 +133,7 @@ class bladeRF_frs(gr.top_block, Qt.QWidget):
         self.ctcss_hpf_ff_taps = ctcss_hpf_ff_taps = [0.77275029037678344412398701024358160793781280517578125,-4.62934886736234840753922981093637645244598388671875,11.562660778112377357729201321490108966827392578125,-15.4121243939073497841718562995083630084991455078125,11.562660778112377357729201321490108966827392578125,-4.62934886736234840753922981093637645244598388671875,0.77275029037678344412398701024358160793781280517578125]
         self.ctcss_hpf_fb_taps = ctcss_hpf_fb_taps = [1,-5.6992016578761877099168486893177032470703125,13.56101351514487163285593851469457149505615234375,-17.24510428469104539317413582466542720794677734375,12.3620564992096202416860251105390489101409912109375,-4.7368104535795811926845999551005661487579345703125,0.7580490211161876601408948772586882114410400390625]
         self.ctcss_enable = ctcss_enable = (ctcss_freq != 0)
+        self.bladerf_device = bladerf_device = (ctcss_freq != 0)
 
         ##################################################
         # Blocks
@@ -1184,9 +1185,9 @@ class bladeRF_frs(gr.top_block, Qt.QWidget):
         self.tx_rf_freq = tx_rf_freq
         self.set_tx_ch11_offset(467.6375e6 - self.tx_rf_freq)
         self.set_tx_ch4_offset(462.6375e6 - self.tx_rf_freq)
+        self.osmosdr_sink_0.set_center_freq(self.tx_rf_freq, 0)
         self.tx_ch1_7_waterfall.set_frequency_range(self.tx_rf_freq + self.tx_ch4_offset, self.tx_pfs_output_rate)
         self.tx_ch8_14_waterfall.set_frequency_range(self.tx_rf_freq + self.tx_ch11_offset, self.tx_pfs_output_rate)
-        self.osmosdr_sink_0.set_center_freq(self.tx_rf_freq, 0)
 
     def get_tx_pfs_output_rate(self):
         return self.tx_pfs_output_rate
@@ -1202,8 +1203,8 @@ class bladeRF_frs(gr.top_block, Qt.QWidget):
 
     def set_tx_ch9_enable(self, tx_ch9_enable):
         self.tx_ch9_enable = tx_ch9_enable
-        self.set_tx_num_enabled_ch8_14(sum([self.tx_ch8_enable, self.tx_ch9_enable, self.tx_ch10_enable, self.tx_ch11_enable, self.tx_ch12_enable, self.tx_ch13_enable, self.tx_ch14_enable]))
         self._tx_ch9_enable_callback(self.tx_ch9_enable)
+        self.set_tx_num_enabled_ch8_14(sum([self.tx_ch8_enable, self.tx_ch9_enable, self.tx_ch10_enable, self.tx_ch11_enable, self.tx_ch12_enable, self.tx_ch13_enable, self.tx_ch14_enable]))
         self.tx_ch9_mute.set_mute(bool(not self.tx_ch9_enable))
 
     def get_tx_ch8_enable(self):
@@ -1211,62 +1212,62 @@ class bladeRF_frs(gr.top_block, Qt.QWidget):
 
     def set_tx_ch8_enable(self, tx_ch8_enable):
         self.tx_ch8_enable = tx_ch8_enable
+        self._tx_ch8_enable_callback(self.tx_ch8_enable)
         self.set_tx_num_enabled_ch8_14(sum([self.tx_ch8_enable, self.tx_ch9_enable, self.tx_ch10_enable, self.tx_ch11_enable, self.tx_ch12_enable, self.tx_ch13_enable, self.tx_ch14_enable]))
         self.tx_ch8_mute.set_mute(bool(not self.tx_ch8_enable))
-        self._tx_ch8_enable_callback(self.tx_ch8_enable)
 
     def get_tx_ch7_enable(self):
         return self.tx_ch7_enable
 
     def set_tx_ch7_enable(self, tx_ch7_enable):
         self.tx_ch7_enable = tx_ch7_enable
+        self._tx_ch7_enable_callback(self.tx_ch7_enable)
         self.set_tx_num_enabled_ch1_7(sum([self.tx_ch1_enable, self.tx_ch2_enable, self.tx_ch3_enable, self.tx_ch4_enable, self.tx_ch5_enable, self.tx_ch6_enable, self.tx_ch7_enable]))
         self.tx_ch7_mute.set_mute(bool(not self.tx_ch7_enable))
-        self._tx_ch7_enable_callback(self.tx_ch7_enable)
 
     def get_tx_ch6_enable(self):
         return self.tx_ch6_enable
 
     def set_tx_ch6_enable(self, tx_ch6_enable):
         self.tx_ch6_enable = tx_ch6_enable
+        self._tx_ch6_enable_callback(self.tx_ch6_enable)
         self.set_tx_num_enabled_ch1_7(sum([self.tx_ch1_enable, self.tx_ch2_enable, self.tx_ch3_enable, self.tx_ch4_enable, self.tx_ch5_enable, self.tx_ch6_enable, self.tx_ch7_enable]))
         self.tx_ch6_mute.set_mute(bool(not self.tx_ch6_enable))
-        self._tx_ch6_enable_callback(self.tx_ch6_enable)
 
     def get_tx_ch5_enable(self):
         return self.tx_ch5_enable
 
     def set_tx_ch5_enable(self, tx_ch5_enable):
         self.tx_ch5_enable = tx_ch5_enable
+        self._tx_ch5_enable_callback(self.tx_ch5_enable)
         self.set_tx_num_enabled_ch1_7(sum([self.tx_ch1_enable, self.tx_ch2_enable, self.tx_ch3_enable, self.tx_ch4_enable, self.tx_ch5_enable, self.tx_ch6_enable, self.tx_ch7_enable]))
         self.tx_ch5_mute.set_mute(bool(not self.tx_ch5_enable))
-        self._tx_ch5_enable_callback(self.tx_ch5_enable)
 
     def get_tx_ch4_enable(self):
         return self.tx_ch4_enable
 
     def set_tx_ch4_enable(self, tx_ch4_enable):
         self.tx_ch4_enable = tx_ch4_enable
+        self._tx_ch4_enable_callback(self.tx_ch4_enable)
         self.set_tx_num_enabled_ch1_7(sum([self.tx_ch1_enable, self.tx_ch2_enable, self.tx_ch3_enable, self.tx_ch4_enable, self.tx_ch5_enable, self.tx_ch6_enable, self.tx_ch7_enable]))
         self.tx_ch4_mute.set_mute(bool(not self.tx_ch4_enable))
-        self._tx_ch4_enable_callback(self.tx_ch4_enable)
 
     def get_tx_ch3_enable(self):
         return self.tx_ch3_enable
 
     def set_tx_ch3_enable(self, tx_ch3_enable):
         self.tx_ch3_enable = tx_ch3_enable
+        self._tx_ch3_enable_callback(self.tx_ch3_enable)
         self.set_tx_num_enabled_ch1_7(sum([self.tx_ch1_enable, self.tx_ch2_enable, self.tx_ch3_enable, self.tx_ch4_enable, self.tx_ch5_enable, self.tx_ch6_enable, self.tx_ch7_enable]))
         self.tx_ch3_mute.set_mute(bool(not self.tx_ch3_enable))
-        self._tx_ch3_enable_callback(self.tx_ch3_enable)
 
     def get_tx_ch2_enable(self):
         return self.tx_ch2_enable
 
     def set_tx_ch2_enable(self, tx_ch2_enable):
         self.tx_ch2_enable = tx_ch2_enable
-        self.set_tx_num_enabled_ch1_7(sum([self.tx_ch1_enable, self.tx_ch2_enable, self.tx_ch3_enable, self.tx_ch4_enable, self.tx_ch5_enable, self.tx_ch6_enable, self.tx_ch7_enable]))
         self._tx_ch2_enable_callback(self.tx_ch2_enable)
+        self.set_tx_num_enabled_ch1_7(sum([self.tx_ch1_enable, self.tx_ch2_enable, self.tx_ch3_enable, self.tx_ch4_enable, self.tx_ch5_enable, self.tx_ch6_enable, self.tx_ch7_enable]))
         self.tx_ch2_mute.set_mute(bool(not self.tx_ch2_enable))
 
     def get_tx_ch1_enable(self):
@@ -1274,8 +1275,8 @@ class bladeRF_frs(gr.top_block, Qt.QWidget):
 
     def set_tx_ch1_enable(self, tx_ch1_enable):
         self.tx_ch1_enable = tx_ch1_enable
-        self.set_tx_num_enabled_ch1_7(sum([self.tx_ch1_enable, self.tx_ch2_enable, self.tx_ch3_enable, self.tx_ch4_enable, self.tx_ch5_enable, self.tx_ch6_enable, self.tx_ch7_enable]))
         self._tx_ch1_enable_callback(self.tx_ch1_enable)
+        self.set_tx_num_enabled_ch1_7(sum([self.tx_ch1_enable, self.tx_ch2_enable, self.tx_ch3_enable, self.tx_ch4_enable, self.tx_ch5_enable, self.tx_ch6_enable, self.tx_ch7_enable]))
         self.tx_ch1_mute.set_mute(bool(not self.tx_ch1_enable))
 
     def get_tx_ch14_enable(self):
@@ -1283,17 +1284,17 @@ class bladeRF_frs(gr.top_block, Qt.QWidget):
 
     def set_tx_ch14_enable(self, tx_ch14_enable):
         self.tx_ch14_enable = tx_ch14_enable
+        self._tx_ch14_enable_callback(self.tx_ch14_enable)
         self.set_tx_num_enabled_ch8_14(sum([self.tx_ch8_enable, self.tx_ch9_enable, self.tx_ch10_enable, self.tx_ch11_enable, self.tx_ch12_enable, self.tx_ch13_enable, self.tx_ch14_enable]))
         self.tx_ch14_mute.set_mute(bool(not self.tx_ch14_enable))
-        self._tx_ch14_enable_callback(self.tx_ch14_enable)
 
     def get_tx_ch13_enable(self):
         return self.tx_ch13_enable
 
     def set_tx_ch13_enable(self, tx_ch13_enable):
         self.tx_ch13_enable = tx_ch13_enable
-        self.set_tx_num_enabled_ch8_14(sum([self.tx_ch8_enable, self.tx_ch9_enable, self.tx_ch10_enable, self.tx_ch11_enable, self.tx_ch12_enable, self.tx_ch13_enable, self.tx_ch14_enable]))
         self._tx_ch13_enable_callback(self.tx_ch13_enable)
+        self.set_tx_num_enabled_ch8_14(sum([self.tx_ch8_enable, self.tx_ch9_enable, self.tx_ch10_enable, self.tx_ch11_enable, self.tx_ch12_enable, self.tx_ch13_enable, self.tx_ch14_enable]))
         self.tx_ch13_mute.set_mute(bool(not self.tx_ch13_enable))
 
     def get_tx_ch12_enable(self):
@@ -1301,8 +1302,8 @@ class bladeRF_frs(gr.top_block, Qt.QWidget):
 
     def set_tx_ch12_enable(self, tx_ch12_enable):
         self.tx_ch12_enable = tx_ch12_enable
-        self.set_tx_num_enabled_ch8_14(sum([self.tx_ch8_enable, self.tx_ch9_enable, self.tx_ch10_enable, self.tx_ch11_enable, self.tx_ch12_enable, self.tx_ch13_enable, self.tx_ch14_enable]))
         self._tx_ch12_enable_callback(self.tx_ch12_enable)
+        self.set_tx_num_enabled_ch8_14(sum([self.tx_ch8_enable, self.tx_ch9_enable, self.tx_ch10_enable, self.tx_ch11_enable, self.tx_ch12_enable, self.tx_ch13_enable, self.tx_ch14_enable]))
         self.tx_ch12_mute.set_mute(bool(not self.tx_ch12_enable))
 
     def get_tx_ch11_enable(self):
@@ -1310,8 +1311,8 @@ class bladeRF_frs(gr.top_block, Qt.QWidget):
 
     def set_tx_ch11_enable(self, tx_ch11_enable):
         self.tx_ch11_enable = tx_ch11_enable
-        self.set_tx_num_enabled_ch8_14(sum([self.tx_ch8_enable, self.tx_ch9_enable, self.tx_ch10_enable, self.tx_ch11_enable, self.tx_ch12_enable, self.tx_ch13_enable, self.tx_ch14_enable]))
         self._tx_ch11_enable_callback(self.tx_ch11_enable)
+        self.set_tx_num_enabled_ch8_14(sum([self.tx_ch8_enable, self.tx_ch9_enable, self.tx_ch10_enable, self.tx_ch11_enable, self.tx_ch12_enable, self.tx_ch13_enable, self.tx_ch14_enable]))
         self.tx_ch11_mute.set_mute(bool(not self.tx_ch11_enable))
 
     def get_tx_ch10_enable(self):
@@ -1319,8 +1320,8 @@ class bladeRF_frs(gr.top_block, Qt.QWidget):
 
     def set_tx_ch10_enable(self, tx_ch10_enable):
         self.tx_ch10_enable = tx_ch10_enable
-        self.set_tx_num_enabled_ch8_14(sum([self.tx_ch8_enable, self.tx_ch9_enable, self.tx_ch10_enable, self.tx_ch11_enable, self.tx_ch12_enable, self.tx_ch13_enable, self.tx_ch14_enable]))
         self._tx_ch10_enable_callback(self.tx_ch10_enable)
+        self.set_tx_num_enabled_ch8_14(sum([self.tx_ch8_enable, self.tx_ch9_enable, self.tx_ch10_enable, self.tx_ch11_enable, self.tx_ch12_enable, self.tx_ch13_enable, self.tx_ch14_enable]))
         self.tx_ch10_mute.set_mute(bool(not self.tx_ch10_enable))
 
     def get_rx_audio_sample_rate(self):
@@ -1335,8 +1336,8 @@ class bladeRF_frs(gr.top_block, Qt.QWidget):
 
     def set_rf_rx_freq(self, rf_rx_freq):
         self.rf_rx_freq = rf_rx_freq
-        self.set_rx_ch4_offset(462.6375e6 - self.rf_rx_freq)
         self.set_rx_ch11_offset(467.6375e6 - self.rf_rx_freq)
+        self.set_rx_ch4_offset(462.6375e6 - self.rf_rx_freq)
         self.osmosdr_source_0.set_center_freq(self.rf_rx_freq, 0)
         self.qtgui_waterfall_sink_x_0.set_frequency_range(self.rf_rx_freq + self.rx_ch4_offset, self.rx_rf_sample_rate / 20)
         self.qtgui_waterfall_sink_x_0_0.set_frequency_range(self.rf_rx_freq + self.rx_ch11_offset, self.rx_rf_sample_rate / 20)
@@ -1346,22 +1347,23 @@ class bladeRF_frs(gr.top_block, Qt.QWidget):
 
     def set_ctcss_freq(self, ctcss_freq):
         self.ctcss_freq = ctcss_freq
+        self.set_bladerf_device((self.ctcss_freq != 0))
         self.set_ctcss_enable((self.ctcss_freq != 0))
         self._ctcss_freq_callback(self.ctcss_freq)
+        self.rx_ch10_analog_ctcss_squelch_ff.set_frequency(self.ctcss_freq)
+        self.rx_ch11_analog_ctcss_squelch_ff.set_frequency(self.ctcss_freq)
+        self.rx_ch12_analog_ctcss_squelch_ff.set_frequency(self.ctcss_freq)
+        self.rx_ch13_analog_ctcss_squelch_ff.set_frequency(self.ctcss_freq)
+        self.rx_ch14_analog_ctcss_squelch_ff.set_frequency(self.ctcss_freq)
+        self.rx_ch1_analog_ctcss_squelch_ff.set_frequency(self.ctcss_freq)
         self.rx_ch2_analog_ctcss_squelch_ff.set_frequency(self.ctcss_freq)
         self.rx_ch3_analog_ctcss_squelch_ff.set_frequency(self.ctcss_freq)
         self.rx_ch4_analog_ctcss_squelch_ff.set_frequency(self.ctcss_freq)
         self.rx_ch5_analog_ctcss_squelch_ff.set_frequency(self.ctcss_freq)
         self.rx_ch6_analog_ctcss_squelch_ff.set_frequency(self.ctcss_freq)
         self.rx_ch7_analog_ctcss_squelch_ff.set_frequency(self.ctcss_freq)
-        self.rx_ch10_analog_ctcss_squelch_ff.set_frequency(self.ctcss_freq)
-        self.rx_ch9_analog_ctcss_squelch_ff.set_frequency(self.ctcss_freq)
-        self.rx_ch14_analog_ctcss_squelch_ff.set_frequency(self.ctcss_freq)
-        self.rx_ch13_analog_ctcss_squelch_ff.set_frequency(self.ctcss_freq)
-        self.rx_ch11_analog_ctcss_squelch_ff.set_frequency(self.ctcss_freq)
-        self.rx_ch12_analog_ctcss_squelch_ff.set_frequency(self.ctcss_freq)
-        self.rx_ch1_analog_ctcss_squelch_ff.set_frequency(self.ctcss_freq)
         self.rx_ch8_analog_ctcss_squelch_ff.set_frequency(self.ctcss_freq)
+        self.rx_ch9_analog_ctcss_squelch_ff.set_frequency(self.ctcss_freq)
         self.tx_ctcss_tone.set_frequency(self.ctcss_freq)
 
     def get_tx_vga2_gain(self):
@@ -1399,8 +1401,8 @@ class bladeRF_frs(gr.top_block, Qt.QWidget):
 
     def set_tx_pfs_taps(self, tx_pfs_taps):
         self.tx_pfs_taps = tx_pfs_taps
-        self.tx_ch8_14_pfs.set_taps((self.tx_pfs_taps))
         self.tx_ch1_7_pfs.set_taps((self.tx_pfs_taps))
+        self.tx_ch8_14_pfs.set_taps((self.tx_pfs_taps))
 
     def get_tx_num_enabled_ch8_14(self):
         return self.tx_num_enabled_ch8_14
@@ -1421,24 +1423,24 @@ class bladeRF_frs(gr.top_block, Qt.QWidget):
 
     def set_tx_interp_fir2_taps(self, tx_interp_fir2_taps):
         self.tx_interp_fir2_taps = tx_interp_fir2_taps
-        self.tx_ch8_14_fir2.set_taps((self.tx_interp_fir2_taps))
         self.tx_ch1_7_fir2.set_taps((self.tx_interp_fir2_taps))
+        self.tx_ch8_14_fir2.set_taps((self.tx_interp_fir2_taps))
 
     def get_tx_interp_fir1_taps(self):
         return self.tx_interp_fir1_taps
 
     def set_tx_interp_fir1_taps(self, tx_interp_fir1_taps):
         self.tx_interp_fir1_taps = tx_interp_fir1_taps
-        self.tx_ch8_14_fir1.set_taps((self.tx_interp_fir1_taps))
         self.tx_ch1_7_fir1.set_taps((self.tx_interp_fir1_taps))
+        self.tx_ch8_14_fir1.set_taps((self.tx_interp_fir1_taps))
 
     def get_tx_cont(self):
         return self.tx_cont
 
     def set_tx_cont(self, tx_cont):
         self.tx_cont = tx_cont
-        self.tx_valve.set_open(bool(not (self.tx_ptt or self.tx_cont)))
         self._tx_cont_callback(self.tx_cont)
+        self.tx_valve.set_open(bool(not (self.tx_ptt or self.tx_cont)))
 
     def get_tx_ch_label(self):
         return self.tx_ch_label
@@ -1452,8 +1454,8 @@ class bladeRF_frs(gr.top_block, Qt.QWidget):
 
     def set_tx_ch4_offset(self, tx_ch4_offset):
         self.tx_ch4_offset = tx_ch4_offset
-        self.tx_ch1_7_waterfall.set_frequency_range(self.tx_rf_freq + self.tx_ch4_offset, self.tx_pfs_output_rate)
         self.analog_sig_source_x_0.set_frequency(self.tx_ch4_offset)
+        self.tx_ch1_7_waterfall.set_frequency_range(self.tx_rf_freq + self.tx_ch4_offset, self.tx_pfs_output_rate)
 
     def get_tx_ch11_offset(self):
         return self.tx_ch11_offset
@@ -1475,8 +1477,8 @@ class bladeRF_frs(gr.top_block, Qt.QWidget):
 
     def set_rx_xlating_fir_taps(self, rx_xlating_fir_taps):
         self.rx_xlating_fir_taps = rx_xlating_fir_taps
-        self.freq_xlating_fir_filter_xxx_0_0.set_taps((self.rx_xlating_fir_taps))
         self.freq_xlating_fir_filter_xxx_0.set_taps((self.rx_xlating_fir_taps))
+        self.freq_xlating_fir_filter_xxx_0_0.set_taps((self.rx_xlating_fir_taps))
 
     def get_rx_vga_gain(self):
         return self.rx_vga_gain
@@ -1490,28 +1492,28 @@ class bladeRF_frs(gr.top_block, Qt.QWidget):
 
     def set_rx_squelch(self, rx_squelch):
         self.rx_squelch = rx_squelch
+        self.rx_ch10_analog_pwr_squelch.set_threshold(self.rx_squelch)
+        self.rx_ch11_analog_pwr_squelch.set_threshold(self.rx_squelch)
+        self.rx_ch12_analog_pwr_squelch.set_threshold(self.rx_squelch)
+        self.rx_ch13_analog_pwr_squelch.set_threshold(self.rx_squelch)
+        self.rx_ch14_analog_pwr_squelch.set_threshold(self.rx_squelch)
         self.rx_ch1_analog_pwr_squelch.set_threshold(self.rx_squelch)
         self.rx_ch2_analog_pwr_squelch.set_threshold(self.rx_squelch)
+        self.rx_ch3_analog_pwr_squelch.set_threshold(self.rx_squelch)
         self.rx_ch4_analog_pwr_squelch.set_threshold(self.rx_squelch)
         self.rx_ch5_analog_pwr_squelch.set_threshold(self.rx_squelch)
         self.rx_ch6_analog_pwr_squelch.set_threshold(self.rx_squelch)
         self.rx_ch7_analog_pwr_squelch.set_threshold(self.rx_squelch)
         self.rx_ch8_analog_pwr_squelch.set_threshold(self.rx_squelch)
         self.rx_ch9_analog_pwr_squelch.set_threshold(self.rx_squelch)
-        self.rx_ch10_analog_pwr_squelch.set_threshold(self.rx_squelch)
-        self.rx_ch11_analog_pwr_squelch.set_threshold(self.rx_squelch)
-        self.rx_ch12_analog_pwr_squelch.set_threshold(self.rx_squelch)
-        self.rx_ch13_analog_pwr_squelch.set_threshold(self.rx_squelch)
-        self.rx_ch14_analog_pwr_squelch.set_threshold(self.rx_squelch)
-        self.rx_ch3_analog_pwr_squelch.set_threshold(self.rx_squelch)
 
     def get_rx_rf_sample_rate(self):
         return self.rx_rf_sample_rate
 
     def set_rx_rf_sample_rate(self, rx_rf_sample_rate):
         self.rx_rf_sample_rate = rx_rf_sample_rate
-        self.osmosdr_source_0.set_sample_rate(self.rx_rf_sample_rate)
         self.blocks_keep_one_in_n_0.set_n(int(self.rx_rf_sample_rate / 30))
+        self.osmosdr_source_0.set_sample_rate(self.rx_rf_sample_rate)
         self.qtgui_waterfall_sink_x_0.set_frequency_range(self.rf_rx_freq + self.rx_ch4_offset, self.rx_rf_sample_rate / 20)
         self.qtgui_waterfall_sink_x_0_0.set_frequency_range(self.rf_rx_freq + self.rx_ch11_offset, self.rx_rf_sample_rate / 20)
 
@@ -1520,20 +1522,20 @@ class bladeRF_frs(gr.top_block, Qt.QWidget):
 
     def set_rx_power_squelch_alpha(self, rx_power_squelch_alpha):
         self.rx_power_squelch_alpha = rx_power_squelch_alpha
+        self.rx_ch10_analog_pwr_squelch.set_alpha(self.rx_power_squelch_alpha)
+        self.rx_ch11_analog_pwr_squelch.set_alpha(self.rx_power_squelch_alpha)
+        self.rx_ch12_analog_pwr_squelch.set_alpha(self.rx_power_squelch_alpha)
+        self.rx_ch13_analog_pwr_squelch.set_alpha(self.rx_power_squelch_alpha)
+        self.rx_ch14_analog_pwr_squelch.set_alpha(self.rx_power_squelch_alpha)
         self.rx_ch1_analog_pwr_squelch.set_alpha(self.rx_power_squelch_alpha)
         self.rx_ch2_analog_pwr_squelch.set_alpha(self.rx_power_squelch_alpha)
+        self.rx_ch3_analog_pwr_squelch.set_alpha(self.rx_power_squelch_alpha)
         self.rx_ch4_analog_pwr_squelch.set_alpha(self.rx_power_squelch_alpha)
         self.rx_ch5_analog_pwr_squelch.set_alpha(self.rx_power_squelch_alpha)
         self.rx_ch6_analog_pwr_squelch.set_alpha(self.rx_power_squelch_alpha)
         self.rx_ch7_analog_pwr_squelch.set_alpha(self.rx_power_squelch_alpha)
         self.rx_ch8_analog_pwr_squelch.set_alpha(self.rx_power_squelch_alpha)
         self.rx_ch9_analog_pwr_squelch.set_alpha(self.rx_power_squelch_alpha)
-        self.rx_ch10_analog_pwr_squelch.set_alpha(self.rx_power_squelch_alpha)
-        self.rx_ch11_analog_pwr_squelch.set_alpha(self.rx_power_squelch_alpha)
-        self.rx_ch12_analog_pwr_squelch.set_alpha(self.rx_power_squelch_alpha)
-        self.rx_ch13_analog_pwr_squelch.set_alpha(self.rx_power_squelch_alpha)
-        self.rx_ch14_analog_pwr_squelch.set_alpha(self.rx_power_squelch_alpha)
-        self.rx_ch3_analog_pwr_squelch.set_alpha(self.rx_power_squelch_alpha)
 
     def get_rx_pc_taps(self):
         return self.rx_pc_taps
@@ -1564,28 +1566,28 @@ class bladeRF_frs(gr.top_block, Qt.QWidget):
 
     def set_rx_dec_fir_taps(self, rx_dec_fir_taps):
         self.rx_dec_fir_taps = rx_dec_fir_taps
-        self.fir_filter_xxx_0_0.set_taps((self.rx_dec_fir_taps))
         self.fir_filter_xxx_0.set_taps((self.rx_dec_fir_taps))
+        self.fir_filter_xxx_0_0.set_taps((self.rx_dec_fir_taps))
 
     def get_rx_ctcss_squelch(self):
         return self.rx_ctcss_squelch
 
     def set_rx_ctcss_squelch(self, rx_ctcss_squelch):
         self.rx_ctcss_squelch = rx_ctcss_squelch
+        self.rx_ch10_analog_ctcss_squelch_ff.set_level(self.rx_ctcss_squelch)
+        self.rx_ch11_analog_ctcss_squelch_ff.set_level(self.rx_ctcss_squelch)
+        self.rx_ch12_analog_ctcss_squelch_ff.set_level(self.rx_ctcss_squelch)
+        self.rx_ch13_analog_ctcss_squelch_ff.set_level(self.rx_ctcss_squelch)
+        self.rx_ch14_analog_ctcss_squelch_ff.set_level(self.rx_ctcss_squelch)
+        self.rx_ch1_analog_ctcss_squelch_ff.set_level(self.rx_ctcss_squelch)
         self.rx_ch2_analog_ctcss_squelch_ff.set_level(self.rx_ctcss_squelch)
         self.rx_ch3_analog_ctcss_squelch_ff.set_level(self.rx_ctcss_squelch)
         self.rx_ch4_analog_ctcss_squelch_ff.set_level(self.rx_ctcss_squelch)
         self.rx_ch5_analog_ctcss_squelch_ff.set_level(self.rx_ctcss_squelch)
         self.rx_ch6_analog_ctcss_squelch_ff.set_level(self.rx_ctcss_squelch)
         self.rx_ch7_analog_ctcss_squelch_ff.set_level(self.rx_ctcss_squelch)
-        self.rx_ch10_analog_ctcss_squelch_ff.set_level(self.rx_ctcss_squelch)
-        self.rx_ch9_analog_ctcss_squelch_ff.set_level(self.rx_ctcss_squelch)
-        self.rx_ch14_analog_ctcss_squelch_ff.set_level(self.rx_ctcss_squelch)
-        self.rx_ch13_analog_ctcss_squelch_ff.set_level(self.rx_ctcss_squelch)
-        self.rx_ch11_analog_ctcss_squelch_ff.set_level(self.rx_ctcss_squelch)
-        self.rx_ch12_analog_ctcss_squelch_ff.set_level(self.rx_ctcss_squelch)
-        self.rx_ch1_analog_ctcss_squelch_ff.set_level(self.rx_ctcss_squelch)
         self.rx_ch8_analog_ctcss_squelch_ff.set_level(self.rx_ctcss_squelch)
+        self.rx_ch9_analog_ctcss_squelch_ff.set_level(self.rx_ctcss_squelch)
 
     def get_rx_ctcss_len(self):
         return self.rx_ctcss_len
@@ -1738,61 +1740,67 @@ class bladeRF_frs(gr.top_block, Qt.QWidget):
 
     def set_ctcss_hpf_ff_taps(self, ctcss_hpf_ff_taps):
         self.ctcss_hpf_ff_taps = ctcss_hpf_ff_taps
+        self.rx_ch10_hpf_iir.set_taps((self.ctcss_hpf_ff_taps), (self.ctcss_hpf_fb_taps))
+        self.rx_ch11_hpf_iir.set_taps((self.ctcss_hpf_ff_taps), (self.ctcss_hpf_fb_taps))
+        self.rx_ch12_hpf_iir.set_taps((self.ctcss_hpf_ff_taps), (self.ctcss_hpf_fb_taps))
+        self.rx_ch13_hpf_iir.set_taps((self.ctcss_hpf_ff_taps), (self.ctcss_hpf_fb_taps))
+        self.rx_ch14_hpf_iir.set_taps((self.ctcss_hpf_ff_taps), (self.ctcss_hpf_fb_taps))
         self.rx_ch1_hpf_iir.set_taps((self.ctcss_hpf_ff_taps), (self.ctcss_hpf_fb_taps))
-        self.rx_ch3_hpf_iir.set_taps((self.ctcss_hpf_ff_taps), (self.ctcss_hpf_fb_taps))
         self.rx_ch2_hpf_iir.set_taps((self.ctcss_hpf_ff_taps), (self.ctcss_hpf_fb_taps))
+        self.rx_ch3_hpf_iir.set_taps((self.ctcss_hpf_ff_taps), (self.ctcss_hpf_fb_taps))
         self.rx_ch4_hpf_iir.set_taps((self.ctcss_hpf_ff_taps), (self.ctcss_hpf_fb_taps))
         self.rx_ch5_hpf_iir.set_taps((self.ctcss_hpf_ff_taps), (self.ctcss_hpf_fb_taps))
         self.rx_ch6_hpf_iir.set_taps((self.ctcss_hpf_ff_taps), (self.ctcss_hpf_fb_taps))
+        self.rx_ch7_hpf_iir.set_taps((self.ctcss_hpf_ff_taps), (self.ctcss_hpf_fb_taps))
         self.rx_ch8_hpf_iir.set_taps((self.ctcss_hpf_ff_taps), (self.ctcss_hpf_fb_taps))
         self.rx_ch9_hpf_iir.set_taps((self.ctcss_hpf_ff_taps), (self.ctcss_hpf_fb_taps))
-        self.rx_ch10_hpf_iir.set_taps((self.ctcss_hpf_ff_taps), (self.ctcss_hpf_fb_taps))
-        self.rx_ch11_hpf_iir.set_taps((self.ctcss_hpf_ff_taps), (self.ctcss_hpf_fb_taps))
-        self.rx_ch13_hpf_iir.set_taps((self.ctcss_hpf_ff_taps), (self.ctcss_hpf_fb_taps))
-        self.rx_ch12_hpf_iir.set_taps((self.ctcss_hpf_ff_taps), (self.ctcss_hpf_fb_taps))
-        self.rx_ch14_hpf_iir.set_taps((self.ctcss_hpf_ff_taps), (self.ctcss_hpf_fb_taps))
-        self.rx_ch7_hpf_iir.set_taps((self.ctcss_hpf_ff_taps), (self.ctcss_hpf_fb_taps))
 
     def get_ctcss_hpf_fb_taps(self):
         return self.ctcss_hpf_fb_taps
 
     def set_ctcss_hpf_fb_taps(self, ctcss_hpf_fb_taps):
         self.ctcss_hpf_fb_taps = ctcss_hpf_fb_taps
+        self.rx_ch10_hpf_iir.set_taps((self.ctcss_hpf_ff_taps), (self.ctcss_hpf_fb_taps))
+        self.rx_ch11_hpf_iir.set_taps((self.ctcss_hpf_ff_taps), (self.ctcss_hpf_fb_taps))
+        self.rx_ch12_hpf_iir.set_taps((self.ctcss_hpf_ff_taps), (self.ctcss_hpf_fb_taps))
+        self.rx_ch13_hpf_iir.set_taps((self.ctcss_hpf_ff_taps), (self.ctcss_hpf_fb_taps))
+        self.rx_ch14_hpf_iir.set_taps((self.ctcss_hpf_ff_taps), (self.ctcss_hpf_fb_taps))
         self.rx_ch1_hpf_iir.set_taps((self.ctcss_hpf_ff_taps), (self.ctcss_hpf_fb_taps))
-        self.rx_ch3_hpf_iir.set_taps((self.ctcss_hpf_ff_taps), (self.ctcss_hpf_fb_taps))
         self.rx_ch2_hpf_iir.set_taps((self.ctcss_hpf_ff_taps), (self.ctcss_hpf_fb_taps))
+        self.rx_ch3_hpf_iir.set_taps((self.ctcss_hpf_ff_taps), (self.ctcss_hpf_fb_taps))
         self.rx_ch4_hpf_iir.set_taps((self.ctcss_hpf_ff_taps), (self.ctcss_hpf_fb_taps))
         self.rx_ch5_hpf_iir.set_taps((self.ctcss_hpf_ff_taps), (self.ctcss_hpf_fb_taps))
         self.rx_ch6_hpf_iir.set_taps((self.ctcss_hpf_ff_taps), (self.ctcss_hpf_fb_taps))
+        self.rx_ch7_hpf_iir.set_taps((self.ctcss_hpf_ff_taps), (self.ctcss_hpf_fb_taps))
         self.rx_ch8_hpf_iir.set_taps((self.ctcss_hpf_ff_taps), (self.ctcss_hpf_fb_taps))
         self.rx_ch9_hpf_iir.set_taps((self.ctcss_hpf_ff_taps), (self.ctcss_hpf_fb_taps))
-        self.rx_ch10_hpf_iir.set_taps((self.ctcss_hpf_ff_taps), (self.ctcss_hpf_fb_taps))
-        self.rx_ch11_hpf_iir.set_taps((self.ctcss_hpf_ff_taps), (self.ctcss_hpf_fb_taps))
-        self.rx_ch13_hpf_iir.set_taps((self.ctcss_hpf_ff_taps), (self.ctcss_hpf_fb_taps))
-        self.rx_ch12_hpf_iir.set_taps((self.ctcss_hpf_ff_taps), (self.ctcss_hpf_fb_taps))
-        self.rx_ch14_hpf_iir.set_taps((self.ctcss_hpf_ff_taps), (self.ctcss_hpf_fb_taps))
-        self.rx_ch7_hpf_iir.set_taps((self.ctcss_hpf_ff_taps), (self.ctcss_hpf_fb_taps))
 
     def get_ctcss_enable(self):
         return self.ctcss_enable
 
     def set_ctcss_enable(self, ctcss_enable):
         self.ctcss_enable = ctcss_enable
-        self.tx_audio_src_sel.set_input_index(int(1 if self.ctcss_enable else 0))
-        self.ch1_audio_sel.set_input_index(int(0 if self.ctcss_enable else 1))
-        self.ch3_audio_sel.set_input_index(int(0 if self.ctcss_enable else 1))
-        self.ch2_audio_sel.set_input_index(int(0 if self.ctcss_enable else 1))
-        self.ch4_audio_sel.set_input_index(int(0 if self.ctcss_enable else 1))
-        self.ch5_audio_sel.set_input_index(int(0 if self.ctcss_enable else 1))
-        self.ch6_audio_sel.set_input_index(int(0 if self.ctcss_enable else 1))
-        self.ch8_audio_sel.set_input_index(int(0 if self.ctcss_enable else 1))
-        self.ch14_audio_sel.set_input_index(int(0 if self.ctcss_enable else 1))
-        self.ch9_audio_sel.set_input_index(int(0 if self.ctcss_enable else 1))
         self.ch10_audio_sel.set_input_index(int(0 if self.ctcss_enable else 1))
         self.ch11_audio_sel.set_input_index(int(0 if self.ctcss_enable else 1))
         self.ch12_audio_sel.set_input_index(int(0 if self.ctcss_enable else 1))
         self.ch13_audio_sel.set_input_index(int(0 if self.ctcss_enable else 1))
+        self.ch14_audio_sel.set_input_index(int(0 if self.ctcss_enable else 1))
+        self.ch1_audio_sel.set_input_index(int(0 if self.ctcss_enable else 1))
+        self.ch2_audio_sel.set_input_index(int(0 if self.ctcss_enable else 1))
+        self.ch3_audio_sel.set_input_index(int(0 if self.ctcss_enable else 1))
+        self.ch4_audio_sel.set_input_index(int(0 if self.ctcss_enable else 1))
+        self.ch5_audio_sel.set_input_index(int(0 if self.ctcss_enable else 1))
+        self.ch6_audio_sel.set_input_index(int(0 if self.ctcss_enable else 1))
         self.ch7_audio_sel.set_input_index(int(0 if self.ctcss_enable else 1))
+        self.ch8_audio_sel.set_input_index(int(0 if self.ctcss_enable else 1))
+        self.ch9_audio_sel.set_input_index(int(0 if self.ctcss_enable else 1))
+        self.tx_audio_src_sel.set_input_index(int(1 if self.ctcss_enable else 0))
+
+    def get_bladerf_device(self):
+        return self.bladerf_device
+
+    def set_bladerf_device(self, bladerf_device):
+        self.bladerf_device = bladerf_device
 
 
 def main(top_block_cls=bladeRF_frs, options=None):

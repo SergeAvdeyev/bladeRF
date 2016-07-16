@@ -9,7 +9,7 @@ QT       += core gui printsupport
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 CONFIG += c++11
 
-TARGET = ../bin/srd_gui
+TARGET = ../bin/sdr_gui
 TEMPLATE = app
 
 INCLUDEPATH += /home/savdeev/Projects/qt_components/qcustomplot \

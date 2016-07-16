@@ -862,7 +862,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>BandStop</string>
+     <string>BandPass</string>
     </property>
    </widget>
    <widget class="QCheckBox" name="IBox">
@@ -897,7 +897,7 @@
    <widget class="QCheckBox" name="RecordBox">
     <property name="geometry">
      <rect>
-      <x>780</x>
+      <x>630</x>
       <y>300</y>
       <width>86</width>
       <height>22</height>
@@ -910,7 +910,7 @@
    <widget class="QCheckBox" name="DCBlockBox">
     <property name="geometry">
      <rect>
-      <x>660</x>
+      <x>770</x>
       <y>300</y>
       <width>86</width>
       <height>22</height>

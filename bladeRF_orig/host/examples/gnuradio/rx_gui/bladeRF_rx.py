@@ -5,7 +5,7 @@
 # Title: Simple bladeRF RX GUI
 # Author: Nuand, LLC <bladeRF@nuand.com>
 # Description: A simple RX-only GUI that demonstrates the usage of various RX controls.
-# Generated: Sun May 22 01:34:52 2016
+# Generated: Tue Jun 21 00:06:13 2016
 ##################################################
 
 if __name__ == '__main__':
@@ -262,6 +262,47 @@ class bladeRF_rx(gr.top_block, Qt.QWidget):
         
         self._qtgui_freq_sink_x_0_0_win = sip.wrapinstance(self.qtgui_freq_sink_x_0_0.pyqwidget(), Qt.QWidget)
         self.top_grid_layout.addWidget(self._qtgui_freq_sink_x_0_0_win, 2, 0, 5, 5)
+        self.qtgui_freq_sink_x_0 = qtgui.freq_sink_c(
+        	8192, #size
+        	firdes.WIN_BLACKMAN_hARRIS, #wintype
+        	gui_rx_frequency, #fc
+        	gui_rx_sample_rate, #bw
+        	"", #name
+        	1 #number of inputs
+        )
+        self.qtgui_freq_sink_x_0.set_update_time(0.10)
+        self.qtgui_freq_sink_x_0.set_y_axis(-140, 10)
+        self.qtgui_freq_sink_x_0.set_trigger_mode(qtgui.TRIG_MODE_FREE, 0.0, 0, "")
+        self.qtgui_freq_sink_x_0.enable_autoscale(False)
+        self.qtgui_freq_sink_x_0.enable_grid(False)
+        self.qtgui_freq_sink_x_0.set_fft_average(1.0)
+        self.qtgui_freq_sink_x_0.enable_control_panel(False)
+        
+        if not True:
+          self.qtgui_freq_sink_x_0.disable_legend()
+        
+        if "complex" == "float" or "complex" == "msg_float":
+          self.qtgui_freq_sink_x_0.set_plot_pos_half(not True)
+        
+        labels = ["", "", "", "", "",
+                  "", "", "", "", ""]
+        widths = [1, 1, 1, 1, 1,
+                  1, 1, 1, 1, 1]
+        colors = ["blue", "red", "green", "black", "cyan",
+                  "magenta", "yellow", "dark red", "dark green", "dark blue"]
+        alphas = [1.0, 1.0, 1.0, 1.0, 1.0,
+                  1.0, 1.0, 1.0, 1.0, 1.0]
+        for i in xrange(1):
+            if len(labels[i]) == 0:
+                self.qtgui_freq_sink_x_0.set_line_label(i, "Data {0}".format(i))
+            else:
+                self.qtgui_freq_sink_x_0.set_line_label(i, labels[i])
+            self.qtgui_freq_sink_x_0.set_line_width(i, widths[i])
+            self.qtgui_freq_sink_x_0.set_line_color(i, colors[i])
+            self.qtgui_freq_sink_x_0.set_line_alpha(i, alphas[i])
+        
+        self._qtgui_freq_sink_x_0_win = sip.wrapinstance(self.qtgui_freq_sink_x_0.pyqwidget(), Qt.QWidget)
+        self.top_grid_layout.addWidget(self._qtgui_freq_sink_x_0_win, 2, 0, 5, 5)
         self.osmosdr_source_0 = osmosdr.source( args="numchan=" + str(1) + " " + bladerf_args )
         self.osmosdr_source_0.set_sample_rate(gui_rx_sample_rate)
         self.osmosdr_source_0.set_center_freq(gui_rx_frequency, 0)
@@ -304,6 +345,7 @@ class bladeRF_rx(gr.top_block, Qt.QWidget):
         self.connect((self.blocks_add_xx_0, 0), (self.rational_resampler_xxx_0, 0))    
         self.connect((self.blocks_complex_to_float_0, 0), (self.blocks_add_const_vxx_0, 0))    
         self.connect((self.blocks_complex_to_float_0, 1), (self.blocks_add_const_vxx_0_0, 0))    
+        self.connect((self.blocks_float_to_complex_0, 0), (self.qtgui_freq_sink_x_0, 0))    
         self.connect((self.blocks_float_to_complex_0, 0), (self.qtgui_freq_sink_x_1, 0))    
         self.connect((self.blocks_float_to_complex_0, 0), (self.qtgui_time_sink_x_0, 0))    
         self.connect((self.osmosdr_source_0, 0), (self.blocks_complex_to_float_0, 0))    
@@ -435,6 +477,7 @@ class bladeRF_rx(gr.top_block, Qt.QWidget):
     def set_gui_rx_sample_rate(self, gui_rx_sample_rate):
         self.gui_rx_sample_rate = gui_rx_sample_rate
         self.osmosdr_source_0.set_sample_rate(self.gui_rx_sample_rate)
+        self.qtgui_freq_sink_x_0.set_frequency_range(self.gui_rx_frequency, self.gui_rx_sample_rate)
         self.qtgui_freq_sink_x_0_0.set_frequency_range(self.gui_rx_frequency, self.gui_rx_sample_rate)
         self.qtgui_freq_sink_x_1.set_frequency_range(self.gui_rx_frequency, self.gui_rx_sample_rate)
 
@@ -452,6 +495,7 @@ class bladeRF_rx(gr.top_block, Qt.QWidget):
     def set_gui_rx_frequency(self, gui_rx_frequency):
         self.gui_rx_frequency = gui_rx_frequency
         self.osmosdr_source_0.set_center_freq(self.gui_rx_frequency, 0)
+        self.qtgui_freq_sink_x_0.set_frequency_range(self.gui_rx_frequency, self.gui_rx_sample_rate)
         self.qtgui_freq_sink_x_0_0.set_frequency_range(self.gui_rx_frequency, self.gui_rx_sample_rate)
         self.qtgui_freq_sink_x_1.set_frequency_range(self.gui_rx_frequency, self.gui_rx_sample_rate)
 

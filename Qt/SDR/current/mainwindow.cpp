@@ -367,7 +367,7 @@ TMainWindow::TMainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::Main
 //	params[2] = 1.25; // Q
 //	IIR_Filter->setParams (params);
 
-
+	ui->RecordBox->setVisible(false);
 
 	ui->customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectAxes |
 								  QCP::iSelectLegend | QCP::iSelectPlottables);
@@ -395,6 +395,7 @@ TMainWindow::TMainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::Main
 	graphPen.setWidthF(1);
 	graphPen.setColor(QColor(0, 200, 255));
 
+
 	ui->customPlot->addGraph();
 	ui->customPlot->graph(0)->setName(QString("New graph %1").arg(ui->customPlot->graphCount() - 1));
 	ui->customPlot->graph(0)->setLineStyle(QCPGraph::lsLine);
@@ -407,7 +408,7 @@ TMainWindow::TMainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::Main
 	ui->customPlot->graph(1)->setPen(graphPen);
 	ui->customPlot->graph(1)->setVisible(ui->QBox->isChecked());
 
-	addRandomGraph();
+	//addRandomGraph();
 
 	// connect slot that ties some axis selections together (especially opposite axes):
 	connect(ui->customPlot, SIGNAL(selectionChangedByUser()), this, SLOT(selectionChanged()));
