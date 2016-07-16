@@ -297,6 +297,8 @@ PTxDataItem TTxThread::GetBuffer() {
 
 int TTxThread::Process() {
 	int Status;
+
+	return 0;
 //	PTxDataItem FDataItem;
 
 //	FDataItem = GetBuffer();

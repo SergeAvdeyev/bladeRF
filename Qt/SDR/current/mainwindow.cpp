@@ -1931,6 +1931,8 @@ void TMainWindow::OnTxTimer() {
 
 	if (!FDevice->TxCanSend()) return;
 
+	return;
+
 	PWCplx FTxBuffer = (PWCplx)malloc(TxSamplesLen*sizeof(TWCplx));
 	int i = 0;
 	int Val = 1000;
