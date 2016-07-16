@@ -1,0 +1,8 @@
+/kal-arfcn_freq.o
+/kal-bladeRF_source.o
+/kal-c0_detect.o
+/kal-circular_buffer.o
+/kal-fcch_detector.o
+/kal-kal.o
+/kal-offset.o
+/kal-util.o
